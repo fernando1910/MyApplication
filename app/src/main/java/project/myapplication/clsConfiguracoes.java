@@ -58,5 +58,5 @@ public class clsConfiguracoes {
     public void setTelefoneVisivel(boolean fg_telefone_visivel) {
         this.fg_telefone_visivel = fg_telefone_visivel;
     }
-//TESTE
+//TESTE kakakaka
 }
