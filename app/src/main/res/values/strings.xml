@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">BlueDate</string>
+
+    <string name="hello_world">Em construção</string>
+    <string name="action_settings">Configurações</string>
+    <string name="title_home">Pagina Inicial</string>
+    <string name="title_activity_padrao_menu">BlueDate</string>
+
+    <string name="title_section1">Calendario</string>
+    <string name="title_section2">Meus Eventos</string>
+    <string name="title_section3">Pesquisar</string>
+    <string name="title_section4">Configurações</string>
+    <string name="title_section5">Ranking</string>
+    <integer name="versao_banco">1</integer>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Opções</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Em construção</string>
+    <string name="title_activity_padrao_configuracao">Configurações</string>
+    <string name="title_activity_padrao_config">Configurações</string>
+    <string name="title_activity_padrao_login">Crie seu perfil</string>
+    <string name="title_activity_padrao_boas_vindas">Boas Vindas</string>
+    <string name="title_activity_padrao_meus_eventos">Principal</string>
+    <string name="title_activity_padrao_configuracoes">padraoConfiguracoes</string>
+    <string name="title_activity_padrao_teste">padraoTeste</string>
+    <string name="title_activity_padrao_perfil">padraoPerfil</string>
+    <string name="criar_evento">Criar evento</string>
+    <string name="title_activity_padrao_criar_evento">Crie seu evento</string>
+
+    <!-- Array com itens do meu e seus icones respectivamente -->
+
+    <string-array name="itens_menu">
+        <item>Inicial</item>
+        <item>Calendario</item>
+        <item>Meus Eventos</item>
+        <item>Pesquisar</item>
+        <item>Configurações</item>
+        <item>Ranking</item>
+    </string-array>
+
+    <string-array name="sections_icons">
+        <item>@drawable/ic_home</item>
+        <item>@android:drawable/ic_menu_my_calendar</item>
+        <item>@android:drawable/btn_star</item>
+        <item>@android:drawable/ic_menu_search</item>
+        <item>@drawable/ic_config</item>
+        <item>@drawable/ic_trofeu</item>
+    </string-array>
+
+    <!-- String da tela de configuração -->
+    <string name="item_config_perfil">Perfil</string>
+    <string name="item_config_ajuda">Ajuda</string>
+    <string name="item_config_sobre">Sobre</string>
+    <string name="item_config_notifica">Notificações</string>
+
+
+
+
+
+    <string name="title_activity_padrao_ranking"></string>
+    <string name="title_activity_listar">Listar</string>
+
+
+</resources>

@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context="project.myapplication.padraoLogin">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="310dp"
+        android:layout_height="310dp"
+        android:layout_gravity="center"
+        android:padding="5dp" >
+
+
+        <ImageButton
+            android:text="Select Photo"
+            android:id="@+id/btnSelectPhoto"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:background="#FFFFFF"
+            android:layout_gravity="center"
+
+            />
+
+
+
+    </LinearLayout>
+
+
+    <EditText
+        android:padding="20dp"
+        android:id="@+id/etNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome"
+        android:inputType="textPersonName"
+
+        />
+
+    <EditText
+        android:padding="20dp"
+        android:id="@+id/etTelefone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Telefone"
+        android:inputType="phone"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btAvancar"
+            android:text="Avançar"
+            android:onClick="onClick_Avancar"
+            android:background="#255E69"
+            android:textColor="#D8E9EB"
+             />
+
+        </LinearLayout>
+
+
+</LinearLayout>

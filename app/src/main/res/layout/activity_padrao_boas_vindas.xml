@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#6E94A9"
+    tools:context="project.myapplication.padraoBoasVindas">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:padding="5dp" >
+
+
+        <ImageView
+
+            android:id="@+id/btnSelectPhoto"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:src="@drawable/ic_padrao"
+
+            />
+
+
+
+    </LinearLayout>
+
+
+    <CheckBox
+        android:layout_margin="10dp"
+        android:textColor="#FFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Li e aceito os termos de uso do aplicativo"
+        android:id="@+id/chkAceitaTermos"
+         />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|center"
+
+        >
+
+
+
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Avançar"
+        android:id="@+id/button"
+        android:onClick="onClick_Avancar"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:padding="5dp"
+            android:background="#255E69"
+            android:textColor="#D8E9EB"
+            />
+
+        </LinearLayout>
+</LinearLayout>
