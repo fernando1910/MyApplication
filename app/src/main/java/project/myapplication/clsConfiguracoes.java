@@ -59,4 +59,6 @@ public class clsConfiguracoes {
         this.fg_telefone_visivel = fg_telefone_visivel;
     }
 
+    //TESTE
+
 }
