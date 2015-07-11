@@ -84,7 +84,7 @@ public class padraoLogin extends Activity {
 
         if(ValidarCampos())
         {
-            SalvarUsuario();
+            //SalvarUsuario();
             clsUtil util = new clsUtil();
             util.AtualizarStatus(getApplicationContext(), 3);
 
@@ -227,7 +227,7 @@ public class padraoLogin extends Activity {
             fileInputStream.read(image);
 
             clsUsuario objUsuario = new clsUsuario();
-            objUsuario.setCodigoUsuario(1);
+            //objUsuario.setCodigoUsuario(1);
             objUsuario.setNome(etNome.getText().toString());
             objUsuario.setTelefone(etTelefone.getText().toString());
             objUsuario.setImagemPerfil(image);

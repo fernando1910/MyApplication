@@ -12,24 +12,21 @@ import java.util.ArrayList;
  */
 public class UsuarioDAO {
     private SQLiteDatabase db;
-    private static final String SCRIPT_DATABASE_DELETE = "DROP TABLE IF EXISTS tb_usuario";
-    private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"CREATE TABLE tb_usuario (cd_usuario integer primary"
-    + " key autoincrement, ds_nome text not null, ds_telefone text not null)" };
 
-    private static final String NOME_BANCO = "fiesta_louca";
-    private static final int VERSAO_BANCO = 1;
     private static final String TABELA_USUARIO = "tb_usuario";
     private SQLiteHelper dbH;
 
     private static final String cd_usuario = "cd_usuario";
     private static final String ds_nome = "ds_nome";
     private static final String ds_telefome = "ds_telefone";
+    private static final String img_perfil = "img_perfil";
 
-    private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefome};
+
+    private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefome, UsuarioDAO.img_perfil};
 
     public UsuarioDAO(Context context)
     {
-        dbH =  new SQLiteHelper(context,UsuarioDAO.NOME_BANCO, UsuarioDAO.VERSAO_BANCO, UsuarioDAO.SCRIPT_DATABASE_CREATE, UsuarioDAO.SCRIPT_DATABASE_DELETE);
+        dbH =  new SQLiteHelper(context);
         db = dbH.getWritableDatabase();
     }
 
@@ -38,6 +35,7 @@ public class UsuarioDAO {
         ContentValues valores = new ContentValues();
         valores.put("ds_nome", objUsuario.getNome());
         valores.put("ds_telefone", objUsuario.getTelefone());
+        valores.put("img_perfil", objUsuario.getImagemPerfil());
         db.insert(TABELA_USUARIO,null,valores);
     }
 
@@ -46,19 +44,20 @@ public class UsuarioDAO {
         ContentValues valores = new ContentValues();
         valores.put("ds_nome", objUsuario.getNome());
         valores.put("ds_telefone", objUsuario.getTelefone());
+        valores.put("img_perfil", objUsuario.getImagemPerfil());
         db.update(TABELA_USUARIO, valores, " cd_usuario = ? ", new String[]{objUsuario.getCodigoUsuario() + ""});
     }
 
     public void Deletar(clsUsuario objUsuario)
     {
-        db.delete(TABELA_USUARIO, "cd_usuario = ?", new String[]{"cd_usuario"+""});
+        db.delete(TABELA_USUARIO, "cd_usuario = ?", new String[]{"cd_usuario" + ""});
     }
 
     public String listar()
     {
         String teste = "teste";
         ArrayList<clsUsuario> usuarios = new ArrayList<clsUsuario>();
-        Cursor c = db.query(true, TABELA_USUARIO, UsuarioDAO.colunas,null, null, null,null,null,null);
+        Cursor c = db.query(true, TABELA_USUARIO, new String[]{cd_usuario},null, null, null,null,null,null);
         c.moveToFirst();
         if(c.getCount()  > 0 ) {
            do {
@@ -88,5 +87,26 @@ public class UsuarioDAO {
             objUsuario.setTelefone(c.getString(2));
         }
         return objUsuario;
+    }
+
+    public boolean VerificarPerfil()
+    {
+        boolean fg_existe_perfil = false;
+        try {
+            Cursor c = db.query(true,TABELA_USUARIO,UsuarioDAO.colunas,null,null, null,null,null,null);
+            c.moveToFirst();
+            if(c.getCount()  > 0 ) {
+                fg_existe_perfil = true;
+            }
+        }
+        catch (Exception e)
+        {
+            String ex = e.getMessage();
+            ex = "";
+        }
+        //Cursor c = db.query(true, TABELA_USUARIO, new String[]{cd_usuario},null, null, null,null,null,null);
+
+
+        return  fg_existe_perfil;
     }
 }

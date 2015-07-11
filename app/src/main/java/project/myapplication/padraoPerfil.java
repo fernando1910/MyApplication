@@ -9,10 +9,12 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 
 public class padraoPerfil extends ActionBarActivity {
+    ImageButton ibPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,13 @@ public class padraoPerfil extends ActionBarActivity {
         setContentView(R.layout.activity_padrao_perfil);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ibPerfil = (ImageButton)findViewById(R.id.ibPerfil);
+
+        clsUsuario objUsuario;
+        UsuarioDAO usuarioDAO = new UsuarioDAO(getApplicationContext());
+        objUsuario = usuarioDAO.getUsuario(1);
+
+        String teste = "";
 
     }
 
