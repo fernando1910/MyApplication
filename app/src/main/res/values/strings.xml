@@ -64,6 +64,7 @@
 
     <string name="title_activity_padrao_ranking"></string>
     <string name="title_activity_listar">Listar</string>
+    <string name="title_activity_padrao_notificacao">padraoNotificacao</string>
 
 
 </resources>

@@ -43,7 +43,7 @@ public class padraoConfiguracao extends ActionBarActivity {
                   {{
                           t = android.R.drawable.ic_popup_reminder;
                           Title = getString(R.string.item_config_notifica);
-                          //    SubTitle = "Subtitle 2";
+                          //    SubTitle = "Subtitle 3";
 
                       }}
         );
@@ -80,6 +80,11 @@ public class padraoConfiguracao extends ActionBarActivity {
                 switch (position) {
                     case 2:
                         intent = new Intent(padraoConfiguracao.this,padraoPerfil.class);
+                        finish();
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(padraoConfiguracao.this,padraoNotificacao.class);
                         finish();
                         startActivity(intent);
                         break;
