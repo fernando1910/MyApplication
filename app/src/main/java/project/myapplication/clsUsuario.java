@@ -1,5 +1,7 @@
 package project.myapplication;
 
+import android.content.Context;
+
 /**
  * Created by Fernando on 24/04/2015.
  */
@@ -7,6 +9,8 @@ public class clsUsuario {
     private int cd_usuario;
     private String ds_nome;
     private String ds_telefone;
+    private byte[] img_perfil;
+
 
     public String getNome() {
         return ds_nome;
@@ -32,6 +36,33 @@ public class clsUsuario {
         this.cd_usuario = cd_usuario;
     }
 
-    //teste 2
+
+    public byte[] getImagemPerfil() {
+        return img_perfil;
+    }
+
+    public void setImagemPerfil(byte[] img_perfil) {
+        this.img_perfil = img_perfil;
+    }
+
+    public void AtualizarUsuario(Context context, clsUsuario objUsuario) {
+        UsuarioDAO usuario_dao = new UsuarioDAO(context);
+        usuario_dao.Atualizar(objUsuario);
+    }
+
+    public clsUsuario SelecionarUsuario(Context context)
+    {
+        clsUsuario objUsuario = null;
+        UsuarioDAO usuario_dao = new UsuarioDAO(context);
+        objUsuario = usuario_dao.getUsuario(1);
+        return objUsuario;
+    }
+
+    public void InserirUsuario(Context context, clsUsuario objUsuario) {
+        UsuarioDAO usuario_dao = new UsuarioDAO(context);
+        usuario_dao.Salvar(objUsuario);
+
+    }
+
 
 }

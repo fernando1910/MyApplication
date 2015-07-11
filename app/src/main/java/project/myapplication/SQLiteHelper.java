@@ -12,13 +12,37 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String CATEGORIA = "banco";
     private String[] scriptSQL;
-    private String scriptDelete;
+    private String[] scriptDelete;
+
+    private static final String[] SCRIPT_DATABASE_DELETE =  new String[] {
+            "DROP TABLE IF EXISTS tb_configuracoes",
+            "DROP TABLE IF EXISTS tb_usuario",
+
+    };
+    private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"" +
+            " CREATE TABLE tb_configuracoes " +
+            " (fg_permite_push BINARY DEFAULT 0 , " +
+            " fg_permite_alarme BINARY DEFAULT 0, " +
+            " fg_notifica_comentario BINARY DEFAULT 1, " +
+            " fg_notifica_mudanca BINARY DEFAULT 1, " +
+            " fg_telefone_visivel BINARY DEFAULT 0 , " +
+            " ind_status_perfil INTEGER NOT NULL)",
+
+            "CREATE TABLE tb_usuario (cd_usuario integer primary"
+                    + " key autoincrement, ds_nome text not null, ds_telefone text not null, img_perfil blob)",
+
+            "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
 
 
-    public SQLiteHelper(Context context, String name,  int version, String [] sqlCreate, String sqlDelete) {
-        super(context, name, null, version);
-        this.scriptSQL = sqlCreate;
-        this.scriptDelete = sqlDelete;
+    private static final String NOME_BANCO = "fiesta_louca";
+    private static final int VERSAO_BANCO = 1;
+
+
+
+    public SQLiteHelper(Context context) {
+        super(context, NOME_BANCO, null, VERSAO_BANCO);
+        this.scriptSQL = SCRIPT_DATABASE_CREATE;
+        this.scriptDelete = SCRIPT_DATABASE_DELETE;
 
     }
 
@@ -28,17 +52,29 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         int quantidadeScript = scriptSQL.length;
         for( int i = 0; i < quantidadeScript; i ++)
         {
-            String sql = scriptSQL[i];
-            Log.i(CATEGORIA,sql);
-            db.execSQL(sql);
+            try {
+                String sql = scriptSQL[i];
+                Log.i(CATEGORIA, sql);
+                db.execSQL(sql);
+            }
+            catch (Exception ex)
+            {
+                Log.i(CATEGORIA, ex.getMessage());
+            }
         }
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.v(CATEGORIA,"Atualizando da versao " + oldVersion +" para a versão " + newVersion);
-        Log.i(CATEGORIA,scriptDelete);
-        onCreate(db);
+        Log.v(CATEGORIA, "Atualizando da versao " + oldVersion + " para a versão " + newVersion);
+        int quantidadeScript = scriptDelete.length;
+        for ( int i = 0; i < quantidadeScript; i ++)
+        {
+            Log.i(CATEGORIA,scriptDelete[i]);
+            onCreate(db);
+        }
+
+
     }
 }

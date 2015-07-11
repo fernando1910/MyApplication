@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Date;
 
 
 public class padraoLogin extends Activity {
@@ -29,8 +31,7 @@ public class padraoLogin extends Activity {
     ImageButton b;
     RoundImage roundedImage;
     Uri imgPerfil;
-    //EditText etTelefone;
-    //TelephonyManager telephonyManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,19 +81,13 @@ public class padraoLogin extends Activity {
     }
 
     public void onClick_Avancar(View v) {
-        if (etNome.getText().length() == 0)
+
+        if(ValidarCampos())
         {
-            Toast.makeText(this, "Seu nome não foi informado", Toast.LENGTH_SHORT).show();
-        }
-        else if (etTelefone.getText().length() == 0) {
-            Toast.makeText(this, "Seu telefone não foi informado", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            /*
-            clsUsuario objUsuario = new clsUsuario();
-            objUsuario.setNome(etNome.getText().toString());
-            objUsuario.setTelefone(etTelefone.getText().toString());
-            */
+            SalvarUsuario();
+            clsUtil util = new clsUtil();
+            util.AtualizarStatus(getApplicationContext(), 3);
+
             Toast.makeText(this, "Seu perfil foi criado", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, padraoMenu.class));
         }
@@ -122,26 +117,13 @@ public class padraoLogin extends Activity {
                 {
 
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    /*ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-                    File diretorio = contextWrapper.getDir("Perfil", Context.MODE_PRIVATE);
-                    File path = new File(diretorio, "perfil.jpg");
-                    imgPerfil = Uri.fromFile(path);
-                    */
                     File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
                             + getString(R.string.app_name));
 
-                    //if(diretorio.exists()){
                         diretorio = new File(diretorio.getPath() + "/Perfil");
+                    clsUtil util = new clsUtil();
                     imgPerfil = Uri.fromFile(new File(diretorio,
-                            "tmp_contact_" + String.valueOf(System.currentTimeMillis()) + ".jpg"));
-
-                    /*
-                    imgPerfil = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                            "tmp_contact_" + String.valueOf(System.currentTimeMillis()) + ".jpg"));
-                    */
-
-                    //File path = new File(diretorio,)
-
+                            "img_perfil_" + String.valueOf(util.RetornaDataHoraMinuto() + ".jpg")));
 
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgPerfil);
 
@@ -151,10 +133,6 @@ public class padraoLogin extends Activity {
                     } catch (ActivityNotFoundException e) {
                         //Do nothing for now
                     }
-
-                    //File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-                   // intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    //startActivityForResult(intent, 1);
 
                 }
 
@@ -222,6 +200,44 @@ public class padraoLogin extends Activity {
         cropIntent.putExtra("return-data", true);
         // start the activity - we handle returning in onActivityResult
         startActivityForResult(cropIntent, 3);
+
+    }
+
+    public boolean ValidarCampos()    {
+        if (etNome.getText().length() == 0)
+        {
+            Toast.makeText(this, "Seu nome não foi informado", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (etTelefone.getText().length() == 0) {
+            Toast.makeText(this, "Seu telefone não foi informado", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void SalvarUsuario()
+    {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(imgPerfil.getPath());
+            byte[] image = new byte[fileInputStream.available()];
+            fileInputStream.read(image);
+
+            clsUsuario objUsuario = new clsUsuario();
+            objUsuario.setCodigoUsuario(1);
+            objUsuario.setNome(etNome.getText().toString());
+            objUsuario.setTelefone(etTelefone.getText().toString());
+            objUsuario.setImagemPerfil(image);
+            objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
+
+        }catch (Exception e)
+        {
+            Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
+            System.exit(0);
+        }
 
     }
 

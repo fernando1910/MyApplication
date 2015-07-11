@@ -11,21 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 public class ConfiguracoesDAO {
 
         private SQLiteDatabase db;
-        private static final String SCRIPT_DATABASE_DELETE = "DROP TABLE IF EXISTS tb_configuracoes";
-        private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"" +
-                " CREATE TABLE tb_configuracoes " +
-                " (fg_permite_push BINARY DEFAULT 0 , " +
-                " fg_permite_alarme BINARY DEFAULT 0, " +
-                " fg_notifica_comentario BINARY DEFAULT 1, " +
-                " fg_notifica_mudanca BINARY DEFAULT 1, " +
-                " fg_telefone_visivel BINARY DEFAULT 0 , " +
-                " ind_status_perfil INTEGER NOT NULL)",
-
-                "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
-
-
-        private static final String NOME_BANCO = "fiesta_louca";
-        private static final int VERSAO_BANCO = 1;
         private static final String TABELA = "tb_configuracoes";
         private SQLiteHelper dbH;
 
@@ -43,7 +28,7 @@ public class ConfiguracoesDAO {
         };
 
         public ConfiguracoesDAO(Context context){
-            dbH =  new SQLiteHelper(context,ConfiguracoesDAO.NOME_BANCO, ConfiguracoesDAO.VERSAO_BANCO, ConfiguracoesDAO.SCRIPT_DATABASE_CREATE, ConfiguracoesDAO.SCRIPT_DATABASE_DELETE);
+            dbH =  new SQLiteHelper(context);
             db = dbH.getWritableDatabase();
         }
 
