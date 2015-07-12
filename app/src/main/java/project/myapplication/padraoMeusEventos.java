@@ -53,4 +53,11 @@ public class padraoMeusEventos extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        startActivity(new Intent(this,padraoMenu.class));
+
+    }
 }

@@ -21,6 +21,13 @@ import java.util.List;
 
 public class padraoConfiguracao extends ActionBarActivity {
 
+    @Override
+     public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        startActivity(new Intent(this,padraoMenu.class));
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +57,7 @@ public class padraoConfiguracao extends ActionBarActivity {
 
         items.add(new ListViewItem()
                   {{
-                          t = R.drawable.ic_calendar;
+                          t = R.drawable.ic_perfil;
                           Title = getString(R.string.item_config_perfil);
                           //    SubTitle = "Subtitle 2";
 

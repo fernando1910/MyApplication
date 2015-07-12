@@ -14,6 +14,17 @@ import android.support.v4.widget.DrawerLayout;
 
 public class padraoMenu extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        System.exit(0);
+    }
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -188,6 +199,7 @@ public class padraoMenu extends ActionBarActivity
             ((padraoMenu) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
+
     }
 
 }

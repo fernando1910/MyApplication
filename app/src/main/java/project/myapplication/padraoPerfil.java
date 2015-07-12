@@ -53,4 +53,12 @@ public class padraoPerfil extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        startActivity(new Intent(this,padraoConfiguracao.class));
+
+    }
+
 }

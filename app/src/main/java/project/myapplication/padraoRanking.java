@@ -27,6 +27,14 @@ public class padraoRanking extends ActionBarActivity implements ActionBar.TabLis
     ViewPager mViewPager;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        startActivity(new Intent(this,padraoMenu.class));
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_ranking);
