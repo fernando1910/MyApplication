@@ -28,8 +28,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             " fg_telefone_visivel INTEGER DEFAULT 0 , " +
             " ind_status_perfil INTEGER NOT NULL)",
 
-            "CREATE TABLE tb_usuario (cd_usuario integer primary"
-                    + " key autoincrement, ds_nome text not null, ds_telefone text not null, img_perfil blob)",
+            "CREATE TABLE tb_usuario " +
+                    "(cd_usuario integer primary key autoincrement, " +
+                    "ds_nome text not null, " +
+                    "ds_telefone text not null, " +
+                    "img_perfil blob," +
+                    "ds_caminho_foto text)",
 
             "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
 

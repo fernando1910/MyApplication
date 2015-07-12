@@ -2,6 +2,10 @@ package project.myapplication;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -11,10 +15,17 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URI;
 
 
 public class padraoPerfil extends ActionBarActivity {
     ImageButton ibPerfil;
+    RoundImage roundedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +38,30 @@ public class padraoPerfil extends ActionBarActivity {
         clsUsuario objUsuario;
         UsuarioDAO usuarioDAO = new UsuarioDAO(getApplicationContext());
         objUsuario = usuarioDAO.getUsuario(1);
+        String caminhoFoto = objUsuario.getCaminhoFoto();
 
-        String teste = "";
+        try{
+            Uri uri = Uri.fromFile(new File(caminhoFoto));
+
+            ibPerfil.setImageURI(uri);
+
+            //InputStream inputStream = getAssets().open(caminhoFoto);
+            //Drawable drawable = Drawable.createFromStream(inputStream,null);
+            //ibPerfil.setImageDrawable(drawable);
+            //ibPerfil.setImageURI(Uri.parse(objUsuario.getCaminhoFoto()));
+
+        }catch (Exception e)
+        {
+            Toast.makeText(this,e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        /*
+        Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(),0,objUsuario.getImagemPerfil().length);
+        roundedImage = new RoundImage(bitmap);
+        ibPerfil =(ImageButton)findViewById(R.id.ibPerfil);
+        ibPerfil.setImageDrawable(roundedImage);
+        */
+
 
     }
 

@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
@@ -84,12 +87,17 @@ public class padraoLogin extends Activity {
 
         if(ValidarCampos())
         {
-            //SalvarUsuario();
-            clsUtil util = new clsUtil();
-            util.AtualizarStatus(getApplicationContext(), 3);
+            if(SalvarUsuario()) {
+                clsUtil util = new clsUtil();
+                util.AtualizarStatus(getApplicationContext(), 3);
 
-            Toast.makeText(this, "Seu perfil foi criado", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, padraoMenu.class));
+                Toast.makeText(this, "Seu perfil foi criado", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, padraoMenu.class));
+            }
+            else
+            {
+                Toast.makeText(this, "Melou", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -219,26 +227,36 @@ public class padraoLogin extends Activity {
         }
     }
 
-    public void SalvarUsuario()
+    public boolean SalvarUsuario()
     {
+        boolean fg_criou_usuario = false;
         try {
-            FileInputStream fileInputStream = new FileInputStream(imgPerfil.getPath());
-            byte[] image = new byte[fileInputStream.available()];
-            fileInputStream.read(image);
-
             clsUsuario objUsuario = new clsUsuario();
-            //objUsuario.setCodigoUsuario(1);
+
+            /*
+            Bitmap pic =  roundedImage.getBitmap();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            pic.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+            objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
+            */
+
+            objUsuario.setCaminhoFoto(imgPerfil.getPath());
+
             objUsuario.setNome(etNome.getText().toString());
             objUsuario.setTelefone(etTelefone.getText().toString());
-            objUsuario.setImagemPerfil(image);
+
             objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
+            fg_criou_usuario = true;
+
+
 
         }catch (Exception e)
         {
+            fg_criou_usuario = false;
             Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
-            System.exit(0);
-        }
 
+        }
+        return fg_criou_usuario;
     }
 
 }

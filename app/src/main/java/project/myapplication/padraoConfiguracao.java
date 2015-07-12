@@ -69,7 +69,7 @@ public class padraoConfiguracao extends ActionBarActivity {
 
         items.add(new ListViewItem()
                   {{
-                          t = R.drawable.ic_calendar;
+                          t = R.drawable.ic_about;
                           Title = getString(R.string.item_config_sobre);
                           //SubTitle = "Subtitle 1";
 

@@ -10,6 +10,7 @@ public class clsUsuario {
     private String ds_nome;
     private String ds_telefone;
     private byte[] img_perfil;
+    private String ds_caminho_foto;
 
 
     public String getNome() {
@@ -63,6 +64,15 @@ public class clsUsuario {
         usuario_dao.Salvar(objUsuario);
 
     }
+
+    public String getCaminhoFoto() {
+        return ds_caminho_foto;
+    }
+
+    public void setCaminhoFoto(String ds_caminho_foto) {
+        this.ds_caminho_foto = ds_caminho_foto;
+    }
+
 
 
 }
