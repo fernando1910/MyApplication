@@ -60,8 +60,9 @@ public class padraoNotificacao extends ActionBarActivity {
 
         if (id == android.R.id.home)
         {
+            SalvarConfiguracoes();
             this.finish();
-            startActivity(new Intent(this,padraoMenu.class));
+            startActivity(new Intent(this,padraoConfiguracao.class));
             return true;
         }
 
@@ -71,5 +72,51 @@ public class padraoNotificacao extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SalvarConfiguracoes();
+        this.finish();
+        startActivity(new Intent(this,padraoConfiguracao.class));
+
+    }
+
+    public void SalvarConfiguracoes()
+    {
+        clsConfiguracoes objConfig = new clsConfiguracoes();
+
+        if(ckPermitePush.isChecked())
+            objConfig.setPermitePush(1);
+        else
+            objConfig.setPermitePush(0);
+
+        if(ckPermiteAlarme.isChecked())
+            objConfig.setPermiteAlarme(1);
+        else
+            objConfig.setPermiteAlarme(0);
+
+        if(ckNotificaComentario.isChecked())
+            objConfig.setNotificaComentario(1);
+        else
+            objConfig.setNotificaComentario(0);
+
+        if(ckNotificaMudanca.isChecked())
+            objConfig.setNotificaMudanca(1);
+        else
+            objConfig.setNotificaMudanca(0);
+
+
+        if(ckTelefoneVisivel.isChecked())
+            objConfig.setTelefoneVisivel(1);
+        else
+            objConfig.setTelefoneVisivel(0);
+
+        objConfig.setStatusPerfil(3);
+
+        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
+        config_dao.Atualizar(objConfig);
+
     }
 }

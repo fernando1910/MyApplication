@@ -54,7 +54,12 @@ public class ConfiguracoesDAO {
     public void Atualizar(clsConfiguracoes objConfiguracoes)
     {
         ContentValues valores = new ContentValues();
-        valores.put("ind_status_perfil", objConfiguracoes.getStatusPerfil());
+        valores.put(fg_permite_push, objConfiguracoes.getPermitePush());
+        valores.put(fg_permite_alarme, objConfiguracoes.getPermiteAlarme());
+        valores.put(fg_notifica_comentario, objConfiguracoes.getNotificaComentario());
+        valores.put(fg_notifica_mudanca, objConfiguracoes.getNotificaMudanca());
+        valores.put(fg_telefone_visivel, objConfiguracoes.getTelefoneVisivel());
+        valores.put(ind_status_perfil, objConfiguracoes.getStatusPerfil());
 
         db.update(TABELA, valores, null, null);
     }
