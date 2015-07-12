@@ -1,5 +1,6 @@
 package project.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +17,7 @@ public class padraoNotificacao extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_notificacao);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ckPermitePush = (CheckBox)findViewById(R.id.ckPermitePush);
         ckPermiteAlarme = (CheckBox)findViewById(R.id.ckPermiteAlarme);
@@ -28,30 +30,20 @@ public class padraoNotificacao extends ActionBarActivity {
         objConfig = config_dao.Carregar();
 
         //Carrega as notificações
-       if(objConfig.getPermitePush()==true)
-       {ckPermitePush.setChecked(true);}
-       else
-       {ckPermitePush.setChecked(false);}
+       if(objConfig.getPermitePush()== 1)
+            ckPermitePush.setChecked(true);
 
-        if(objConfig.getPermiteAlarme()==true)
-        { ckPermiteAlarme.setChecked(true);}
-        else
-        {ckPermiteAlarme.setChecked(false);}
+        if(objConfig.getPermiteAlarme()==1)
+            ckPermiteAlarme.setChecked(true);
 
-        if(objConfig.getNotificaComentario()==true)
-        {ckNotificaComentario.setChecked(true);}
-        else
-        {ckNotificaComentario.setChecked(false);}
+        if(objConfig.getNotificaComentario()==1)
+            ckNotificaComentario.setChecked(true);
 
-        if(objConfig.getNotificaMudanca()==true)
-        {ckNotificaMudanca.setChecked(true);}
-        else
-        {ckNotificaMudanca.setChecked(false);}
+        if(objConfig.getNotificaMudanca()==1)
+            ckNotificaMudanca.setChecked(true);
 
-        if(objConfig.getTelefoneVisivel()==true)
-        {ckTelefoneVisivel.setChecked(true);}
-        else
-        {ckTelefoneVisivel.setChecked(false);}
+        if(objConfig.getTelefoneVisivel()==1)
+            ckTelefoneVisivel.setChecked(true);
         //Verificar se a Check ta ticada ou não e alterar
     }
 
@@ -64,10 +56,14 @@ public class padraoNotificacao extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        if (id == android.R.id.home)
+        {
+            this.finish();
+            startActivity(new Intent(this,padraoMenu.class));
+            return true;
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

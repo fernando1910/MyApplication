@@ -40,6 +40,11 @@ public class ConfiguracoesDAO {
         {
             objConfig = new clsConfiguracoes();
             c.moveToFirst();
+            objConfig.setPermitePush(c.getInt(0));
+            objConfig.setPermiteAlarme(c.getInt(1));
+            objConfig.setNotificaComentario(c.getInt(2));
+            objConfig.setNotificaMudanca(c.getInt(3));
+            objConfig.setTelefoneVisivel(c.getInt(4));
             objConfig.setStatusPerfil(c.getInt(5));
         }
 

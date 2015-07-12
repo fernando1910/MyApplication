@@ -27,8 +27,7 @@
     <string name="title_activity_padrao_boas_vindas">Boas Vindas</string>
     <string name="title_activity_padrao_meus_eventos">Principal</string>
     <string name="title_activity_padrao_configuracoes">padraoConfiguracoes</string>
-    <string name="title_activity_padrao_teste">padraoTeste</string>
-    <string name="title_activity_padrao_perfil">padraoPerfil</string>
+    <string name="title_activity_padrao_perfil">Seu Perfil</string>
     <string name="criar_evento">Criar evento</string>
     <string name="title_activity_padrao_criar_evento">Crie seu evento</string>
 
@@ -57,9 +56,6 @@
     <string name="item_config_ajuda">Ajuda</string>
     <string name="item_config_sobre">Sobre</string>
     <string name="item_config_notifica">Notificações</string>
-
-
-
 
 
     <string name="title_activity_padrao_ranking"></string>

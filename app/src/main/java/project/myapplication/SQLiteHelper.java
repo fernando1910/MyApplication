@@ -21,11 +21,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     };
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"" +
             " CREATE TABLE tb_configuracoes " +
-            " (fg_permite_push BINARY DEFAULT 0 , " +
-            " fg_permite_alarme BINARY DEFAULT 0, " +
-            " fg_notifica_comentario BINARY DEFAULT 1, " +
-            " fg_notifica_mudanca BINARY DEFAULT 1, " +
-            " fg_telefone_visivel BINARY DEFAULT 0 , " +
+            " (fg_permite_push INTEGER DEFAULT 0 , " +
+            " fg_permite_alarme INTEGER DEFAULT 0, " +
+            " fg_notifica_comentario INTEGER DEFAULT 1, " +
+            " fg_notifica_mudanca INTEGER DEFAULT 1, " +
+            " fg_telefone_visivel INTEGER DEFAULT 0 , " +
             " ind_status_perfil INTEGER NOT NULL)",
 
             "CREATE TABLE tb_usuario (cd_usuario integer primary"
