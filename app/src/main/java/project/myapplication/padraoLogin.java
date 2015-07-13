@@ -41,7 +41,7 @@ public class padraoLogin extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_login);
 
-        clsConfiguracoes objConfig = null;
+        clsConfiguracoes objConfig;
         ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
         objConfig = config_dao.Carregar();
 
@@ -229,19 +229,16 @@ public class padraoLogin extends Activity {
 
     public boolean SalvarUsuario()
     {
-        boolean fg_criou_usuario = false;
+        boolean fg_criou_usuario;
         try {
             clsUsuario objUsuario = new clsUsuario();
 
-            /*
             Bitmap pic =  roundedImage.getBitmap();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             pic.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+
             objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
-            */
-
             objUsuario.setCaminhoFoto(imgPerfil.getPath());
-
             objUsuario.setNome(etNome.getText().toString());
             objUsuario.setTelefone(etTelefone.getText().toString());
 

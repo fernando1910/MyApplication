@@ -13,6 +13,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import java.net.URI;
 
 
 public class padraoPerfil extends ActionBarActivity {
+    EditText etNome;
     ImageButton ibPerfil;
     RoundImage roundedImage;
 
@@ -34,34 +36,40 @@ public class padraoPerfil extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ibPerfil = (ImageButton)findViewById(R.id.ibPerfil);
+        etNome = (EditText)findViewById(R.id.etNome);
+
+        Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.image);
+        roundedImage  = new RoundImage(bm);
+        ibPerfil.setImageDrawable(roundedImage);
 
         clsUsuario objUsuario;
         UsuarioDAO usuarioDAO = new UsuarioDAO(getApplicationContext());
         objUsuario = usuarioDAO.getUsuario(1);
         String caminhoFoto = objUsuario.getCaminhoFoto();
 
+        etNome.setText(objUsuario.getNome());
+
         try{
-            Uri uri = Uri.fromFile(new File(caminhoFoto));
+            Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(),0,objUsuario.getImagemPerfil().length);
+            roundedImage = new RoundImage(bitmap);
+            ibPerfil =(ImageButton)findViewById(R.id.ibPerfil);
+            ibPerfil.setImageDrawable(roundedImage);
 
-            ibPerfil.setImageURI(uri);
+            File file = new File(caminhoFoto);
 
-            //InputStream inputStream = getAssets().open(caminhoFoto);
-            //Drawable drawable = Drawable.createFromStream(inputStream,null);
-            //ibPerfil.setImageDrawable(drawable);
-            //ibPerfil.setImageURI(Uri.parse(objUsuario.getCaminhoFoto()));
+            /*if(file.exists())
+            {
+                //Bitmap image = BitmapFactory.decodeFile(file.getPath());
+                //ibPerfil.setImageBitmap(image);
+                //ibPerfil.setImageURI(uri);
+            }
+            */
+
 
         }catch (Exception e)
         {
             Toast.makeText(this,e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
-        /*
-        Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(),0,objUsuario.getImagemPerfil().length);
-        roundedImage = new RoundImage(bitmap);
-        ibPerfil =(ImageButton)findViewById(R.id.ibPerfil);
-        ibPerfil.setImageDrawable(roundedImage);
-        */
-
 
     }
 
@@ -74,7 +82,7 @@ public class padraoPerfil extends ActionBarActivity {
         if (id == android.R.id.home)
         {
             this.finish();
-            startActivity(new Intent(this,padraoMenu.class));
+            startActivity(new Intent(this,padraoConfiguracao.class));
             return true;
         }
 
