@@ -22,6 +22,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,7 +92,7 @@ public class padraoLogin extends Activity {
         {
             if(SalvarUsuario()) {
                 clsUtil util = new clsUtil();
-                util.AtualizarStatus(getApplicationContext(), 3);
+                //util.AtualizarStatus(getApplicationContext(), 3);
 
                 Toast.makeText(this, "Seu perfil foi criado", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, padraoMenu.class));
@@ -233,14 +236,18 @@ public class padraoLogin extends Activity {
         try {
             clsUsuario objUsuario = new clsUsuario();
 
-            Bitmap pic =  roundedImage.getBitmap();
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            pic.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+            if (roundedImage != null) {
+                Bitmap pic = roundedImage.getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
+                objUsuario.setCaminhoFoto(imgPerfil.getPath());
+            }
 
-            objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
-            objUsuario.setCaminhoFoto(imgPerfil.getPath());
             objUsuario.setNome(etNome.getText().toString());
             objUsuario.setTelefone(etTelefone.getText().toString());
+
+            objUsuario.gerarUsuarioJSON(objUsuario);
 
             objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
             fg_criou_usuario = true;

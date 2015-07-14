@@ -4,6 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
+
+import org.apache.http.HttpConnection;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,14 +30,12 @@ public class UsuarioDAO {
 
     private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefone, UsuarioDAO.img_perfil, UsuarioDAO.ds_caminho_foto};
 
-    public UsuarioDAO(Context context)
-    {
+    public UsuarioDAO(Context context) {
         dbH =  new SQLiteHelper(context);
         db = dbH.getWritableDatabase();
     }
 
-    public void Salvar(clsUsuario objUsuario )
-    {
+    public void Salvar(clsUsuario objUsuario ) {
         ContentValues valores = new ContentValues();
         valores.put(ds_nome, objUsuario.getNome());
         valores.put(ds_telefone, objUsuario.getTelefone());
@@ -40,8 +44,7 @@ public class UsuarioDAO {
         db.insert(TABELA_USUARIO,null,valores);
     }
 
-    public void Atualizar(clsUsuario objUsuario)
-    {
+    public void Atualizar(clsUsuario objUsuario) {
         ContentValues valores = new ContentValues();
         valores.put(ds_nome, objUsuario.getNome());
         valores.put(ds_telefone, objUsuario.getTelefone());
@@ -55,8 +58,7 @@ public class UsuarioDAO {
         db.delete(TABELA_USUARIO, "cd_usuario = ?", new String[]{"cd_usuario" + ""});
     }
 
-    public String listar()
-    {
+    public String listar()  {
         String teste = "teste";
         ArrayList<clsUsuario> usuarios = new ArrayList<clsUsuario>();
         Cursor c = db.query(true, TABELA_USUARIO, new String[]{cd_usuario},null, null, null,null,null,null);
@@ -109,9 +111,6 @@ public class UsuarioDAO {
             String ex = e.getMessage();
             ex = "";
         }
-        //Cursor c = db.query(true, TABELA_USUARIO, new String[]{cd_usuario},null, null, null,null,null,null);
-
-
         return  fg_existe_perfil;
     }
 }
