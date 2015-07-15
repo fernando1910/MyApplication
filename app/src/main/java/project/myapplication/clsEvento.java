@@ -18,6 +18,7 @@ public class clsEvento {
     Date dt_inclusao;
     Date dt_alteracao;
     public int fg_evento_privado;
+    private String ds_endereco;
 
     protected final String caminhoSevidor = "";
 
@@ -86,6 +87,14 @@ public class clsEvento {
         this.fg_evento_privado = fg_evento_privado;
     }
 
+    public String getEndereco() {
+        return ds_endereco;
+    }
+
+    public void setEndereco(String ds_endereco) {
+        this.ds_endereco = ds_endereco;
+    }
+
     public void gerarEventoJSON(clsEvento objEvento) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -95,9 +104,8 @@ public class clsEvento {
             jsonObject.put("ds_descricao", objEvento.getDescricao());
             jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
             jsonObject.put("dt_evento", objEvento.getDataEvento());
-            jsonObject.put("dt_inclusao", objEvento.getDataInclusao());
-            jsonObject.put("dt_alteracao", objEvento.getDataAlteracao());
             jsonObject.put("fg_evento_privado", objEvento.getEventoPrivado());
+            jsonObject.put("ds_endereco", objEvento.getEndereco());
 
 
         } catch (JSONException e) {
