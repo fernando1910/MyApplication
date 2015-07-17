@@ -63,7 +63,8 @@
             android:id="@+id/btDataPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mostrar"
+            android:text=""
+            android:src="@drawable/ic_calendar1"
             android:onClick="onClickMostrarDataPicker"
 
             />

@@ -233,33 +233,32 @@ public class padraoLogin extends Activity {
     public boolean SalvarUsuario()
     {
         boolean fg_criou_usuario;
-        try {
-            clsUsuario objUsuario = new clsUsuario();
 
-            if (roundedImage != null) {
-                Bitmap pic = roundedImage.getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
-                objUsuario.setCaminhoFoto(imgPerfil.getPath());
+            clsUsuario objUsuario = new clsUsuario();
+            try
+            {
+                if(imgPerfil != null) {
+                    Bitmap pic = roundedImage.getBitmap();
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
+                    objUsuario.setCaminhoFoto(imgPerfil.getPath());
+                }
+
+                objUsuario.setNome(etNome.getText().toString());
+                objUsuario.setTelefone(etTelefone.getText().toString());
+
+                objUsuario.gerarUsuarioJSON(objUsuario);
+
+                objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
+                fg_criou_usuario = true;
+            }catch (Exception e)
+            {
+
+                fg_criou_usuario = false;
+                Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
             }
 
-            objUsuario.setNome(etNome.getText().toString());
-            objUsuario.setTelefone(etTelefone.getText().toString());
-
-            objUsuario.gerarUsuarioJSON(objUsuario);
-
-            objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
-            fg_criou_usuario = true;
-
-
-
-        }catch (Exception e)
-        {
-            fg_criou_usuario = false;
-            Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
-
-        }
         return fg_criou_usuario;
     }
 
