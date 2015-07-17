@@ -1,6 +1,7 @@
 package project.myapplication;
 
 import android.app.DatePickerDialog;
+import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,14 +22,14 @@ public class padraoCriarEvento extends ActionBarActivity {
     DateFormat format  = DateFormat.getDateInstance();
     Calendar calendar = Calendar.getInstance();
     TextView tvData;
-    Button btData;
+    ImageButton btData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_criar_evento);
         tvData = (TextView)findViewById(R.id.tvData);
-        btData = (Button)findViewById(R.id.btDataPicker);
+        btData = (ImageButton)findViewById(R.id.btDataPicker);
         atualizarData();
         //Button btDataPicker = (Button)findViewById(R.id.btDataPicker);
 

@@ -49,7 +49,8 @@
         </RadioGroup>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="1">
 
 
         <TextView
@@ -59,15 +60,14 @@
             android:text="xx/xx/xxxx"
             />
 
-        <Button
+        <ImageButton
             android:id="@+id/btDataPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:src="@drawable/ic_calendar1"
             android:onClick="onClickMostrarDataPicker"
-
-            />
+            android:adjustViewBounds="false"
+            android:background="#ffffff" />
         </LinearLayout>
 
 
