@@ -1,5 +1,7 @@
 package project.myapplication;
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,7 +101,7 @@ public class clsEvento {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        try{
+        try {
             jsonObject.put("ds_titulo_evento", objEvento.getTituloEvento());
             jsonObject.put("ds_descricao", objEvento.getDescricao());
             jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
@@ -112,6 +114,26 @@ public class clsEvento {
             e.printStackTrace();
         }
 
+        enviarEventoServidor(jsonObject.toString());
+    }
+
+        public void InserirEvento(Context context, clsEvento objEvento) {
+            //Criar Evento DAO
+        }
+
+    public String enviarEventoServidor(final String data)
+    {
+        final String[] resposta = new String[1];
+        new Thread(){
+            public void run(){
+                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb("http://www.fiesta1.hol.es/process.php", "send-json",data);
+
+            }
+        }.start();
+        return resposta[0];
     }
 
 }
+
+
+
