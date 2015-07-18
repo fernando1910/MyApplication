@@ -1,6 +1,10 @@
 package project.myapplication;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +33,15 @@ public class clsUtil {
         objConfig = config_dao.Carregar();
         objConfig.setStatusPerfil(ind_status_perfil);
         config_dao.Atualizar(objConfig);
+    }
+
+    public Drawable retornarIcone(Drawable drawable, Resources resources)
+    {
+
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,60,60,true));
+        return d;
+
     }
 
     public clsUtil() {

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.NetworkOnMainThreadException;
@@ -14,6 +15,7 @@ import android.text.Layout;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,67 +39,28 @@ import java.net.URI;
 
 public class padraoPerfil extends ActionBarActivity {
     EditText etNome;
-    ImageButton ibPerfil;
+    ImageButton ibPerfil, ibEditarNome;
     RoundImage roundedImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_perfil);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ibPerfil = (ImageButton)findViewById(R.id.ibPerfil);
+        ibEditarNome = (ImageButton)findViewById(R.id.ibEditarNome);
         etNome = (EditText)findViewById(R.id.etNome);
+        etNome.setEnabled(false);
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.image);
         roundedImage  = new RoundImage(bm);
         ibPerfil.setImageDrawable(roundedImage);
 
-        String result;
-
-        try {
-            HttpClient httpClient = new DefaultHttpClient();
-            try {
-                HttpPost httpPost = new HttpPost("http://www.fiesta1.hol.es/CadUsuario.php");
-
-
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-
-                HttpEntity httpEntity = httpResponse.getEntity();
-
-                InputStream inputStream = httpEntity.getContent();
-                try {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line + "\n");
-                    }
-                    inputStream.close();
-                    result = stringBuilder.toString();
-                } catch (Exception e) {
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-            catch (NetworkOnMainThreadException ex)
-            {
-                result = ex.getMessage();
-            }
-
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
-        }
-
-        /*
-
         clsUsuario objUsuario;
         UsuarioDAO usuarioDAO = new UsuarioDAO(getApplicationContext());
         objUsuario = usuarioDAO.getUsuario(1);
-        String caminhoFoto = objUsuario.getCaminhoFoto();
 
         etNome.setText(objUsuario.getNome());
 
@@ -107,22 +70,14 @@ public class padraoPerfil extends ActionBarActivity {
             ibPerfil =(ImageButton)findViewById(R.id.ibPerfil);
             ibPerfil.setImageDrawable(roundedImage);
 
-            File file = new File(caminhoFoto);
-
-            /*if(file.exists())
-            {
-                //Bitmap image = BitmapFactory.decodeFile(file.getPath());
-                //ibPerfil.setImageBitmap(image);
-                //ibPerfil.setImageURI(uri);
-            }
-
-
-
         }catch (Exception e)
         {
             Toast.makeText(this,e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        */
+        clsUtil objUtil = new clsUtil();
+        ibEditarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_edit),getResources()));
+
+
 
     }
 
@@ -152,6 +107,12 @@ public class padraoPerfil extends ActionBarActivity {
         super.onBackPressed();
         this.finish();
         startActivity(new Intent(this,padraoConfiguracao.class));
+
+    }
+
+    public void onClickEditarNome(View v)
+    {
+        etNome.setEnabled(true);
 
     }
 
