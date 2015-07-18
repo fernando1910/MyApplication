@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -85,6 +86,11 @@ public class padraoConfiguracao extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
                 switch (position) {
+                    case 3:
+                        intent = new Intent(padraoConfiguracao.this,padraoSobre.class);
+                        finish();
+                        startActivity(intent);
+                        break;
                     case 2:
                         intent = new Intent(padraoConfiguracao.this,padraoPerfil.class);
                         finish();
@@ -95,6 +101,11 @@ public class padraoConfiguracao extends ActionBarActivity {
                         finish();
                         startActivity(intent);
                         break;
+                    case 0:
+                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.padrao_ajuda)));
+                        startActivity(intent);
+                        break;
+
                 }
 
 

@@ -26,14 +26,6 @@ public class clsUtil {
         return DataHora;
     }
 
-    public void AtualizarStatus(Context context, int ind_status_perfil)
-    {
-        clsConfiguracoes objConfig;
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(context);
-        objConfig = config_dao.Carregar();
-        objConfig.setStatusPerfil(ind_status_perfil);
-        config_dao.Atualizar(objConfig);
-    }
 
     public Drawable retornarIcone(Drawable drawable, Resources resources)
     {

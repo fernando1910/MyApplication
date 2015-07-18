@@ -66,5 +66,10 @@
 
     <string name="selecionar_foto">Select Photo</string>
 
+    <!-- Tela Sobre -->
+    <string name="padrao_sobre">"Aplicativo com fins academicos"</string>
+    <string name="title_activity_padrao_sobre">Sobre</string>
+    <!-- Tela Ajuda -->
+    <string name="padrao_ajuda">http://www.fiesta1.hol.es/ajuda.html</string>
 
 </resources>
