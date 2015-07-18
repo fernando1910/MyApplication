@@ -71,5 +71,6 @@
     <string name="title_activity_padrao_sobre">Sobre</string>
     <!-- Tela Ajuda -->
     <string name="padrao_ajuda">http://www.fiesta1.hol.es/ajuda.html</string>
+    <string name="title_activity_padrao_mapa">Mapa</string>
 
 </resources>

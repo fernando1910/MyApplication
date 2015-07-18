@@ -68,6 +68,10 @@ public class padraoMenu extends ActionBarActivity
                 startActivity(new Intent(this,padraoMeusEventos.class));
                 this.finish();
                 break;
+            case 3:
+                startActivity(new Intent(this,padraoMapa.class));
+                this.finish();
+                break;
             case 4:
                 startActivity(new Intent(this,padraoConfiguracao.class));
                 this.finish();
