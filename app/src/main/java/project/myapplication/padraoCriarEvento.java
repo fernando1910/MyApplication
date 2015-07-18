@@ -1,6 +1,7 @@
 package project.myapplication;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,12 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 
 public class padraoCriarEvento extends ActionBarActivity {
@@ -23,6 +27,10 @@ public class padraoCriarEvento extends ActionBarActivity {
     Calendar calendar = Calendar.getInstance();
     TextView tvData;
     ImageButton btData;
+    EditText etTitulo;
+    EditText etDescricao;
+    EditText etEndereco;
+    RadioGroup rgStatusEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +38,81 @@ public class padraoCriarEvento extends ActionBarActivity {
         setContentView(R.layout.activity_padrao_criar_evento);
         tvData = (TextView)findViewById(R.id.tvData);
         btData = (ImageButton)findViewById(R.id.btDataPicker);
+        etTitulo = (EditText)findViewById(R.id.etTitulo);
+        etDescricao = (EditText)findViewById(R.id.etDescricao);
+        etEndereco = (EditText)findViewById(R.id.etEndereco);
+        rgStatusEvento = (RadioGroup)findViewById(R.id.rgStatusEvento);
         atualizarData();
         //Button btDataPicker = (Button)findViewById(R.id.btDataPicker);
 
     }
 
+    public void onClickCriarEventto(View v)
+    {
+        if(ValidarCampos())
+        {
+            if(SalvarEvento()) {
+                //clsUtil util = new clsUtil();
+                //util.AtualizarStatus(getApplicationContext(), 3);
+
+                Toast.makeText(this, "O evento foi criado", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, padraoMenu.class));
+            }
+            else
+            {
+                Toast.makeText(this, "Melou", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public boolean SalvarEvento()
+    {
+        boolean fg_criou_evento = false;
+        clsEvento objEvento = new clsEvento();
+        try {
+            if (ValidarCampos()) {
+                objEvento.setTituloEvento(etTitulo.getText().toString());
+                objEvento.setDescricao(etDescricao.getText().toString());
+                objEvento.setEndereco(etEndereco.getText().toString());
+                objEvento.setEventoPrivado(rgStatusEvento.getCheckedRadioButtonId());
+
+            }
+            objEvento.gerarEventoJSON(objEvento);
+
+            objEvento.InserirEvento(this.getApplicationContext(), objEvento);
+            fg_criou_evento = true;
+            return true;
+            }catch (Exception e)
+            {
+                fg_criou_evento = false;
+                Toast.makeText(this, "Erro: Evento não foi criado", Toast.LENGTH_SHORT).show();
+            }
+        return fg_criou_evento;
+    }
+
+    public boolean ValidarCampos()
+    {
+        if(etTitulo.getText().length()==0)
+        {
+            Toast.makeText(this, "Necessário informar um Titulo", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(etEndereco.getText().length()==0)
+        {
+            Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(rgStatusEvento.getCheckedRadioButtonId()==0)
+        {
+            Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
     public void atualizarData()
     {
 
