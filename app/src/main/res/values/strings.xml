@@ -50,6 +50,13 @@
         <item>@drawable/ic_config</item>
         <item>@drawable/ic_trofeu</item>
     </string-array>
+    
+    <string-array name="sessao_ddi">
+        <item>+55</item>
+    </string-array>
+
+    <!-- Tela de Criação de Perfil / Login (padraoLogin) -->
+    <string name="padrao_login">http://www.fiesta1.hol.es/CadUsuario.php</string>
 
     <!-- String da tela de configuração -->
     <string name="item_config_perfil">Perfil</string>

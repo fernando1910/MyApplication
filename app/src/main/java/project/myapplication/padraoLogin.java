@@ -4,40 +4,32 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Date;
 
 
 public class padraoLogin extends Activity {
-    EditText etNome;
-    EditText etTelefone;
+    EditText etNome, etTelefone;
     ImageButton b;
     RoundImage roundedImage;
     Uri imgPerfil;
-
+    Button btAvancar;
+    Spinner spDDI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,26 +55,19 @@ public class padraoLogin extends Activity {
 
         etNome = (EditText)findViewById(R.id.etNome);
         etTelefone = (EditText)findViewById(R.id.etTelefone);
+        btAvancar = (Button)findViewById(R.id.btAvancar);
+        spDDI = (Spinner)findViewById(R.id.spDDI);
 
         b=(ImageButton)findViewById(R.id.btnSelectPhoto);
         Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.image);
         roundedImage  = new RoundImage(bm);
         b.setImageDrawable(roundedImage);
 
-        //etTelefone = (EditText)findViewById(R.id.etTelefone);
-
-        //telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        //etTelefone.setText(telephonyManager.getLine1Number());
-        //etTelefone.setText(t);
-
         b.setOnClickListener(new View.OnClickListener() {
-
             @Override
-
             public void onClick(View v) {
-                selectImage();
+                SelectImagem();
             }
-
         });
     }
 
@@ -110,18 +95,15 @@ public class padraoLogin extends Activity {
         return true;
     }
 
-    private void selectImage() {
+    private void SelectImagem() {
 
         final CharSequence[] options = {"Tirar foto", "Escolher da Galeria","Cancelar" };
         AlertDialog.Builder builder = new AlertDialog.Builder(padraoLogin.this);
         builder.setTitle("Adcionar Foto");
 
-        //builder.setIcon(android.R.drawable.ic_menu_camera);
-
         builder.setItems(options, new DialogInterface.OnClickListener() {
 
             @Override
-
             public void onClick(DialogInterface dialog, int item) {
 
                 if (options[item].equals("Tirar foto"))
@@ -142,9 +124,8 @@ public class padraoLogin extends Activity {
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, 1);
                     } catch (ActivityNotFoundException e) {
-                        //Do nothing for now
-                    }
 
+                    }
                 }
 
                 else if (options[item].equals("Escolher da Galeria"))
@@ -155,14 +136,11 @@ public class padraoLogin extends Activity {
 
                 else if (options[item].equals("Cancelar")) {
                     dialog.dismiss();
-
                 }
             }
-
         });
 
         builder.show();
-
     }
 
     @Override
@@ -171,7 +149,6 @@ public class padraoLogin extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-
             if (requestCode == 1) {
                 cortarFoto(imgPerfil);
 
@@ -183,16 +160,10 @@ public class padraoLogin extends Activity {
             {
                 Bundle extras = data.getExtras();
                 Bitmap thumbnail = extras.getParcelable("data");
-
-                //Log.w("path of image from gallery......******************.........", picturePath+"");
-
                 roundedImage  = new RoundImage(thumbnail);
                 b.setImageDrawable(roundedImage);
-
             }
-
         }
-
     }
 
     public void cortarFoto(Uri selectedImage)    {
@@ -232,8 +203,6 @@ public class padraoLogin extends Activity {
 
     public boolean SalvarUsuario()
     {
-        boolean fg_criou_usuario;
-
             clsUsuario objUsuario = new clsUsuario();
             try
             {
@@ -247,19 +216,52 @@ public class padraoLogin extends Activity {
 
                 objUsuario.setNome(etNome.getText().toString());
                 objUsuario.setTelefone(etTelefone.getText().toString());
+                objUsuario.setDDI(spDDI.getSelectedItem().toString());
 
-                objUsuario.gerarUsuarioJSON(objUsuario);
+                String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
+                int codigoUsuario = Integer.parseInt(enviarUsuarioServidor(usuario));
 
-                objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
-                fg_criou_usuario = true;
+                if (codigoUsuario == 0)
+                {
+                    Toast.makeText(this, "Erro: Falha ao criar o perfil", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                else {
+
+                    objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
+                    return true;
+                }
             }catch (Exception e)
             {
-
-                fg_criou_usuario = false;
                 Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
+                return false;
+
             }
 
-        return fg_criou_usuario;
+    }
+
+    public String enviarUsuarioServidor(final String data) throws InterruptedException {
+
+        final String[] resposta = new String[1];
+        try{
+            btAvancar.setVisibility(View.INVISIBLE);
+            Thread thread =  new Thread( new Runnable(){
+            public void run(){
+                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb(getString(R.string.padrao_login), "send-json",data);
+
+            }
+        });
+        thread.start();
+
+
+            thread.join();
+        } catch (InterruptedException e) {
+            btAvancar.setVisibility(View.VISIBLE);
+            e.printStackTrace();
+        }
+
+
+        return resposta[0];
     }
 
 }

@@ -104,10 +104,10 @@ public class clsEvento {
         try {
             jsonObject.put("ds_titulo_evento", objEvento.getTituloEvento());
             jsonObject.put("ds_descricao", objEvento.getDescricao());
-            jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
-            jsonObject.put("dt_evento", objEvento.getDataEvento());
-            jsonObject.put("fg_evento_privado", objEvento.getEventoPrivado());
-            jsonObject.put("ds_endereco", objEvento.getEndereco());
+            //jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
+            //jsonObject.put("dt_evento", objEvento.getDataEvento());
+            //jsonObject.put("fg_evento_privado", objEvento.getEventoPrivado());
+            //jsonObject.put("ds_endereco", objEvento.getEndereco());
 
 
         } catch (JSONException e) {
@@ -126,7 +126,7 @@ public class clsEvento {
         final String[] resposta = new String[1];
         new Thread(){
             public void run(){
-                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb("http://www.fiesta1.hol.es/process.php", "send-json",data);
+                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb("http://www.fiesta1.hol.es/CadEvento.php", "send-json",data);
 
             }
         }.start();

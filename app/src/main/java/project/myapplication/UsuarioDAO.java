@@ -37,6 +37,7 @@ public class UsuarioDAO {
 
     public void Salvar(clsUsuario objUsuario ) {
         ContentValues valores = new ContentValues();
+        valores.put(cd_usuario, objUsuario.getCodigoUsuario());
         valores.put(ds_nome, objUsuario.getNome());
         valores.put(ds_telefone, objUsuario.getTelefone());
         valores.put(img_perfil, objUsuario.getImagemPerfil());
@@ -78,16 +79,16 @@ public class UsuarioDAO {
         return  teste;
     }
 
-    public clsUsuario getUsuario(int id)
+    public clsUsuario getUsuario()
     {
-        Cursor c = db.rawQuery("SELECT * FROM tb_usuario",null);
+        Cursor c = db.rawQuery("SELECT TOP 1 * FROM tb_usuario",null);
         //Cursor c = db.query(true, TABELA_USUARIO, UsuarioDAO.colunas," cd_usuario = ? ", new String[]{id+""}, null,null,null,null);
         clsUsuario objUsuario = null;
         if (c.getCount() > 0)
         {
             objUsuario = new clsUsuario();
             c.moveToFirst();
-            //objUsuario.setCodigoUsuario(c.getInt(0));
+            objUsuario.setCodigoUsuario(c.getInt(0));
             objUsuario.setNome(c.getString(1));
             objUsuario.setTelefone(c.getString(2));
             objUsuario.setImagemPerfil(c.getBlob(3));
@@ -108,8 +109,7 @@ public class UsuarioDAO {
         }
         catch (Exception e)
         {
-            String ex = e.getMessage();
-            ex = "";
+            e.getMessage();
         }
         return  fg_existe_perfil;
     }

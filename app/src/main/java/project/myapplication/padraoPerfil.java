@@ -60,24 +60,23 @@ public class padraoPerfil extends ActionBarActivity {
 
         clsUsuario objUsuario;
         UsuarioDAO usuarioDAO = new UsuarioDAO(getApplicationContext());
-        objUsuario = usuarioDAO.getUsuario(1);
+        objUsuario = usuarioDAO.getUsuario();
 
         etNome.setText(objUsuario.getNome());
 
-        try{
-            Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(),0,objUsuario.getImagemPerfil().length);
-            roundedImage = new RoundImage(bitmap);
-            ibPerfil =(ImageButton)findViewById(R.id.ibPerfil);
-            ibPerfil.setImageDrawable(roundedImage);
+        if(objUsuario.getImagemPerfil() != null) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+                roundedImage = new RoundImage(bitmap);
+                ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
+                ibPerfil.setImageDrawable(roundedImage);
 
-        }catch (Exception e)
-        {
-            Toast.makeText(this,e.getMessage(), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            clsUtil objUtil = new clsUtil();
+            ibEditarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_edit), getResources()));
         }
-        clsUtil objUtil = new clsUtil();
-        ibEditarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_edit),getResources()));
-
-
 
     }
 

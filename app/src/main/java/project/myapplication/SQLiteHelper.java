@@ -29,7 +29,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             " ind_status_perfil INTEGER NOT NULL)",
 
             "CREATE TABLE tb_usuario " +
-                    "(cd_usuario integer primary key autoincrement, " +
+                    "(cd_usuario integer primary key , " +
                     "ds_nome text not null, " +
                     "ds_telefone text not null, " +
                     "img_perfil blob," +
@@ -40,8 +40,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String NOME_BANCO = "fiesta_louca";
     private static final int VERSAO_BANCO = 1;
-
-
 
     public SQLiteHelper(Context context) {
         super(context, NOME_BANCO, null, VERSAO_BANCO);
@@ -78,7 +76,5 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             Log.i(CATEGORIA,scriptDelete[i]);
             onCreate(db);
         }
-
-
     }
 }

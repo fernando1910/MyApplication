@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Fernando on 07/06/2015.
@@ -34,6 +35,22 @@ public class clsUtil {
         Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,60,60,true));
         return d;
 
+    }
+
+    public String formatarDataBanco(Date data)
+    {
+        String dataFinal;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dataFinal = dateFormat.format(data);
+        return dataFinal;
+    }
+
+    public String formatarDataTela(Date data)
+    {
+        String dataFinal;
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dataFinal = dateFormat.format(data);
+        return dataFinal;
     }
 
     public clsUtil() {

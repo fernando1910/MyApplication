@@ -40,19 +40,22 @@
             <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:checked="true"
             android:text="Publico"
+                android:id="@+id/rbPublic"
             />
 
             <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+                android:id="@+id/rlPrivate"
             android:text="Privado"/>
 
         </RadioGroup>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:weightSum="1">
 
 
@@ -60,18 +63,35 @@
             android:id="@+id/tvData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="xx/xx/xxxx"
+            android:text="dd/MM/yyyy"
             />
 
         <ImageButton
             android:id="@+id/btDataPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_calendar1"
             android:onClick="onClickMostrarDataPicker"
             android:adjustViewBounds="false"
+            android:layout_marginLeft="10dp"
             android:background="@android:color/transparent" />
-        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvHora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HH:mm"
+            android:layout_marginLeft="10dp"
+            />
+
+        <ImageButton
+            android:id="@+id/ibTimePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickShowTimerPicker"
+            android:adjustViewBounds="false"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
 
 
     <LinearLayout

@@ -15,6 +15,7 @@ public class clsUsuario {
     private String ds_telefone;
     private byte[] img_perfil;
     private String ds_caminho_foto;
+    private String nr_ddi;
 
 
     public String getNome() {
@@ -57,9 +58,9 @@ public class clsUsuario {
 
     public clsUsuario SelecionarUsuario(Context context)
     {
-        clsUsuario objUsuario = null;
+        clsUsuario objUsuario;
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        objUsuario = usuario_dao.getUsuario(1);
+        objUsuario = usuario_dao.getUsuario();
         return objUsuario;
     }
 
@@ -77,32 +78,29 @@ public class clsUsuario {
         this.ds_caminho_foto = ds_caminho_foto;
     }
 
-    public void gerarUsuarioJSON(clsUsuario objUsuario) {
+    public String getDDI() {
+        return nr_ddi;
+    }
+
+    public void setDDI(String nr_ddi) {
+        this.nr_ddi = nr_ddi;
+    }
+
+    public String gerarUsuarioJSON(clsUsuario objUsuario) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
-        try{
+        try {
             jsonObject.put("ds_nome", objUsuario.getNome());
             jsonObject.put("ds_telefone", objUsuario.getTelefone());
+            jsonObject.put("nr_ddi", objUsuario.getDDI());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-         enviarUsuarioServidor(jsonObject.toString());
+        return jsonObject.toString();
 
-    }
-
-    public String enviarUsuarioServidor(final String data)
-    {
-        final String[] resposta = new String[1];
-        new Thread(){
-            public void run(){
-                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb("http://www.fiesta1.hol.es/process.php", "send-json",data);
-
-            }
-        }.start();
-        return resposta[0];
     }
 
 
