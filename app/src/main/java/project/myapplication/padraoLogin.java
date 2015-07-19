@@ -227,7 +227,7 @@ public class padraoLogin extends Activity {
                     return false;
                 }
                 else {
-
+                    objUsuario.setCodigoUsuario(codigoUsuario);
                     objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
                     return true;
                 }

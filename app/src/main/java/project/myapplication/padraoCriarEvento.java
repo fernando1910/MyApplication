@@ -55,7 +55,7 @@ public class padraoCriarEvento extends ActionBarActivity {
         //Button btDataPicker = (Button)findViewById(R.id.btDataPicker);
         util = new clsUtil();
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1),getResources()));
-        ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1), getResources()));
+        ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_clock), getResources()));
 
     }
 

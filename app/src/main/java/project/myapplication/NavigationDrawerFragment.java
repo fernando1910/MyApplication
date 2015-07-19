@@ -1,5 +1,6 @@
 package project.myapplication;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
@@ -271,7 +272,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this.getActivity().getApplicationContext(),padraoCriarEvento.class));
             return true;
         }
 

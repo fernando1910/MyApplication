@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but are recommended.
@@ -85,6 +86,10 @@
         <activity
             android:name=".padraoMapa"
             android:label="@string/title_activity_padrao_mapa" >
+        </activity>
+        <activity
+            android:name=".padraoContatos"
+            android:label="@string/title_activity_padrao_contatos" >
         </activity>
     </application>
 

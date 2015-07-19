@@ -6,9 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Fernando on 24/04/2015.
- */
 public class clsUsuario {
     private int cd_usuario;
     private String ds_nome;
@@ -56,6 +53,11 @@ public class clsUsuario {
         usuario_dao.Atualizar(objUsuario);
     }
 
+    public void AtualizarNome(Context context, String ds_nome) {
+        UsuarioDAO usuario_dao = new UsuarioDAO(context);
+        usuario_dao.AtualizarNome(ds_nome);
+    }
+
     public clsUsuario SelecionarUsuario(Context context)
     {
         clsUsuario objUsuario;
@@ -94,6 +96,7 @@ public class clsUsuario {
             jsonObject.put("ds_nome", objUsuario.getNome());
             jsonObject.put("ds_telefone", objUsuario.getTelefone());
             jsonObject.put("nr_ddi", objUsuario.getDDI());
+            jsonObject.put("img_perfil", objUsuario.getImagemPerfil());
 
         } catch (JSONException e) {
             e.printStackTrace();

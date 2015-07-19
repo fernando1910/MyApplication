@@ -87,7 +87,7 @@ public class padraoMapa extends FragmentActivity implements LocationListener {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
     }
 
     @Override
@@ -162,6 +162,7 @@ public class padraoMapa extends FragmentActivity implements LocationListener {
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("Marker"));
                             }
                         }
                     }

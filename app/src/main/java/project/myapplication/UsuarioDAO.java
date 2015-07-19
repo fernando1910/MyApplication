@@ -13,9 +13,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Fernando on 24/04/2015.
- */
 public class UsuarioDAO {
     private SQLiteDatabase db;
 
@@ -54,6 +51,12 @@ public class UsuarioDAO {
         db.update(TABELA_USUARIO, valores, " cd_usuario = ? ", new String[]{objUsuario.getCodigoUsuario() + ""});
     }
 
+    public void AtualizarNome(String ds_nome){
+        ContentValues values = new ContentValues();
+        values.put(this.ds_nome,ds_nome);
+        db.update(TABELA_USUARIO, values,null,null);
+    }
+
     public void Deletar(clsUsuario objUsuario)
     {
         db.delete(TABELA_USUARIO, "cd_usuario = ?", new String[]{"cd_usuario" + ""});
@@ -81,7 +84,7 @@ public class UsuarioDAO {
 
     public clsUsuario getUsuario()
     {
-        Cursor c = db.rawQuery("SELECT TOP 1 * FROM tb_usuario",null);
+        Cursor c = db.rawQuery("SELECT * FROM tb_usuario",null);
         //Cursor c = db.query(true, TABELA_USUARIO, UsuarioDAO.colunas," cd_usuario = ? ", new String[]{id+""}, null,null,null,null);
         clsUsuario objUsuario = null;
         if (c.getCount() > 0)

@@ -5,9 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-/**
- * Created by Fernando on 24/04/2015.
- */
+
 public class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String CATEGORIA = "banco";
@@ -34,6 +32,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_telefone text not null, " +
                     "img_perfil blob," +
                     "ds_caminho_foto text)",
+
+            "CREATE TABLE tb_contatos" +
+                    "(cd_usuario INTEGER, cd_contato INTEGER)",
 
             "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
 

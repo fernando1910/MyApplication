@@ -10,11 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-/**
- * Created by Fernando on 07/06/2015.
- */
-public class clsUtil {
+class clsUtil {
 
     public String RetornaDataHoraMinuto()
     {
@@ -32,7 +28,7 @@ public class clsUtil {
     {
 
         Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,60,60,true));
+        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,75,75,true));
         return d;
 
     }

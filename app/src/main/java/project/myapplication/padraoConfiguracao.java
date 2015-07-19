@@ -1,8 +1,5 @@
 package project.myapplication;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -11,12 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -47,6 +41,17 @@ public class padraoConfiguracao extends ActionBarActivity {
 
                       }}
         );
+
+        items.add(new ListViewItem()
+        {{
+                         t = android.R.drawable.ic_menu_agenda;
+                         Title = "Contatos";
+                      }
+
+                  }
+
+        );
+
         items.add(new ListViewItem()
                   {{
                           t = android.R.drawable.ic_popup_reminder;
@@ -86,18 +91,23 @@ public class padraoConfiguracao extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
                 switch (position) {
-                    case 3:
+                    case 4:
                         intent = new Intent(padraoConfiguracao.this,padraoSobre.class);
                         finish();
                         startActivity(intent);
                         break;
-                    case 2:
+                    case 3:
                         intent = new Intent(padraoConfiguracao.this,padraoPerfil.class);
                         finish();
                         startActivity(intent);
                         break;
-                    case 1:
+                    case 2:
                         intent = new Intent(padraoConfiguracao.this,padraoNotificacao.class);
+                        finish();
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(padraoConfiguracao.this,padraoContatos.class);
                         finish();
                         startActivity(intent);
                         break;
@@ -145,7 +155,7 @@ public class padraoConfiguracao extends ActionBarActivity {
     }
 
 
-    class ListViewItem
+    static class ListViewItem
     {
         public int t;
         public String Title;
