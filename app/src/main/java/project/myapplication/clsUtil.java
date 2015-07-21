@@ -49,6 +49,24 @@ class clsUtil {
         return dataFinal;
     }
 
+
+    public String formatarStringDataBanco(String data)
+    {
+        String dataFinal = null;
+        data = data.replace("/","-");
+        String[] dataTemp = data.split("//-");
+
+        int i = 0;
+
+        while (i> dataTemp.length)
+        {
+            dataFinal = dataFinal + dataTemp[i];
+            i++;
+        }
+
+        return   dataFinal;
+    }
+
     public clsUtil() {
     }
 

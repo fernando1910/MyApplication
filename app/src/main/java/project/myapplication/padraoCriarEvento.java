@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -35,6 +36,7 @@ public class padraoCriarEvento extends ActionBarActivity {
     EditText etTitulo, etDescricao, etEndereco;
     RadioGroup rgStatusEvento;
     clsUtil util;
+    RadioButton rbPublic,rbPrivate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class padraoCriarEvento extends ActionBarActivity {
         etEndereco = (EditText)findViewById(R.id.etEndereco);
         rgStatusEvento = (RadioGroup)findViewById(R.id.rgStatusEvento);
         ibTimePicker = (ImageButton)findViewById(R.id.ibTimePicker);
+        rbPublic = (RadioButton)findViewById(R.id.rbPublic);
+        rbPrivate = (RadioButton)findViewById(R.id.rbPrivate);
+
         atualizarData();
         atualizarHora();
         //Button btDataPicker = (Button)findViewById(R.id.btDataPicker);
@@ -79,26 +84,33 @@ public class padraoCriarEvento extends ActionBarActivity {
 
     public boolean SalvarEvento()
     {
-        boolean fg_criou_evento = false;
         clsEvento objEvento = new clsEvento();
         try {
             if (ValidarCampos()) {
+                clsUsuario objUsuario = new clsUsuario();
+                objUsuario = objUsuario.SelecionarUsuario(this);
+
                 objEvento.setTituloEvento(etTitulo.getText().toString());
                 objEvento.setDescricao(etDescricao.getText().toString());
                 objEvento.setEndereco(etEndereco.getText().toString());
-                objEvento.setEventoPrivado(rgStatusEvento.getCheckedRadioButtonId());
+                if (rbPrivate.isChecked())
+                    objEvento.setEventoPrivado(1);
+                else
+                    objEvento.setEventoPrivado(0);
+                objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
+
+                objEvento.setDataEvento(calendar.getTime());
 
             }
-            objEvento.gerarEventoJSON(objEvento);
+            objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
 
             objEvento.InserirEvento(this.getApplicationContext(), objEvento);
-            fg_criou_evento = true;
             return true;
             }catch (Exception e)
             {
                 Toast.makeText(this, "Erro: Evento não foi criado", Toast.LENGTH_SHORT).show();
+                return false;
             }
-        return fg_criou_evento;
     }
 
     public boolean ValidarCampos()

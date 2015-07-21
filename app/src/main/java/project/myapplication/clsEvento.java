@@ -1,16 +1,13 @@
 package project.myapplication;
 
 import android.content.Context;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by Fernando on 14/07/2015.
- */
 public class clsEvento {
     private int cd_evento;
     private String ds_titulo_evento;
@@ -21,6 +18,8 @@ public class clsEvento {
     Date dt_alteracao;
     public int fg_evento_privado;
     private String ds_endereco;
+
+    clsUtil util;
 
     protected final String caminhoSevidor = "";
 
@@ -97,39 +96,48 @@ public class clsEvento {
         this.ds_endereco = ds_endereco;
     }
 
-    public void gerarEventoJSON(clsEvento objEvento) {
+    public void gerarEventoJSON(clsEvento objEvento, String url) throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
+        String dataEvento = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(objEvento.getDataEvento());
+
 
         try {
             jsonObject.put("ds_titulo_evento", objEvento.getTituloEvento());
             jsonObject.put("ds_descricao", objEvento.getDescricao());
-            //jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
-            //jsonObject.put("dt_evento", objEvento.getDataEvento());
-            //jsonObject.put("fg_evento_privado", objEvento.getEventoPrivado());
-            //jsonObject.put("ds_endereco", objEvento.getEndereco());
+            jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
+            jsonObject.put("dt_evento", dataEvento);
+            jsonObject.put("fg_evento_privado",objEvento.getEventoPrivado() );
+            jsonObject.put("ds_endereco", objEvento.getEndereco());
 
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
         }
 
-        enviarEventoServidor(jsonObject.toString());
+        enviarEventoServidor(url, jsonObject.toString());
     }
 
         public void InserirEvento(Context context, clsEvento objEvento) {
             //Criar Evento DAO
         }
 
-    public String enviarEventoServidor(final String data)
-    {
+    public String enviarEventoServidor(final String url,final String data) throws InterruptedException {
         final String[] resposta = new String[1];
-        new Thread(){
+        Thread thread = new Thread(){
             public void run(){
-                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb("http://www.fiesta1.hol.es/CadEvento.php", "send-json",data);
+                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb(url, "send-json",data);
 
             }
-        }.start();
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return resposta[0];
     }
 

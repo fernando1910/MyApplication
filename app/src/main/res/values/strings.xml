@@ -65,7 +65,7 @@
     <string name="item_config_notifica">Notificações</string>
 
 
-    <string name="title_activity_padrao_ranking"></string>
+    <string name="title_activity_padrao_ranking">Ranking</string>
     <string name="title_activity_listar">Listar</string>
     <string name="title_activity_padrao_notificacao">padraoNotificacao</string>
 
@@ -76,6 +76,9 @@
 
     <!-- String tela de Perfil -->
     <string name="action_update">Atualizar</string>
+
+    <!-- String tela de eventos -->
+    <string name="padrao_evento">http://www.fiesta1.hol.es/CadEvento.php</string>
 
     <!-- Tela Sobre -->
     <string name="padrao_sobre">"Aplicativo com fins academicos"</string>
