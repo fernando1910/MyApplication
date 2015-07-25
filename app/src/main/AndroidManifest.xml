@@ -24,6 +24,8 @@
         android:icon="@drawable/ic_padrao"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -91,6 +93,15 @@
             android:name=".padraoContatos"
             android:label="@string/title_activity_padrao_contatos" >
         </activity>
+        <activity
+            android:name=".padraoVisulizarEvento"
+            android:label="@string/title_activity_padrao_visulizar_evento" >
+        </activity>
+        <activity
+            android:name=".padraoPesquisarEndereco"
+            android:label="@string/title_activity_padrao_pesquisar_endereco" >
+        </activity>
+
     </application>
 
 </manifest>

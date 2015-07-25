@@ -1,8 +1,5 @@
 package project.myapplication;
 
-/**
- * Created by Fernando on 21/04/2015.
- */
 import java.util.List;
 
 import project.myapplication.padraoConfiguracao.ListViewItem;
@@ -70,6 +67,12 @@ public class CustomListViewAdapter extends BaseAdapter
 
 
         return vi;
+    }
+
+    public int getValue(final int position)
+    {
+        ListViewItem item = items.get(position);
+        return item.t;
     }
 
 }

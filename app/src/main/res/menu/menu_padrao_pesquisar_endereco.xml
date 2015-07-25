@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="project.myapplication.padraoPesquisarEndereco">
+
+    <item android:title="Search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:actionViewClass="android.widget.SearchView" />
+
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+</menu>

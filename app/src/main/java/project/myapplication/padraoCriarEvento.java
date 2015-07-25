@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Timer;
@@ -28,15 +30,16 @@ import java.util.concurrent.ExecutionException;
 
 public class padraoCriarEvento extends ActionBarActivity {
 
-    DateFormat formatDate  = DateFormat.getDateInstance();
-    DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
-    Calendar calendar = Calendar.getInstance();
-    TextView tvData, tvHora;
-    ImageButton btData, ibTimePicker;
-    EditText etTitulo, etDescricao, etEndereco;
-    RadioGroup rgStatusEvento;
-    clsUtil util;
-    RadioButton rbPublic,rbPrivate;
+    private DateFormat formatDate  = DateFormat.getDateInstance();
+    private DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
+    private Calendar calendar = Calendar.getInstance();
+    private TextView tvData, tvHora;
+    private ImageButton btData, ibTimePicker, ibEndereco;
+    private EditText etTitulo, etDescricao, etEndereco;
+    private RadioGroup rgStatusEvento;
+    private clsUtil util;
+    private RadioButton rbPublic,rbPrivate;
+    private double nr_latitude, nr_longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class padraoCriarEvento extends ActionBarActivity {
         ibTimePicker = (ImageButton)findViewById(R.id.ibTimePicker);
         rbPublic = (RadioButton)findViewById(R.id.rbPublic);
         rbPrivate = (RadioButton)findViewById(R.id.rbPrivate);
+        ibEndereco = (ImageButton)findViewById(R.id.ibEndereco);
 
         atualizarData();
         atualizarHora();
@@ -61,7 +65,7 @@ public class padraoCriarEvento extends ActionBarActivity {
         util = new clsUtil();
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1),getResources()));
         ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_clock), getResources()));
-
+        ibEndereco.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
     }
 
     public void onClickCriarEvento(View v)
@@ -100,6 +104,8 @@ public class padraoCriarEvento extends ActionBarActivity {
                 objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
 
                 objEvento.setDataEvento(calendar.getTime());
+                objEvento.setLatitude(nr_latitude);
+                objEvento.setLongitude(nr_longitude);
 
             }
             objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
@@ -161,7 +167,6 @@ public class padraoCriarEvento extends ActionBarActivity {
 
     TimePickerDialog.OnTimeSetListener timePickerDialog = new TimePickerDialog.OnTimeSetListener()
     {
-
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -228,5 +233,31 @@ public class padraoCriarEvento extends ActionBarActivity {
         this.finish();
         startActivity(new Intent(this,padraoMeusEventos.class));
 
+    }
+
+    public void chamarMapa(View view)
+    {
+        Bundle parameters = new Bundle();
+        Intent intent = new Intent(getApplicationContext(), padraoPesquisarEndereco.class);
+        startActivityForResult(intent, 1, parameters);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                String endereco;
+                nr_latitude= data.getDoubleExtra("latitude",0);
+                nr_longitude = data.getDoubleExtra("longitude",0);
+                endereco = data.getStringExtra("endereco");
+                etEndereco.setText(endereco);
+
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
