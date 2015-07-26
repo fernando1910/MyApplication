@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
 
 
 public class padraoCriarEvento extends ActionBarActivity {
-
+    //region Variaveis
     private DateFormat formatDate  = DateFormat.getDateInstance();
     private DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
     private Calendar calendar = Calendar.getInstance();
@@ -40,13 +40,15 @@ public class padraoCriarEvento extends ActionBarActivity {
     private clsUtil util;
     private RadioButton rbPublic,rbPrivate;
     private double nr_latitude, nr_longitude;
-
+    private clsConfiguracoes objConf;
+    //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_criar_evento);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    //region Vincular variaveis com interface
         tvData = (TextView)findViewById(R.id.tvData);
         tvHora = (TextView)findViewById(R.id.tvHora);
         btData = (ImageButton)findViewById(R.id.btDataPicker);
@@ -58,14 +60,17 @@ public class padraoCriarEvento extends ActionBarActivity {
         rbPublic = (RadioButton)findViewById(R.id.rbPublic);
         rbPrivate = (RadioButton)findViewById(R.id.rbPrivate);
         ibEndereco = (ImageButton)findViewById(R.id.ibEndereco);
+    //endregion
 
         atualizarData();
         atualizarHora();
-        //Button btDataPicker = (Button)findViewById(R.id.btDataPicker);
+
         util = new clsUtil();
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1),getResources()));
         ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_clock), getResources()));
         ibEndereco.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
+
+        objConf = new clsConfiguracoes();
     }
 
     public void onClickCriarEvento(View v)
@@ -73,15 +78,20 @@ public class padraoCriarEvento extends ActionBarActivity {
         if(ValidarCampos())
         {
             if(SalvarEvento()) {
-                //clsUtil util = new clsUtil();
-                //util.AtualizarStatus(getApplicationContext(), 3);
+                ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
 
                 Toast.makeText(this, "O evento foi criado", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, padraoMenu.class));
+                objConf = config_dao.Carregar();
+                if(objConf.getPermiteAlarme() == 1)
+                {
+                    criarEventoCalendarioAndroid();
+                }
+                this.finish();
             }
             else
             {
-                Toast.makeText(this, "Melou", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Algo deu errado", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -259,5 +269,17 @@ public class padraoCriarEvento extends ActionBarActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void criarEventoCalendarioAndroid()
+    {
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        intent.putExtra("beginTime", calendar.getTimeInMillis());
+        intent.putExtra("allDay", false);
+        //intent.putExtra("rrule", "FREQ=DAILY");
+        intent.putExtra("endTime", calendar.getTimeInMillis() + 60 * 60 *1000);
+        intent.putExtra("title", etTitulo.getText().toString());
+        startActivity(intent);
     }
 }
