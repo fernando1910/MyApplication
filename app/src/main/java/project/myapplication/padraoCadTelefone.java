@@ -1,11 +1,16 @@
 package project.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.provider.Telephony;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class padraoCadTelefone extends Activity {
 
@@ -13,11 +18,24 @@ public class padraoCadTelefone extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_cad_telefone);
+        Button btAvancar = (Button)findViewById(R.id.btAvancar);
     }
 
     public void onClick_Avancar(View v)
     {
+        EnviarSms();
+        Toast.makeText(this, "Vai KAraaaai", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, padraoLogin.class));
 
+    }
+
+    public boolean EnviarSms(){
+        EditText etTelefone = (EditText)findViewById(R.id.etTelefone);
+        String numero = etTelefone.getText().toString();
+        String mensagem = "Teste";
+        clsSms sms = new clsSms();
+        sms.enviarSms(padraoCadTelefone.this,numero,mensagem);
+        return true;
     }
 
     @Override
