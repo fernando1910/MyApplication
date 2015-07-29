@@ -23,11 +23,31 @@
         android:autoText="false"
         android:id="@+id/etDescricao" />
 
-    <EditText
-        android:hint="Endereco"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etEndereco" />
+        android:gravity="center"
+        android:weightSum="1"
+        android:orientation="horizontal">
+
+        <EditText
+            android:hint="Endereco"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etEndereco" />
+
+
+        <ImageButton
+            android:id="@+id/ibEndereco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="chamarMapa"
+            android:adjustViewBounds="false"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
+
+
 
 
         <RadioGroup

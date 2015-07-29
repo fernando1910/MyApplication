@@ -28,8 +28,8 @@ class clsUtil {
     {
 
         Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-        Drawable d = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,75,75,true));
-        return d;
+        drawable = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,100,100,true));
+        return drawable;
 
     }
 

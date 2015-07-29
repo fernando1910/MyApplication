@@ -32,7 +32,7 @@ public class padraoConfiguracao extends ActionBarActivity {
 
 
        ListView lv = (ListView) findViewById(R.id.listView);
-        List<ListViewItem> items = new ArrayList<ListViewItem>();
+        List<ListViewItem> items = new ArrayList<>();
         items.add(new ListViewItem()
         {{
                           t = android.R.drawable.ic_menu_help   ;
@@ -160,6 +160,11 @@ public class padraoConfiguracao extends ActionBarActivity {
         public int t;
         public String Title;
         //public String SubTitle;
+
+        public int value()
+        {
+            return t;
+        }
     }
 
 }
