@@ -1,6 +1,7 @@
 package project.myapplication;
 
 import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -194,6 +195,7 @@ public class clsEvento {
     public clsEvento carregar(String codigoEvento, String url)
     {
         clsEvento objEvento = new clsEvento();
+        clsUtil util = new clsUtil();
         JSONObject jsonObject;
 
         String jsonString;
@@ -201,8 +203,17 @@ public class clsEvento {
             jsonString = carregarEventoUnico(url, codigoEvento);
             JSONArray jsonArray = new JSONArray(jsonString);
             jsonObject = new JSONObject(jsonArray.getString(0));
+
+            objEvento.setCodigoEvento(Integer.parseInt(codigoEvento));
             objEvento.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
             objEvento.setDescricao(jsonObject.getString("ds_descricao"));
+            objEvento.setEndereco(jsonObject.getString("ds_endereco"));
+            objEvento.setDataEvento(util.formataData(jsonObject.getString("dt_evento")));
+            objEvento.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
+            objEvento.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
+            objEvento.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
+
+
 
 
         } catch (InterruptedException | JSONException e) {

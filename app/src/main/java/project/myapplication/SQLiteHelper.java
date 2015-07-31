@@ -34,7 +34,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_caminho_foto text)",
 
             "CREATE TABLE tb_contatos" +
-                    "(cd_usuario INTEGER, cd_contato INTEGER)",
+                    "(cd_usuario INTEGER, cd_contato INTEGER, cd_contato_sevidor INTEGER)",
 
             "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
 
@@ -52,16 +52,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.i(CATEGORIA," CRIANDO O BANCO SQLLITE " );
-        int quantidadeScript = scriptSQL.length;
-        for( int i = 0; i < quantidadeScript; i ++)
-        {
+        for (String aScriptSQL : scriptSQL) {
             try {
-                String sql = scriptSQL[i];
+                String sql = aScriptSQL;
                 Log.i(CATEGORIA, sql);
                 db.execSQL(sql);
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Log.i(CATEGORIA, ex.getMessage());
             }
         }
@@ -71,10 +67,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.v(CATEGORIA, "Atualizando da versao " + oldVersion + " para a versão " + newVersion);
-        int quantidadeScript = scriptDelete.length;
-        for ( int i = 0; i < quantidadeScript; i ++)
-        {
-            Log.i(CATEGORIA,scriptDelete[i]);
+        for (String aScriptDelete : scriptDelete) {
+            Log.i(CATEGORIA, aScriptDelete);
             onCreate(db);
         }
     }

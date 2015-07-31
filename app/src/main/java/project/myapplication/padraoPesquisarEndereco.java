@@ -1,19 +1,14 @@
 package project.myapplication;
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
@@ -73,7 +68,7 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
         String stLocalizacao = etLocalizacao.getText().toString();
 
         List<Address> addressList;
-        if (stLocalizacao != null || stLocalizacao.equals(""))
+        if (stLocalizacao.length() > 0)
         {
             Geocoder geocoder = new Geocoder(this);
             try {
@@ -85,11 +80,15 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
+
         }
         else
         {
-            Toast.makeText(getApplicationContext(),"Endereço não informado", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(),"Endereço não informado", Toast.LENGTH_LONG).show();
 
         }
 
@@ -147,20 +146,25 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
 
     public void retonar(View view)
     {
+        if (address !=null) {
+            Intent intent = new Intent();
 
-        Intent intent = new Intent();
+            double latitude = address.getLatitude();
+            double longitude = address.getLongitude();
+            String endereco = address.getAddressLine(0) + " " + address.getAddressLine(1) + " " + address.getAddressLine(2);
 
-        double latitude = address.getLatitude();
-        double longitude = address.getLongitude();
-        String endereco = address.getAddressLine(0) +" "+ address.getAddressLine(1) + " " + address.getAddressLine(2);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            intent.putExtra("endereco", endereco);
 
-        intent.putExtra("latitude",latitude);
-        intent.putExtra("longitude",longitude);
-        intent.putExtra("endereco", endereco);
+            setResult(RESULT_OK, intent);
 
-        setResult(RESULT_OK, intent);
-
-        finish();
+            finish();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Nao foi localizado nenhum endereço", Toast.LENGTH_LONG).show();
+        }
     }
 
 

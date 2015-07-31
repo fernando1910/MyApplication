@@ -2,6 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="project.myapplication.padraoVisulizarEvento">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+    <item android:id="@+id/action_comentar" android:title="@string/action_comentar"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_convidar" android:title="@string/action_convidar"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

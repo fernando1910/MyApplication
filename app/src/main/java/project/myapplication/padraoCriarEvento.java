@@ -3,13 +3,11 @@ package project.myapplication;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,13 +17,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutionException;
 
 
 public class padraoCriarEvento extends ActionBarActivity {
@@ -33,9 +26,9 @@ public class padraoCriarEvento extends ActionBarActivity {
     private DateFormat formatDate  = DateFormat.getDateInstance();
     private DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
     private Calendar calendar = Calendar.getInstance();
-    private TextView tvData, tvHora;
+    private TextView tvData, tvHora, tvEndereco;
     private ImageButton btData, ibTimePicker, ibEndereco;
-    private EditText etTitulo, etDescricao, etEndereco;
+    private EditText etTitulo, etDescricao;
     private RadioGroup rgStatusEvento;
     private clsUtil util;
     private RadioButton rbPublic,rbPrivate;
@@ -54,7 +47,7 @@ public class padraoCriarEvento extends ActionBarActivity {
         btData = (ImageButton)findViewById(R.id.btDataPicker);
         etTitulo = (EditText)findViewById(R.id.etTitulo);
         etDescricao = (EditText)findViewById(R.id.etDescricao);
-        etEndereco = (EditText)findViewById(R.id.etEndereco);
+        tvEndereco = (TextView)findViewById(R.id.tvEndereco);
         rgStatusEvento = (RadioGroup)findViewById(R.id.rgStatusEvento);
         ibTimePicker = (ImageButton)findViewById(R.id.ibTimePicker);
         rbPublic = (RadioButton)findViewById(R.id.rbPublic);
@@ -106,7 +99,7 @@ public class padraoCriarEvento extends ActionBarActivity {
 
                 objEvento.setTituloEvento(etTitulo.getText().toString());
                 objEvento.setDescricao(etDescricao.getText().toString());
-                objEvento.setEndereco(etEndereco.getText().toString());
+                objEvento.setEndereco(tvEndereco.getText().toString());
                 if (rbPrivate.isChecked())
                     objEvento.setEventoPrivado(1);
                 else
@@ -136,7 +129,7 @@ public class padraoCriarEvento extends ActionBarActivity {
             Toast.makeText(this, "Necessário informar um Titulo", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if(etEndereco.getText().length()==0)
+        else if(tvEndereco.getText().length()==0)
         {
             Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
             return false;
@@ -263,7 +256,7 @@ public class padraoCriarEvento extends ActionBarActivity {
                 nr_latitude= data.getDoubleExtra("latitude",0);
                 nr_longitude = data.getDoubleExtra("longitude",0);
                 endereco = data.getStringExtra("endereco");
-                etEndereco.setText(endereco);
+                tvEndereco.setText(endereco);
 
             }
         }

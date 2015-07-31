@@ -1,12 +1,12 @@
 package project.myapplication;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +21,19 @@ class clsUtil {
         calendar.add(Calendar.DATE,-1);
         DataHora=  dateFormat.format(calendar.getTime());
         return DataHora;
+    }
+
+    public Date formataData(String date)
+    {
+        Date dataConvertida = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
+        try{
+            dataConvertida = simpleDateFormat.parse(date);
+        }catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        return  dataConvertida;
     }
 
 
@@ -65,6 +78,23 @@ class clsUtil {
         }
 
         return   dataFinal;
+    }
+
+    public String enviarServidor(final String url,final String data, final String comando) throws InterruptedException {
+        final String[] resposta = new String[1];
+        Thread thread = new Thread(){
+            public void run(){
+                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb(url,comando ,data);
+
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return resposta[0];
     }
 
     public clsUtil() {

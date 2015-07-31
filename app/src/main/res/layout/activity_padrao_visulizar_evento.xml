@@ -1,12 +1,72 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="project.myapplication.padraoVisulizarEvento">
+    android:orientation="vertical"
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:id="@+id/tvTituloEvento" />
+    tools:context="project.myapplication.padraoVisulizarEvento"
+    android:weightSum="1">
 
-</RelativeLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:text="Título do Evento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTituloEvento"
+        android:padding="10dp"/>
+
+    <TextView
+        android:text="Descrição do evento"
+        android:id="@+id/tvDescricaoEvento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"/>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:padding="10dp"
+            android:id="@+id/tvEndereco"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Endereço"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:weightSum="1">
+
+            <ImageButton
+                android:id="@+id/ibEndereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:text="Button"
+                android:background="@null"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvPrivado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Este evento é" />
+
+</LinearLayout>

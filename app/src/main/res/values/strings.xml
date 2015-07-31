@@ -90,9 +90,14 @@
     <!-- Tela Ajuda -->
     <string name="padrao_ajuda">http://www.fiesta1.hol.es/ajuda.html</string>
     <string name="title_activity_padrao_mapa">Mapa</string>
-    <string name="title_activity_padrao_contatos">padraoContatos</string>
-    <string name="title_activity_padrao_visulizar_evento">padraoVisulizarEvento</string>
+    <string name="title_activity_padrao_contatos">Contatos</string>
+    <string name="title_activity_padrao_visulizar_evento">Evento</string>
     <string name="title_activity_padrao_pesquisas_endereco">Map</string>
     <string name="title_activity_padrao_pesquisar_endereco">Pesquisar Endereços</string>
+    <string name="padrao_contatos">http://www.fiesta1.hol.es/padraoAtualizarContatos.php</string>
+
+    <!--Tela Visualizar Evento -->
+    <string name="action_comentar">Comentar</string>
+    <string name="action_convidar">Convidar</string>
 
 </resources>
