@@ -13,14 +13,14 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 public class padraoBoasVindas extends Activity {
-    CheckBox chkAceitaTermos;
+
     clsConfiguracoes objConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_boas_vindas);
-        chkAceitaTermos = (CheckBox)findViewById(R.id.chkAceitaTermos);
+
         clsConfiguracoes objConfig = null;
         ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
         objConfig = config_dao.Carregar();
@@ -31,7 +31,7 @@ public class padraoBoasVindas extends Activity {
                 startActivity(new Intent(this,MainActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this,padraoLogin.class));
+                startActivity(new Intent(this,padraoCadTelefone.class));
                 break;
             case 3:
                 startActivity(new Intent(this,padraoMenu.class));
@@ -42,17 +42,12 @@ public class padraoBoasVindas extends Activity {
 
     public void onClick_Avancar(View v)
     {
-        if (chkAceitaTermos.isChecked()) {
+
             ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
             objConfig = config_dao.Carregar();
             objConfig.setStatusPerfil(2);
 
             config_dao.Atualizar(objConfig);
-            startActivity(new Intent(this, padraoLogin.class));
-        }
-        else {
-            Toast.makeText(this, "Os termos de uso não foram aceitos", Toast.LENGTH_SHORT).show();
-            chkAceitaTermos.requestFocus();
-        }
+            startActivity(new Intent(this, padraoCadTelefone.class));
     }
 }

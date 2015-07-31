@@ -29,15 +29,13 @@
     </LinearLayout>
 
 
-    <CheckBox
+    <TextView
         android:layout_margin="10dp"
         android:textColor="#FFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Li e aceito os termos de uso do aplicativo"
-        android:id="@+id/chkAceitaTermos"
-         />
-
+        android:text="CLique em avançar se concorda com os termo de uso."
+        />
 
 
     <LinearLayout
