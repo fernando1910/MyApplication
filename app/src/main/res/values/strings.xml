@@ -54,6 +54,10 @@
         <item>@drawable/ic_trofeu</item>
     </string-array>
     
+    <string-array name="sessao_pais">
+        <item>Brasil</item>
+    </string-array>
+
     <string-array name="sessao_ddi">
         <item>+55</item>
     </string-array>
