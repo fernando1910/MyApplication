@@ -1,9 +1,19 @@
 package project.myapplication;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.Settings;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -95,6 +105,82 @@ class clsUtil {
             e.printStackTrace();
         }
         return resposta[0];
+    }
+
+    public void ligarGPS(Context context) // NAO FUNCIONA
+    {
+        Intent intent = new Intent("android.location.GPS_ENABLED_CHANGE");
+        intent.putExtra("enabled", true);
+        context.sendBroadcast(intent);
+        String provider = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        if(!provider.contains("gps")) { //gps desligado
+            final Intent poke = new Intent();
+            poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+            poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+            poke.setData(Uri.parse("3"));
+            context.sendBroadcast(poke);
+        }
+
+    }
+
+    public LatLng getLocation(Context context) {
+        boolean isGPSEnabled = false;
+        boolean isNetworkEnabled = false;
+        boolean podePegarLocalizacao = false;
+        Location location = null;
+        final long MIN_TIME_BW_UPDATES = 1000 * 60;
+        final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+        LatLng latLng = null;
+        try {
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            if (!isGPSEnabled && !isNetworkEnabled) {
+
+            } else {
+                podePegarLocalizacao = true;
+
+                if (isNetworkEnabled) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                            60000,
+                            10, (LocationListener) context
+                    );
+                    if (locationManager != null) {
+                        location = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null) {
+                            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        }
+                    }
+                }
+                if (isGPSEnabled) {
+                    if (location == null) {
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                60000,
+                                10, (LocationListener) this);
+                        Log.d("GPS Enabled", "GPS Enabled");
+                        if (locationManager != null) {
+                            location = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (location != null) {
+                                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+        } catch (Exception ex) {
+
+        }
+        return latLng;
+
     }
 
     public clsUtil() {
