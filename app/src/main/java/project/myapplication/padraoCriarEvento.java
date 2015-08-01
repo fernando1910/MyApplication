@@ -240,9 +240,14 @@ public class padraoCriarEvento extends ActionBarActivity {
 
     public void chamarMapa(View view)
     {
-        Bundle parameters = new Bundle();
-        Intent intent = new Intent(getApplicationContext(), padraoPesquisarEndereco.class);
-        startActivityForResult(intent, 1, parameters);
+        try {
+            Bundle parameters = new Bundle();
+            Intent intent = new Intent(getApplicationContext(), padraoPesquisarEndereco.class);
+            startActivityForResult(intent, 1, parameters);
+        }catch (Exception e)
+        {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

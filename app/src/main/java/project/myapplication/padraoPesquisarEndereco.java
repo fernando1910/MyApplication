@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class padraoPesquisarEndereco extends ActionBarActivity implements SearchView.OnQueryTextListener{
+public class padraoPesquisarEndereco extends ActionBarActivity {
 
     private SearchView mSearchView;
     private clsUtil util;
@@ -115,16 +115,6 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
     }
 
     private void setUpMapIfNeeded() {

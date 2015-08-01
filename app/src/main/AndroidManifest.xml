@@ -92,6 +92,11 @@
             android:name=".padraoContatos"
             android:label="@string/title_activity_padrao_contatos" >
         </activity>
+        <activity
+            android:name=".padraoPesquisarEndereco"
+            android:label="@string/title_activity_padrao_pesquisar_endereco">
+
+        </activity>
     </application>
 
 </manifest>
