@@ -16,6 +16,7 @@
     <string name="title_section5">Ranking</string>
     <integer name="versao_banco">1</integer>
 
+    <string name="google_map_key_browser">AIzaSyC8IwurYOdZXbTtZalkxGDzGqQNfPIxQmM</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

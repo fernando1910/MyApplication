@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -20,7 +21,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.ByteArrayBuffer;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +44,8 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
     private EditText etLocalizacao;
     private GoogleMap mMap;
     private LatLng latLng;
-    Address address;
+    private Address address;
+    ListView lvEndereco;
 
 
     @Override
@@ -52,13 +65,9 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ibPesquisar = (ImageButton)findViewById(R.id.ibPesquisar);
         etLocalizacao = (EditText)findViewById(R.id.etLocalizacao);
+        lvEndereco =  (ListView)findViewById(R.id.lvEndereco);
         util = new clsUtil();
         ibPesquisar.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_pesquisar), getResources()));
-
-        //ibPesquisar.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
-
-
-
 
 
     }
@@ -78,6 +87,22 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                JSONObject jsonObject = new JSONObject(locaisProximos(address));
+                if (jsonObject.has("results")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("results");
+                    List<menuEndereco> enderecos = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        menuEndereco endereco = new menuEndereco();
+                        endereco.setNome(jsonArray.getJSONObject(i).optString("name"));
+                        endereco.setEndereco(jsonArray.getJSONObject(i).optString("vicinity"));
+                        endereco.setUrlIcon(jsonArray.getJSONObject(i).optString("icon"));
+                        enderecos.add(endereco);
+
+                    }
+                    final CustomListViewEndereco arrayAdapter = new CustomListViewEndereco(this,enderecos);
+                    lvEndereco.setAdapter(arrayAdapter);
+
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e)
@@ -157,5 +182,50 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
         }
     }
 
+    public String locaisProximos(Address address ) {
+
+        final String GOOGLE_KEY = getString(R.string.google_map_key_browser);
+        String url = "https://maps.googleapis.com/maps/api/place/search/json?location="+address.getLatitude()+","+ address.getLongitude()+"&radius=250&sensor=true&key=" + GOOGLE_KEY;
+
+
+        StringBuffer buffer_string = new StringBuffer(url);
+        final String[] replyString = {""};
+        final HttpClient httpclient = new DefaultHttpClient();
+        final HttpGet httpget = new HttpGet(buffer_string.toString());
+
+        Thread thread = new Thread(){
+            public void run(){
+                try {
+                    HttpResponse response = httpclient.execute(httpget);
+                    InputStream is = response.getEntity().getContent();
+                    // buffer input stream the result
+                    BufferedInputStream bis = new BufferedInputStream(is);
+
+                    ByteArrayBuffer baf = new ByteArrayBuffer(20);
+
+                    int current = 0;
+                    while ((current = bis.read()) != -1) {
+                        baf.append((byte) current);
+                    }
+                    replyString[0] = new String(baf.toByteArray());
+
+                } catch (Exception e) {
+                    replyString[0] = e.getMessage();
+
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println(replyString[0]);
+        return replyString[0].trim();
+
+    }
 
 }
