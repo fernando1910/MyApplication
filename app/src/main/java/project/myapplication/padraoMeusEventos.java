@@ -1,19 +1,13 @@
 package project.myapplication;
 
-import android.app.ListActivity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +72,13 @@ public class padraoMeusEventos extends ActionBarActivity {
                 Bundle parameters = new Bundle();
                 parameters.putInt("codigoEvento", codigoEvento);
                 intent.putExtras(parameters);
-                startActivity(intent);
+                try {
+                    startActivity(intent);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
             }
         });

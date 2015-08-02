@@ -1,6 +1,7 @@
 package project.myapplication;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -16,10 +17,43 @@ import java.util.Set;
 
 public class clsContatos {
 
+    //region Variaveis
+    private int cd_contato;
+    private String ds_contato;
+    private byte[] img_contato;
+    //endregion
+
+    //region Propriedades
+
+    public int getCodigoContato() {
+        return cd_contato;
+    }
+
+    public void setCodigoContato(int cd_contato) {
+        this.cd_contato = cd_contato;
+    }
+
+    public String getNomeContato() {
+        return ds_contato;
+    }
+
+    public void setNomeContato(String ds_contato) {
+        this.ds_contato = ds_contato;
+    }
+
+    public byte[] getImagemContato() {
+        return img_contato;
+    }
+
+    public void setImagemContato(byte[] img_contato) {
+        this.img_contato = img_contato;
+    }
+
+    //endregion
 
     //region Métodos
 
-    public void AtualizarContatos(ContentResolver contentResolver, String url) {
+    public void AtualizarContatos(ContentResolver contentResolver, String url, Context context) {
         String phoneNumber;
         Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
         String _ID = ContactsContract.Contacts._ID;
@@ -81,7 +115,21 @@ public class clsContatos {
             jsonObject.put("numeros", jsonArray);
 
                 clsUtil util = new clsUtil();
-                util.enviarServidor(url,jsonObject.toString(),"send-json");
+                String jsonString;
+                jsonString = util.enviarServidor(url,jsonObject.toString(),"send-json");
+                JSONArray jsonArrayResultado = new JSONArray(jsonString);
+                JSONObject jsonObjectResultado;
+                ContatoDAO contatoDAO = new ContatoDAO(context);
+                contatoDAO.DeletarTudo();
+                for (int i = 0 ; i < jsonArrayResultado.length(); i++)
+                {
+                    jsonObjectResultado = new JSONObject(jsonArrayResultado.getString(i));
+                    clsContatos objContatos = new clsContatos();
+                    objContatos.setCodigoContato(Integer.parseInt(jsonObjectResultado.getString("cd_usuario_contato")));
+                    objContatos.setNomeContato(jsonObjectResultado.getString("ds_nome"));
+                    contatoDAO.Salvar(objContatos );
+
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace(); // Erro JSON
@@ -91,6 +139,14 @@ public class clsContatos {
 
         }
 
+    }
+
+    public List<clsContatos> retonarContatos(Context context)
+    {
+        List<clsContatos> list = new ArrayList<>();
+        ContatoDAO contatoDAO = new ContatoDAO(context);
+        list = contatoDAO.Carregar();
+        return  list;
     }
     //endregion
 }

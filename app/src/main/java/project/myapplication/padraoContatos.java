@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 
 public class padraoContatos extends ActionBarActivity {
@@ -25,8 +28,22 @@ public class padraoContatos extends ActionBarActivity {
         itemTextView = (TextView)findViewById(R.id.itemTextView);
         lvContatos = (ListView)findViewById(R.id.lvContatos);
         clsContatos objContatos = new clsContatos();
-        objContatos.AtualizarContatos(getContentResolver(),getString(R.string.padrao_contatos));
+        try{
+            objContatos.AtualizarContatos(getContentResolver(),getString(R.string.padrao_contatos),this);
+        }catch (Exception e)
+        {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
 
+        try {
+
+            List<clsContatos> contatosList = objContatos.retonarContatos(this);
+            final CustomListViewContato arrayAdapter = new CustomListViewContato(this, contatosList);
+            lvContatos.setAdapter(arrayAdapter);
+        }catch (Exception ex)
+        {
+            Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
+        }
 
     }
 

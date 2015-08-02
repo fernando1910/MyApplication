@@ -33,8 +33,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "img_perfil blob," +
                     "ds_caminho_foto text)",
 
-            "CREATE TABLE tb_contatos" +
-                    "(cd_usuario INTEGER, cd_contato INTEGER, cd_contato_sevidor INTEGER)",
+            "CREATE TABLE tb_contato" +
+                    "(cd_contato INTEGER, ds_contato TEXT, img_contato BLOB )",
 
             "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
 
