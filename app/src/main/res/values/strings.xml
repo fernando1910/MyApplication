@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">BlueDate</string>
 
+    <string name="app_label">BlueDate</string>
+    <string name="search_hint">Pesquisar</string>
+
     <string name="hello_world">Em construção</string>
     <string name="action_settings">Configurações</string>
     <string name="title_home">Pagina Inicial</string>
@@ -13,6 +16,7 @@
     <string name="title_section5">Ranking</string>
     <integer name="versao_banco">1</integer>
 
+    <string name="google_map_key_browser">AIzaSyC8IwurYOdZXbTtZalkxGDzGqQNfPIxQmM</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -51,6 +55,10 @@
         <item>@drawable/ic_trofeu</item>
     </string-array>
     
+    <string-array name="sessao_pais">
+        <item>Brasil</item>
+    </string-array>
+
     <string-array name="sessao_ddi">
         <item>+55</item>
     </string-array>
@@ -79,6 +87,7 @@
 
     <!-- String tela de eventos -->
     <string name="padrao_evento">http://www.fiesta1.hol.es/CadEvento.php</string>
+    <string name="padrao_seleciona_evento">http://www.fiesta1.hol.es/padraoSelecionaEvento.php</string>
 
     <!-- Tela Sobre -->
     <string name="padrao_sobre">"Aplicativo com fins academicos"</string>
@@ -86,6 +95,14 @@
     <!-- Tela Ajuda -->
     <string name="padrao_ajuda">http://www.fiesta1.hol.es/ajuda.html</string>
     <string name="title_activity_padrao_mapa">Mapa</string>
-    <string name="title_activity_padrao_contatos">padraoContatos</string>
+    <string name="title_activity_padrao_contatos">Contatos</string>
+    <string name="title_activity_padrao_visulizar_evento">Evento</string>
+    <string name="title_activity_padrao_pesquisas_endereco">Map</string>
+    <string name="title_activity_padrao_pesquisar_endereco">Pesquisar Endereços</string>
+    <string name="padrao_contatos">http://www.fiesta1.hol.es/padraoAtualizarContatos.php</string>
+
+    <!--Tela Visualizar Evento -->
+    <string name="action_comentar">Comentar</string>
+    <string name="action_convidar">Convidar</string>
 
 </resources>

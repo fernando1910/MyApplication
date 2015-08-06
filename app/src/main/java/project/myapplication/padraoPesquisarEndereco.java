@@ -1,21 +1,17 @@
 package project.myapplication;
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -25,11 +21,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.ByteArrayBuffer;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class padraoPesquisarEndereco extends ActionBarActivity implements SearchView.OnQueryTextListener{
+public class padraoPesquisarEndereco extends ActionBarActivity {
 
     private SearchView mSearchView;
     private clsUtil util;
@@ -37,7 +44,8 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
     private EditText etLocalizacao;
     private GoogleMap mMap;
     private LatLng latLng;
-    Address address;
+    private Address address;
+    ListView lvEndereco;
 
 
     @Override
@@ -57,13 +65,9 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ibPesquisar = (ImageButton)findViewById(R.id.ibPesquisar);
         etLocalizacao = (EditText)findViewById(R.id.etLocalizacao);
+        lvEndereco =  (ListView)findViewById(R.id.lvEndereco);
         util = new clsUtil();
         ibPesquisar.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_pesquisar), getResources()));
-
-        //ibPesquisar.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
-
-
-
 
 
     }
@@ -73,7 +77,7 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
         String stLocalizacao = etLocalizacao.getText().toString();
 
         List<Address> addressList;
-        if (stLocalizacao != null || stLocalizacao.equals(""))
+        if (stLocalizacao.length() > 0)
         {
             Geocoder geocoder = new Geocoder(this);
             try {
@@ -83,13 +87,33 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                JSONObject jsonObject = new JSONObject(locaisProximos(address));
+                if (jsonObject.has("results")) {
+                    JSONArray jsonArray = jsonObject.getJSONArray("results");
+                    List<menuEndereco> enderecos = new ArrayList<>();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        menuEndereco endereco = new menuEndereco();
+                        endereco.setNome(jsonArray.getJSONObject(i).optString("name"));
+                        endereco.setEndereco(jsonArray.getJSONObject(i).optString("vicinity"));
+                        endereco.setUrlIcon(jsonArray.getJSONObject(i).optString("icon"));
+                        enderecos.add(endereco);
+
+                    }
+                    final CustomListViewEndereco arrayAdapter = new CustomListViewEndereco(this,enderecos);
+                    lvEndereco.setAdapter(arrayAdapter);
+
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
+
         }
         else
         {
-            Toast.makeText(getApplicationContext(),"Endereço não informado", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(),"Endereço não informado", Toast.LENGTH_LONG).show();
 
         }
 
@@ -118,16 +142,6 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -147,21 +161,71 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Search
 
     public void retonar(View view)
     {
+        if (address !=null) {
+            Intent intent = new Intent();
 
-        Intent intent = new Intent();
+            double latitude = address.getLatitude();
+            double longitude = address.getLongitude();
+            String endereco = address.getAddressLine(0) + " " + address.getAddressLine(1) + " " + address.getAddressLine(2);
 
-        double latitude = address.getLatitude();
-        double longitude = address.getLongitude();
-        String endereco = address.getAddressLine(0) +" "+ address.getAddressLine(1) + " " + address.getAddressLine(2);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            intent.putExtra("endereco", endereco);
 
-        intent.putExtra("latitude",latitude);
-        intent.putExtra("longitude",longitude);
-        intent.putExtra("endereco", endereco);
+            setResult(RESULT_OK, intent);
 
-        setResult(RESULT_OK, intent);
-
-        finish();
+            finish();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Nao foi localizado nenhum endereço", Toast.LENGTH_LONG).show();
+        }
     }
 
+    public String locaisProximos(Address address ) {
+
+        final String GOOGLE_KEY = getString(R.string.google_map_key_browser);
+        String url = "https://maps.googleapis.com/maps/api/place/search/json?location="+address.getLatitude()+","+ address.getLongitude()+"&radius=250&sensor=true&key=" + GOOGLE_KEY;
+
+
+        StringBuffer buffer_string = new StringBuffer(url);
+        final String[] replyString = {""};
+        final HttpClient httpclient = new DefaultHttpClient();
+        final HttpGet httpget = new HttpGet(buffer_string.toString());
+
+        Thread thread = new Thread(){
+            public void run(){
+                try {
+                    HttpResponse response = httpclient.execute(httpget);
+                    InputStream is = response.getEntity().getContent();
+                    // buffer input stream the result
+                    BufferedInputStream bis = new BufferedInputStream(is);
+
+                    ByteArrayBuffer baf = new ByteArrayBuffer(20);
+
+                    int current = 0;
+                    while ((current = bis.read()) != -1) {
+                        baf.append((byte) current);
+                    }
+                    replyString[0] = new String(baf.toByteArray());
+
+                } catch (Exception e) {
+                    replyString[0] = e.getMessage();
+
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println(replyString[0]);
+        return replyString[0].trim();
+
+    }
 
 }
