@@ -244,7 +244,6 @@ public class padraoLogin extends Activity {
 
         final String[] resposta = new String[1];
         try{
-            btAvancar.setVisibility(View.INVISIBLE);
             Thread thread =  new Thread( new Runnable(){
             public void run(){
                 resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb(getString(R.string.padrao_login), "send-json",data);
@@ -256,7 +255,6 @@ public class padraoLogin extends Activity {
 
             thread.join();
         } catch (InterruptedException e) {
-            btAvancar.setVisibility(View.VISIBLE);
             e.printStackTrace();
         }
 
