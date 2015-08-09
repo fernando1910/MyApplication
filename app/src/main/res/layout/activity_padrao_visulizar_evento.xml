@@ -9,16 +9,21 @@
     tools:context="project.myapplication.padraoVisulizarEvento"
     android:weightSum="1">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp" />
-
     <TextView
         android:text="Título do Evento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTituloEvento"
-        android:padding="10dp"/>
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:textSize="16dp" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#d5d5d5" />
+
 
     <TextView
         android:text="Descrição do evento"

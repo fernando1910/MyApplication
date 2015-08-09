@@ -1,6 +1,8 @@
 package project.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -19,69 +21,15 @@ import java.util.List;
 
 public class padraoMeusEventos extends ActionBarActivity {
 
-    clsEvento objEvento;
-    ListView lvEventos;
+    private clsEvento objEvento;
+    private ListView lvEventos;
+    private ProgressDialog progressDialog;
+    String jsonString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_padrao_meus_eventos);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        lvEventos = (ListView)findViewById(R.id.lvEventos);
-
-        objEvento = new clsEvento();
-
-        String jsonString;
-        List<menuEvento> eventos = new ArrayList<>();
-
-        try {
-            jsonString =  objEvento.carregarEventos(getString(R.string.padrao_evento),null);
-            JSONArray jsonArray = new JSONArray(jsonString);
-            JSONObject jsonObject;
-
-            for (int i = 0 ; i < jsonArray.length(); i++)
-            {
-                jsonObject = new JSONObject(jsonArray.getString(i));
-                menuEvento evento = new menuEvento();
-                evento.setTitulo((jsonObject.getString("ds_titulo_evento")));
-                evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
-
-                eventos.add(evento);
-            }
-
-
-        } catch (InterruptedException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        /*
-        final ArrayAdapter<menuEvento> arrayAdapter = new ArrayAdapter<>(
-                this,android.R.layout.simple_expandable_list_item_2,eventos
-        );
-        */
-        final CustomListViewEvento arrayAdapter = new CustomListViewEvento(this,eventos);
-        lvEventos.setAdapter(arrayAdapter);
-
-        lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int codigoEvento = arrayAdapter.getValue(position);
-                Intent intent = new Intent(getApplicationContext(),padraoVisulizarEvento.class);
-                Bundle parameters = new Bundle();
-                parameters.putInt("codigoEvento", codigoEvento);
-                intent.putExtras(parameters);
-                try {
-                    startActivity(intent);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-        });
+        new Carregar().execute();
 
     }
 
@@ -124,7 +72,95 @@ public class padraoMeusEventos extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this,padraoMenu.class));
+        startActivity(new Intent(this, padraoMenu.class));
 
+    }
+
+    public class Carregar extends AsyncTask<Void,Integer,Void>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            //Create a new progress dialog
+            progressDialog = new ProgressDialog(padraoMeusEventos.this);
+
+            progressDialog = ProgressDialog.show(padraoMeusEventos.this,"Carregando...",
+                    "Carregando seus eventos, por favor aguarde...", false, false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+            try
+            {
+                synchronized (this)
+                {
+                    objEvento = new clsEvento();
+                    jsonString =  objEvento.carregarEventos(getString(R.string.padrao_evento),null);
+                }
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values)
+        {
+            progressDialog.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Void result)
+        {
+            progressDialog.dismiss();
+
+            setContentView(R.layout.activity_padrao_meus_eventos);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            lvEventos = (ListView)findViewById(R.id.lvEventos);
+            List<menuEvento> eventos = new ArrayList<>();
+
+            try {
+                JSONArray jsonArray = new JSONArray(jsonString);
+                JSONObject jsonObject;
+
+                for (int i = 0 ; i < jsonArray.length(); i++)
+                {
+                    jsonObject = new JSONObject(jsonArray.getString(i));
+                    menuEvento evento = new menuEvento();
+                    evento.setTitulo((jsonObject.getString("ds_titulo_evento")));
+                    evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
+                    eventos.add(evento);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            final CustomListViewEvento arrayAdapter = new CustomListViewEvento(padraoMeusEventos.this,eventos);
+            lvEventos.setAdapter(arrayAdapter);
+
+            lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int codigoEvento = arrayAdapter.getValue(position);
+                    Intent intent = new Intent(getApplicationContext(),padraoVisulizarEvento.class);
+                    Bundle parameters = new Bundle();
+                    parameters.putInt("codigoEvento", codigoEvento);
+                    intent.putExtras(parameters);
+                    try {
+                        startActivity(intent);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+        }
     }
 }
