@@ -3,16 +3,23 @@ package project.myapplication;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class padraoPesquisarEndereco extends ActionBarActivity {
+public class padraoPesquisarEndereco extends ActionBarActivity implements LocationListener {
 
     private SearchView mSearchView;
     private clsUtil util;
@@ -45,6 +52,8 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
     private GoogleMap mMap;
     private LatLng latLng;
     private Address address;
+    private WebView wvCarregando;
+    private TextView tvInstrucao;
     ListView lvEndereco;
 
 
@@ -52,6 +61,7 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_pesquisar_endereco);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setUpMapIfNeeded();
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -61,15 +71,41 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
         mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        tvInstrucao = (TextView)findViewById(R.id.tvInstrucao);
         ibPesquisar = (ImageButton)findViewById(R.id.ibPesquisar);
         etLocalizacao = (EditText)findViewById(R.id.etLocalizacao);
         lvEndereco =  (ListView)findViewById(R.id.lvEndereco);
+        wvCarregando = (WebView)findViewById(R.id.wvCarregando);
+        wvCarregando.loadUrl("file:///android_asset/carregandoGIF.gif");
+
         util = new clsUtil();
         ibPesquisar.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_pesquisar), getResources()));
 
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        float density = getResources().getDisplayMetrics().density;
+        int height = (int) (displayMetrics.heightPixels / density);
+
+        ViewGroup.LayoutParams params = supportMapFragment.getView().getLayoutParams();
+        params.height = height ;
+        supportMapFragment.getView().setLayoutParams(params);
+
+        if(util.verificaGPS(getApplicationContext()))
+        {;
+            try {
+                latLng = util.retornaLocalizacao(getApplicationContext(), this);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(this,"GPS desligado", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void procurarEndereco(View view)
@@ -87,22 +123,12 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-                JSONObject jsonObject = new JSONObject(locaisProximos(address));
-                if (jsonObject.has("results")) {
-                    JSONArray jsonArray = jsonObject.getJSONArray("results");
-                    List<menuEndereco> enderecos = new ArrayList<>();
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        menuEndereco endereco = new menuEndereco();
-                        endereco.setNome(jsonArray.getJSONObject(i).optString("name"));
-                        endereco.setEndereco(jsonArray.getJSONObject(i).optString("vicinity"));
-                        endereco.setUrlIcon(jsonArray.getJSONObject(i).optString("icon"));
-                        enderecos.add(endereco);
+                lvEndereco.setVisibility(View.INVISIBLE);
+                wvCarregando.setVisibility(View.VISIBLE);
+                tvInstrucao.setVisibility(View.INVISIBLE);
 
-                    }
-                    final CustomListViewEndereco arrayAdapter = new CustomListViewEndereco(this,enderecos);
-                    lvEndereco.setAdapter(arrayAdapter);
+                new carregarLocais().execute();
 
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e)
@@ -228,4 +254,69 @@ public class padraoPesquisarEndereco extends ActionBarActivity {
 
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    public class carregarLocais extends AsyncTask<Void,Intent,Void>
+    {
+        List<menuEndereco> enderecos;
+        @Override
+        protected Void doInBackground(Void... params) {
+            synchronized (this)
+            {
+                try{
+
+                    JSONObject jsonObject = new JSONObject(locaisProximos(address));
+                    if (jsonObject.has("results")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("results");
+                         enderecos = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            menuEndereco endereco = new menuEndereco();
+                            endereco.setNome(jsonArray.getJSONObject(i).optString("name"));
+                            endereco.setEndereco(jsonArray.getJSONObject(i).optString("vicinity"));
+                            endereco.setUrlIcon(jsonArray.getJSONObject(i).optString("icon"));
+                            enderecos.add(endereco);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            final CustomListViewEndereco arrayAdapter = new CustomListViewEndereco(padraoPesquisarEndereco.this,enderecos);
+            lvEndereco.setAdapter(arrayAdapter);
+            lvEndereco.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams params  = lvEndereco.getLayoutParams();
+            //params = 300;
+            lvEndereco.setLayoutParams(params);
+            lvEndereco.requestLayout();
+
+
+            wvCarregando.setVisibility(View.INVISIBLE);
+        }
+    }
 }
