@@ -1,8 +1,10 @@
 package project.myapplication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.provider.Telephony;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,28 +18,40 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 
 public class padraoCadTelefone extends Activity {
-    EditText etTelefone;
+    private EditText etTelefone;
+    private ProgressDialog progressDialog;
+    clsConfiguracoes objConfig;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_cad_telefone);
         etTelefone = (EditText)findViewById(R.id.etTelefone);
+
+        clsConfiguracoes objConfig = null;
+        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
+        objConfig = config_dao.Carregar();
+
+        switch (objConfig.getStatusPerfil())
+        {
+            case 0:
+                startActivity(new Intent(this,MainActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(this,padraoCadTelefone.class));
+                break;
+            case 3:
+                startActivity(new Intent(this,padraoMenu.class));
+                break;
+        }
     }
 
     public void onClick_Avancar(View v)
     {
-        if(SalvarTelefone()){
-            Toast.makeText(this, "Telefone Salvo!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, padraoValidarTelefone.class));
-        }
-        else{
-            Toast.makeText(this, "Não Deu certo não Sofra!", Toast.LENGTH_SHORT).show();
-        }
-
+        new aguardarTelefone().execute();
 
     }
 
-    public boolean SalvarTelefone(){
+    public boolean SalvarTelefone() throws  InterruptedException{
         clsUsuario objUsuario = new clsUsuario();
         try
         {
@@ -92,6 +106,64 @@ public class padraoCadTelefone extends Activity {
         clsSms sms = new clsSms();
         sms.enviarSms(padraoCadTelefone.this,numero,mensagem);
         return true;
+    }
+
+    public class aguardarTelefone extends AsyncTask <Void, Integer,Void>{
+        boolean criou;
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try
+            {
+                synchronized (this)
+                {
+                    criou= SalvarTelefone();
+
+                }
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialog = new ProgressDialog(padraoCadTelefone.this);
+
+            progressDialog = ProgressDialog.show(padraoCadTelefone.this,"Carregando...",
+                    "Estamos validando suas informações, por favor aguarde...", false, false);
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            if(criou == true)
+            {
+
+                ConfiguracoesDAO config_dao = new ConfiguracoesDAO(padraoCadTelefone.this);
+                objConfig = config_dao.Carregar();
+                objConfig.setStatusPerfil(3);
+
+                config_dao.Atualizar(objConfig);
+
+                Toast.makeText(padraoCadTelefone.this, "Telefone Salvo", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(padraoCadTelefone.this,padraoValidarTelefone.class));
+
+
+            }else
+            {
+                Toast.makeText(padraoCadTelefone.this, "Erro: Telefone não foi Salvo", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
