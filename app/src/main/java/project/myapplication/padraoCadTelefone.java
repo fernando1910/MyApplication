@@ -28,7 +28,7 @@ public class padraoCadTelefone extends Activity {
     {
         if(SalvarTelefone()){
             Toast.makeText(this, "Telefone Salvo!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, padraoLogin.class));
+            startActivity(new Intent(this, padraoValidarTelefone.class));
         }
         else{
             Toast.makeText(this, "Não Deu certo não Sofra!", Toast.LENGTH_SHORT).show();
@@ -53,8 +53,8 @@ public class padraoCadTelefone extends Activity {
                 return false;
             }
             else {
-                //objUsuario.setCodigoUsuario(codigoUsuario);
-                //objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
+                objUsuario.setCodigoUsuario(codigoUsuario);
+                objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
                 return true;
             }
         }catch (Exception e)

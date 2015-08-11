@@ -98,12 +98,15 @@
         </activity>
         <activity
             android:name=".padraoPesquisarEndereco"
-            android:label="@string/title_activity_padrao_pesquisar_endereco">
-
+            android:label="@string/title_activity_padrao_pesquisar_endereco" >
         </activity>
         <activity
             android:name=".padraoVisulizarEvento"
-            android:label="@string/title_activity_padrao_visulizar_evento">
+            android:label="@string/title_activity_padrao_visulizar_evento" >
+        </activity>
+        <activity
+            android:name=".padraoValidarTelefone"
+            android:label="@string/title_activity_padrao_validar_telefone" >
         </activity>
     </application>
 
