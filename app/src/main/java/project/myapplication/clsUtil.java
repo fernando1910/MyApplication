@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -123,7 +124,7 @@ class clsUtil {
 
     }
 
-    public LatLng getLocation(Context context) {
+    public LatLng retornaLocalizacao(Context context, LocationListener locationListener) {
         boolean isGPSEnabled = false;
         boolean isNetworkEnabled = false;
         boolean podePegarLocalizacao = false;
@@ -144,7 +145,7 @@ class clsUtil {
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                             60000,
-                            10, (LocationListener) context
+                            10, locationListener
                     );
                     if (locationManager != null) {
                         location = locationManager
@@ -159,7 +160,7 @@ class clsUtil {
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 60000,
-                                10, (LocationListener) this);
+                                10, locationListener);
                         Log.d("GPS Enabled", "GPS Enabled");
                         if (locationManager != null) {
                             location = locationManager
@@ -177,10 +178,23 @@ class clsUtil {
 
 
         } catch (Exception ex) {
+            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
 
         }
         return latLng;
 
+    }
+
+    public boolean verificaGPS(Context context)
+    {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+    }
+
+    public boolean verificaInternet(Context context){
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     public clsUtil() {

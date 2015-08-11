@@ -99,6 +99,10 @@
         <activity
             android:name=".padraoPesquisarEndereco"
             android:label="@string/title_activity_padrao_pesquisar_endereco" >
+            android:label="@string/title_activity_padrao_pesquisar_endereco"
+            android:hardwareAccelerated="false">
+
+
         </activity>
         <activity
             android:name=".padraoVisulizarEvento"
