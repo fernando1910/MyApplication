@@ -3,6 +3,7 @@
     android:id="@+id/relativeLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/item_border"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
@@ -32,16 +33,48 @@
         >
     </TextView>
 
-    <TextView
+    <LinearLayout
+
         android:layout_height="wrap_content"
-        android:text="TextView"
         android:layout_width="wrap_content"
-        android:id="@+id/txtSubTitle"
         android:layout_toRightOf="@+id/imgThumbnail"
         android:layout_below="@+id/txtTitle"
         android:layout_marginTop="3dip"
-        android:layout_marginLeft="6dip">
-    </TextView>
+        android:layout_marginBottom="3dip"
+        android:layout_marginLeft="6dip"
+        android:orientation="horizontal">
+    <ImageView
+        android:src="@drawable/ic_positivo"
+        android:id="@+id/ivConvidados"
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:padding="2dp" />
+
+        <TextView
+            android:id="@+id/tvConvidados"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp" />
+
+        <ImageView
+            android:src="@drawable/ic_comentario"
+            android:id="@+id/ivComentarios"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:padding="2dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:id="@+id/tvComentarios"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp" />
+
+
+    </LinearLayout>
+
 
 
 </RelativeLayout>
