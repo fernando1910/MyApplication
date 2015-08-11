@@ -1,9 +1,15 @@
 package project.myapplication;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
 
@@ -27,13 +34,14 @@ public class padraoCriarEvento extends ActionBarActivity {
     private DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
     private Calendar calendar = Calendar.getInstance();
     private TextView tvData, tvHora, tvEndereco;
-    private ImageButton btData, ibTimePicker, ibEndereco;
+    private ImageButton btData, ibTimePicker, ibEndereco, ibFotoCapa;
     private EditText etTitulo, etDescricao;
     private RadioGroup rgStatusEvento;
     private clsUtil util;
     private RadioButton rbPublic,rbPrivate;
     private double nr_latitude, nr_longitude;
     private clsConfiguracoes objConf;
+    private Uri imgEvento;
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +61,73 @@ public class padraoCriarEvento extends ActionBarActivity {
         rbPublic = (RadioButton)findViewById(R.id.rbPublic);
         rbPrivate = (RadioButton)findViewById(R.id.rbPrivate);
         ibEndereco = (ImageButton)findViewById(R.id.ibEndereco);
+        ibFotoCapa = (ImageButton)findViewById(R.id.ibFotoCapa);
     //endregion
 
         atualizarData();
         atualizarHora();
 
         util = new clsUtil();
+        objConf = new clsConfiguracoes();
+
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1),getResources()));
         ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_clock), getResources()));
         ibEndereco.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
 
-        objConf = new clsConfiguracoes();
+        ibFotoCapa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selecionarFoto();
+            }
+        });
+    }
+
+    public void selecionarFoto()
+    {
+        final CharSequence[] options = {"Tirar foto", "Escolher da Galeria","Cancelar" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(padraoCriarEvento.this);
+        builder.setTitle("Adcionar Foto");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Tirar foto"))
+                {
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
+                            + getString(R.string.app_name));
+
+                    diretorio = new File(diretorio.getPath() + "/Evento");
+
+                    imgEvento = Uri.fromFile(new File(diretorio,
+                            "img_evento_" + String.valueOf(util.RetornaDataHoraMinuto() + ".jpg")));
+
+                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgEvento);
+
+                    try {
+                        intent.putExtra("return-data", true);
+                        startActivityForResult(intent, 1);
+                    } catch (ActivityNotFoundException e) {
+
+                    }
+                }
+
+                else if (options[item].equals("Escolher da Galeria"))
+                {
+                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, 2);
+                }
+
+                else if (options[item].equals("Cancelar")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        builder.show();
     }
 
     public void onClickCriarEvento(View v)

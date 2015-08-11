@@ -12,9 +12,10 @@ import android.widget.Toast;
 
 public class padraoVisulizarEvento extends ActionBarActivity {
 
-    TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado;
-    ImageButton ibEndereco;
-    clsUtil util;
+    private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado;
+    private ImageButton ibEndereco;
+    private clsUtil util;
+    private int codigoEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class padraoVisulizarEvento extends ActionBarActivity {
         Bundle parameters = getIntent().getExtras();
         if(parameters != null)
         {
-            int codigoEvento =  parameters.getInt("codigoEvento");
+            codigoEvento =  parameters.getInt("codigoEvento");
             clsEvento objEvento = new clsEvento();
             objEvento = objEvento.carregar(String.valueOf(codigoEvento),getString(R.string.padrao_evento));
             tvTituloEvento.setText(objEvento.getTituloEvento());
@@ -74,6 +75,13 @@ public class padraoVisulizarEvento extends ActionBarActivity {
             this.finish();
             startActivity(new Intent(this,padraoMeusEventos.class));
             return true;
+        }
+        if (id == R.id.action_convidar)
+        {
+            Intent intent = new Intent(this,padraoContatos.class);
+            intent.putExtra("codigoEvento",codigoEvento);
+            startActivity(intent);
+
         }
         return super.onOptionsItemSelected(item);
     }
