@@ -40,7 +40,7 @@ public class padraoCadTelefone extends Activity {
                 startActivity(new Intent(this,MainActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(this,padraoMenu.class));
+                startActivity(new Intent(this,padraoValidarTelefone.class));
                 break;
         }
     }

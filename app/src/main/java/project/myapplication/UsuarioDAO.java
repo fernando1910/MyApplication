@@ -24,8 +24,9 @@ public class UsuarioDAO {
     private static final String ds_telefone = "ds_telefone";
     private static final String img_perfil = "img_perfil";
     private static final String ds_caminho_foto = "ds_caminho_foto";
+    private static final String nr_codigo_valida_telefone = "nr_codigo_valida_telefone";
 
-    private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefone, UsuarioDAO.img_perfil, UsuarioDAO.ds_caminho_foto};
+    private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefone, UsuarioDAO.img_perfil, UsuarioDAO.ds_caminho_foto,UsuarioDAO.nr_codigo_valida_telefone};
 
     public UsuarioDAO(Context context) {
         dbH =  new SQLiteHelper(context);
@@ -39,6 +40,7 @@ public class UsuarioDAO {
         valores.put(ds_telefone, objUsuario.getTelefone());
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
+        valores.put(nr_codigo_valida_telefone,objUsuario.getNr_codigo_valida_telefone());
         db.insert(TABELA_USUARIO,null,valores);
     }
 
@@ -48,6 +50,7 @@ public class UsuarioDAO {
         valores.put(ds_telefone, objUsuario.getTelefone());
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
+        valores.put(nr_codigo_valida_telefone,objUsuario.getNr_codigo_valida_telefone());
         db.update(TABELA_USUARIO, valores, " cd_usuario = ? ", new String[]{objUsuario.getCodigoUsuario() + ""});
     }
 
@@ -96,6 +99,7 @@ public class UsuarioDAO {
             objUsuario.setTelefone(c.getString(2));
             objUsuario.setImagemPerfil(c.getBlob(3));
             objUsuario.setCaminhoFoto(c.getString(4));
+            objUsuario.setNr_codigo_valida_telefone(c.getString(5));
         }
         return objUsuario;
     }

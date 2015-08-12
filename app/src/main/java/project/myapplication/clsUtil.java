@@ -203,7 +203,7 @@ class clsUtil {
     }
     public String gerarCodigo(){
         Random gerador = new Random();
-        return  String.valueOf(gerador.nextInt());
+        return  String.valueOf(gerador.nextInt(100000)+100000);
     }
 
 }
