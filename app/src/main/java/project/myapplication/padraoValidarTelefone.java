@@ -1,16 +1,24 @@
 package project.myapplication;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class padraoValidarTelefone extends ActionBarActivity {
+public class padraoValidarTelefone extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_validar_telefone);
+    }
+
+    public void onClick_Avancar(View v){
+
+        startActivity(new Intent(this,padraoLogin.class));
     }
 
     @Override

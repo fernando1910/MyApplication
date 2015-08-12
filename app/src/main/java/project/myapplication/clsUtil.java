@@ -21,6 +21,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
+
 class clsUtil {
 
     public String RetornaDataHoraMinuto()
@@ -198,6 +200,10 @@ class clsUtil {
     }
 
     public clsUtil() {
+    }
+    public String gerarCodigo(){
+        Random gerador = new Random();
+        return  String.valueOf(gerador.nextInt());
     }
 
 }

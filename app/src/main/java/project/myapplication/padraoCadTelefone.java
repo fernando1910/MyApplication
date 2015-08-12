@@ -21,11 +21,14 @@ public class padraoCadTelefone extends Activity {
     private EditText etTelefone;
     private ProgressDialog progressDialog;
     clsConfiguracoes objConfig;
+    private clsUtil util;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_cad_telefone);
         etTelefone = (EditText)findViewById(R.id.etTelefone);
+        util = new clsUtil();
+        String teste = util.gerarCodigo();
 
         clsConfiguracoes objConfig = null;
         ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
@@ -36,14 +39,12 @@ public class padraoCadTelefone extends Activity {
             case 0:
                 startActivity(new Intent(this,MainActivity.class));
                 break;
-            case 2:
-                startActivity(new Intent(this,padraoCadTelefone.class));
-                break;
             case 3:
                 startActivity(new Intent(this,padraoMenu.class));
                 break;
         }
     }
+
 
     public void onClick_Avancar(View v)
     {
