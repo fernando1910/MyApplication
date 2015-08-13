@@ -13,8 +13,9 @@ public class clsUsuario {
     private byte[] img_perfil;
     private String ds_caminho_foto;
     private String nr_ddi;
+    private  String nr_codigo_valida_telefone;
 
-
+    //region propriedades
     public String getNome() {
         return ds_nome;
     }
@@ -39,7 +40,6 @@ public class clsUsuario {
         this.cd_usuario = cd_usuario;
     }
 
-
     public byte[] getImagemPerfil() {
         return img_perfil;
     }
@@ -48,6 +48,31 @@ public class clsUsuario {
         this.img_perfil = img_perfil;
     }
 
+    public String getCaminhoFoto() {
+        return ds_caminho_foto;
+    }
+
+    public void setCaminhoFoto(String ds_caminho_foto) {
+        this.ds_caminho_foto = ds_caminho_foto;
+    }
+
+    public String getDDI() {
+        return nr_ddi;
+    }
+
+    public void setDDI(String nr_ddi) {
+        this.nr_ddi = nr_ddi;
+    }
+
+    public String getNr_codigo_valida_telefone() {
+        return nr_codigo_valida_telefone;
+    }
+
+    public void setNr_codigo_valida_telefone(String nr_codigo_valida_telefone) {
+        this.nr_codigo_valida_telefone = nr_codigo_valida_telefone;
+    }
+
+    //endregion
     public void AtualizarUsuario(Context context, clsUsuario objUsuario) {
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
         usuario_dao.Atualizar(objUsuario);
@@ -72,22 +97,6 @@ public class clsUsuario {
 
     }
 
-    public String getCaminhoFoto() {
-        return ds_caminho_foto;
-    }
-
-    public void setCaminhoFoto(String ds_caminho_foto) {
-        this.ds_caminho_foto = ds_caminho_foto;
-    }
-
-    public String getDDI() {
-        return nr_ddi;
-    }
-
-    public void setDDI(String nr_ddi) {
-        this.nr_ddi = nr_ddi;
-    }
-
     public String gerarUsuarioJSON(clsUsuario objUsuario) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -97,6 +106,7 @@ public class clsUsuario {
             jsonObject.put("ds_telefone", objUsuario.getTelefone());
             jsonObject.put("nr_ddi", objUsuario.getDDI());
             jsonObject.put("img_perfil", objUsuario.getImagemPerfil());
+            jsonObject.put("nr_codigo_valida_telefone", objUsuario.getNr_codigo_valida_telefone());
 
         } catch (JSONException e) {
             e.printStackTrace();

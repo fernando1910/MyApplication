@@ -105,5 +105,6 @@
     <!--Tela Visualizar Evento -->
     <string name="action_comentar">Comentar</string>
     <string name="action_convidar">Convidar</string>
+    <string name="title_activity_padrao_validar_telefone">padraoValidarTelefone</string>
 
 </resources>

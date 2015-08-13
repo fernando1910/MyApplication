@@ -42,6 +42,8 @@ public class padraoBoasVindas extends Activity {
 
     public void onClick_Avancar(View v)
     {
+        try {
+
 
             ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
             objConfig = config_dao.Carregar();
@@ -49,5 +51,11 @@ public class padraoBoasVindas extends Activity {
 
             config_dao.Atualizar(objConfig);
             startActivity(new Intent(this, padraoCadTelefone.class));
+
+        }catch (Exception ex)
+        {
+            Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
     }
 }

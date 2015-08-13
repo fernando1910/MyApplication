@@ -31,7 +31,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_nome text not null, " +
                     "ds_telefone text not null, " +
                     "img_perfil blob," +
-                    "ds_caminho_foto text)",
+                    "ds_caminho_foto text" +
+                    "nr_codigo_valida_telefone tex)",
 
             "CREATE TABLE tb_contato" +
                     "(cd_contato INTEGER, ds_contato TEXT, img_contato BLOB )",
