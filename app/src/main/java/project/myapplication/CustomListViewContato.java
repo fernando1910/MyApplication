@@ -21,6 +21,7 @@ public class CustomListViewContato extends BaseAdapter {
     List<clsContatos> items;
     Context context;
     boolean cbContatoVisivel;
+    private CheckBox cbContato;
 
     public CustomListViewContato(Activity context, List<clsContatos> items, boolean cbContatoVisivel) {
         this.items = items;
@@ -46,7 +47,7 @@ public class CustomListViewContato extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        clsContatos item = items.get(position);
+        final clsContatos item = items.get(position);
         Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.image);
         RoundImage roundedImage  = new RoundImage(bm);
 
@@ -57,19 +58,43 @@ public class CustomListViewContato extends BaseAdapter {
         ImageView img = (ImageView) view.findViewById(R.id.imgThumbnail);
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
         img.setImageDrawable(roundedImage);
-        CheckBox cbContato = (CheckBox) view.findViewById(R.id.cbContato);
+        cbContato = (CheckBox) view.findViewById(R.id.cbContato);
         if (cbContatoVisivel)
             cbContato.setVisibility(View.VISIBLE);
         else
             cbContato.setVisibility(View.GONE);
         //TextView txtSubTitle = (TextView) vi.findViewById(R.id.txtSubTitle);
 
+
+        cbContato.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (cbContato.isChecked())
+                            item.setSelecionado(true);
+                        else
+                            item.setSelecionado(false);
+                    }
+                }
+        );
         //img.setImageResource(item.t);
         txtTitle.setText(item.getNomeContato());
         //txtSubTitle.setText(item.SubTitle);
 
 
         return view;
+    }
+
+    public int getValue(int position)
+    {
+        clsContatos objContatos = items.get(position);
+        return objContatos.getCodigoContato();
+    }
+
+    public boolean isChecked(int position)
+    {
+        clsContatos objContatos = items.get(position);
+        return objContatos.getSelecionado();
     }
 
 }

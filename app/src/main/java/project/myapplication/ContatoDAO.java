@@ -40,6 +40,7 @@ public class ContatoDAO {
                 clsContatos objContatos = new clsContatos();
                 objContatos.setCodigoContato(cursor.getInt(0));
                 objContatos.setNomeContato(cursor.getString(1));
+                objContatos.setSelecionado(false);
                 //objContatos.setImagemContato(cursor.getBlob(2));
 
                 contatos.add(objContatos);

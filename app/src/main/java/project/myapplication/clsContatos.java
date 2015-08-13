@@ -21,6 +21,7 @@ public class clsContatos {
     private int cd_contato;
     private String ds_contato;
     private byte[] img_contato;
+    private boolean fg_selecionado;
     //endregion
 
     //region Propriedades
@@ -47,6 +48,14 @@ public class clsContatos {
 
     public void setImagemContato(byte[] img_contato) {
         this.img_contato = img_contato;
+    }
+
+    public boolean getSelecionado() {
+        return fg_selecionado;
+    }
+
+    public void setSelecionado(boolean fg_selecionado) {
+        this.fg_selecionado = fg_selecionado;
     }
 
     //endregion

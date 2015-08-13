@@ -8,20 +8,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 
-public class padraoContatos extends ActionBarActivity {
+public class padraoContatos extends ActionBarActivity{
 
     private ListView lvContatos;
-    private TextView itemTextView;
     private clsContatos objContatos;
     private Button btConfirmar;
     private int codigoEvento = 0;
-    boolean cbContatoVisivel = false;
+    private boolean cbContatoVisivel = false;
+    private List<clsContatos> contatosList;
+    private CustomListViewContato arrayAdapter;
+    private clsUtil util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +35,12 @@ public class padraoContatos extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //region Vinculação com XML
-        itemTextView = (TextView)findViewById(R.id.itemTextView);
         lvContatos = (ListView)findViewById(R.id.lvContatos);
         btConfirmar = (Button)findViewById(R.id.btConfirmar);
         //endregion
 
         objContatos = new clsContatos();
+        util = new clsUtil();
 
         Bundle parameters = getIntent().getExtras();
         if(parameters != null) {
@@ -46,9 +51,10 @@ public class padraoContatos extends ActionBarActivity {
 
         try {
 
-            List<clsContatos> contatosList = objContatos.retonarContatos(this);
-            final CustomListViewContato arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
+            contatosList = objContatos.retonarContatos(this);
+            arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
             lvContatos.setAdapter(arrayAdapter);
+
         }catch (Exception ex)
         {
             Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
@@ -95,7 +101,7 @@ public class padraoContatos extends ActionBarActivity {
 
         if (id == R.id.action_settings) {
             atualizarContatos();
-            return id == R.id.action_settings;
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -124,6 +130,39 @@ public class padraoContatos extends ActionBarActivity {
         }catch (Exception ex)
         {
             Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void onCLickConvidarContatos(View view)
+    {
+        boolean checked ;
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        for(int i = 0; i < lvContatos.getCount(); i++)
+        {
+            checked = arrayAdapter.isChecked(i);
+            if (checked)
+            {
+                JSONObject aux = new JSONObject();
+                try {
+                    aux.put("cd_usuario", arrayAdapter.getValue(i));
+                    aux.put("cd_evento", codigoEvento);
+                    jsonArray.put(aux);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        try {
+            jsonObject.put("convidados", jsonArray);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
     }
