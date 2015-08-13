@@ -106,6 +106,7 @@ public class clsUsuario {
             jsonObject.put("ds_telefone", objUsuario.getTelefone());
             jsonObject.put("nr_ddi", objUsuario.getDDI());
             jsonObject.put("img_perfil", objUsuario.getImagemPerfil());
+            jsonObject.put("nr_codigo_valida_telefone", objUsuario.getNr_codigo_valida_telefone());
 
         } catch (JSONException e) {
             e.printStackTrace();

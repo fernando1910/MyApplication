@@ -21,6 +21,7 @@ public class padraoCadTelefone extends Activity {
     private EditText etTelefone;
     private ProgressDialog progressDialog;
     clsConfiguracoes objConfig;
+    String strCodigo;
     private clsUtil util;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class padraoCadTelefone extends Activity {
         setContentView(R.layout.activity_padrao_cad_telefone);
         etTelefone = (EditText)findViewById(R.id.etTelefone);
         util = new clsUtil();
-        String teste = util.gerarCodigo();
+        strCodigo = util.gerarCodigo();
 
         clsConfiguracoes objConfig = null;
         ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
@@ -38,6 +39,9 @@ public class padraoCadTelefone extends Activity {
         {
             case 0:
                 startActivity(new Intent(this,MainActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(this,padraoBoasVindas.class));
                 break;
             case 3:
                 startActivity(new Intent(this,padraoValidarTelefone.class));
@@ -58,7 +62,7 @@ public class padraoCadTelefone extends Activity {
         {
 
             objUsuario.setTelefone(etTelefone.getText().toString());
-
+            objUsuario.setNr_codigo_valida_telefone(strCodigo.toString());
             String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
             int codigoUsuario = Integer.parseInt(EnviarTelefoneServidor(usuario));
 
