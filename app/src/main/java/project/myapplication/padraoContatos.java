@@ -137,6 +137,7 @@ public class padraoContatos extends ActionBarActivity{
     public void onCLickConvidarContatos(View view)
     {
         boolean checked ;
+        boolean selecionou = false;
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         for(int i = 0; i < lvContatos.getCount(); i++)
@@ -144,10 +145,11 @@ public class padraoContatos extends ActionBarActivity{
             checked = arrayAdapter.isChecked(i);
             if (checked)
             {
+                selecionou = true;
                 JSONObject aux = new JSONObject();
                 try {
-                    aux.put("cd_usuario", arrayAdapter.getValue(i));
-                    aux.put("cd_evento", codigoEvento);
+                    aux.put("cd_usuario", String.valueOf(arrayAdapter.getValue(i)));
+                    aux.put("cd_evento", String.valueOf(codigoEvento));
                     jsonArray.put(aux);
 
                 } catch (JSONException e) {
@@ -157,12 +159,21 @@ public class padraoContatos extends ActionBarActivity{
             }
         }
 
-        try {
-            jsonObject.put("convidados", jsonArray);
+        if(selecionou) {
 
+            try {
+                jsonObject.put("convidados", jsonArray);
+                util.enviarServidor(getString(R.string.padrao_convidar), jsonObject.toString(), "send-json");
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            Toast.makeText(this,"Não foi selecionado nenhum contato", Toast.LENGTH_LONG).show();
         }
 
     }

@@ -107,4 +107,7 @@
     <string name="action_convidar">Convidar</string>
     <string name="title_activity_padrao_validar_telefone">padraoValidarTelefone</string>
 
+    <!--Tela Convidar-->
+    <string name="padrao_convidar">http://www.fiesta1.hol.es/padraoConvidar.php</string>
+
 </resources>

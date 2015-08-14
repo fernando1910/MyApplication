@@ -110,7 +110,7 @@ class clsUtil {
         return resposta[0];
     }
 
-    public void ligarGPS(Context context) // NAO FUNCIONA
+    public void ligarGPS(Context context) // NAO FUNCIONA111
     {
         Intent intent = new Intent("android.location.GPS_ENABLED_CHANGE");
         intent.putExtra("enabled", true);
