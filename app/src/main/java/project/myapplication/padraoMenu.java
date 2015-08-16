@@ -2,14 +2,14 @@ package project.myapplication;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
 
 
 public class padraoMenu extends ActionBarActivity
@@ -83,31 +83,13 @@ public class padraoMenu extends ActionBarActivity
 
 
         }
-        fragmentManager.beginTransaction()
-
-
-                .replace(R.id.container, fragment)
-                .commit();
-
-        /*
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = null;
-
-        switch (position)
-        {
-            case 0:
-                fragment = new padraoCalendario();
-                mTitle = getString(R.string.title_section1);
-
-                break;
-
+        if(position ==0) {
             fragmentManager.beginTransaction()
+
 
                     .replace(R.id.container, fragment)
                     .commit();
-
-                    */
-
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -117,20 +99,6 @@ public class padraoMenu extends ActionBarActivity
         {
             mTitle = stringArray[number-1];
         }
-        /*switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_activity_padrao_config);
-                break;
-        }*/
     }
 
     public void restoreActionBar() {
@@ -205,5 +173,19 @@ public class padraoMenu extends ActionBarActivity
         }
 
     }
+
+    public void startService()
+    {
+        Intent it = new Intent("SERVICO_NOVIDADES");
+        startService(it);
+
+    }
+
+    public void stopService()
+    {
+        Intent it = new Intent("servico_novidades");
+        stopService(it);
+    }
+
 
 }

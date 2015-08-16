@@ -45,6 +45,4 @@ public class padraoPainel extends Fragment {
 
         return view ;
     }
-
-
 }
