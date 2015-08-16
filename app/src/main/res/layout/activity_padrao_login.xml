@@ -46,23 +46,6 @@
         android:gravity="center"
         android:weightSum="1">
 
-    <Spinner
-        android:id="@+id/spDDI"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/sessao_ddi"
-        >
-
-    </Spinner>
-
-    <EditText
-        android:padding="20dp"
-        android:id="@+id/etTelefone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Telefone"
-        android:inputType="phone"
-        />
      </LinearLayout>
 
 

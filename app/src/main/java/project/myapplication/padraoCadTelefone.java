@@ -3,19 +3,13 @@ package project.myapplication;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.provider.Telephony;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
 
 public class padraoCadTelefone extends Activity {
     private EditText etTelefone;
@@ -49,10 +43,25 @@ public class padraoCadTelefone extends Activity {
         }
     }
 
+    public boolean validarCampos()
+    {
+       if (etTelefone.getText().equals("")) {
+           Toast.makeText(this,"Campo telefone invalido", Toast.LENGTH_LONG).show();
+           return false;
+       }
+       else
+        return true;
+    }
+
 
     public void onClick_Avancar(View v)
     {
-        new aguardarTelefone().execute();
+        if (validarCampos()) {
+            if (util.verificaInternet(getApplicationContext()))
+                new aguardarTelefone().execute();
+            else
+                Toast.makeText(this, "Verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -62,7 +71,7 @@ public class padraoCadTelefone extends Activity {
         {
 
             objUsuario.setTelefone(etTelefone.getText().toString());
-            objUsuario.setNr_codigo_valida_telefone(strCodigo.toString());
+            objUsuario.setCodigoVerificardor(strCodigo.toString());
             String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
             int codigoUsuario = Integer.parseInt(EnviarTelefoneServidor(usuario));
 
@@ -73,7 +82,7 @@ public class padraoCadTelefone extends Activity {
             }
             else {
                 objUsuario.setCodigoUsuario(codigoUsuario);
-                objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
+                objUsuario.salvar(this.getApplicationContext(), objUsuario);
                 return true;
             }
         }catch (Exception e)

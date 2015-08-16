@@ -64,18 +64,18 @@ public class clsUsuario {
         this.nr_ddi = nr_ddi;
     }
 
-    public String getNr_codigo_valida_telefone() {
+    public String getCodigoVerificardor() {
         return nr_codigo_valida_telefone;
     }
 
-    public void setNr_codigo_valida_telefone(String nr_codigo_valida_telefone) {
+    public void setCodigoVerificardor(String nr_codigo_valida_telefone) {
         this.nr_codigo_valida_telefone = nr_codigo_valida_telefone;
     }
 
     //endregion
-    public void AtualizarUsuario(Context context, clsUsuario objUsuario) {
+    public void atualizar(Context context) {
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        usuario_dao.Atualizar(objUsuario);
+        usuario_dao.atualizar(this);
     }
 
     public void AtualizarNome(Context context, String ds_nome) {
@@ -91,9 +91,22 @@ public class clsUsuario {
         return objUsuario;
     }
 
-    public void InserirUsuario(Context context, clsUsuario objUsuario) {
+    public void carregar(Context context)
+    {
+        clsUsuario objUsuario;
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        usuario_dao.Salvar(objUsuario);
+        objUsuario = usuario_dao.getUsuario();
+        if(objUsuario != null) {
+            this.cd_usuario = objUsuario.getCodigoUsuario();
+            this.ds_nome = objUsuario.getNome();
+            this.ds_telefone = objUsuario.getTelefone();
+        }
+
+    }
+
+    public void salvar(Context context, clsUsuario objUsuario) {
+        UsuarioDAO usuario_dao = new UsuarioDAO(context);
+        usuario_dao.salvar(objUsuario);
 
     }
 
@@ -106,7 +119,7 @@ public class clsUsuario {
             jsonObject.put("ds_telefone", objUsuario.getTelefone());
             jsonObject.put("nr_ddi", objUsuario.getDDI());
             jsonObject.put("img_perfil", objUsuario.getImagemPerfil());
-            jsonObject.put("nr_codigo_valida_telefone", objUsuario.getNr_codigo_valida_telefone());
+            jsonObject.put("nr_codigo_valida_telefone", objUsuario.getCodigoVerificardor());
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -4,12 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
-
-import org.apache.http.HttpConnection;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -33,24 +27,24 @@ public class UsuarioDAO {
         db = dbH.getWritableDatabase();
     }
 
-    public void Salvar(clsUsuario objUsuario ) {
+    public void salvar(clsUsuario objUsuario ) {
         ContentValues valores = new ContentValues();
         valores.put(cd_usuario, objUsuario.getCodigoUsuario());
         valores.put(ds_nome, objUsuario.getNome());
         valores.put(ds_telefone, objUsuario.getTelefone());
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
-        valores.put(nr_codigo_valida_telefone,objUsuario.getNr_codigo_valida_telefone());
+        valores.put(nr_codigo_valida_telefone,objUsuario.getCodigoVerificardor());
         db.insert(TABELA_USUARIO,null,valores);
     }
 
-    public void Atualizar(clsUsuario objUsuario) {
+    public void atualizar(clsUsuario objUsuario) {
         ContentValues valores = new ContentValues();
         valores.put(ds_nome, objUsuario.getNome());
         valores.put(ds_telefone, objUsuario.getTelefone());
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
-        valores.put(nr_codigo_valida_telefone,objUsuario.getNr_codigo_valida_telefone());
+        valores.put(nr_codigo_valida_telefone,objUsuario.getCodigoVerificardor());
         db.update(TABELA_USUARIO, valores, " cd_usuario = ? ", new String[]{objUsuario.getCodigoUsuario() + ""});
     }
 
@@ -88,18 +82,19 @@ public class UsuarioDAO {
     public clsUsuario getUsuario()
     {
         Cursor c = db.rawQuery("SELECT * FROM tb_usuario",null);
-        //Cursor c = db.query(true, TABELA_USUARIO, UsuarioDAO.colunas," cd_usuario = ? ", new String[]{id+""}, null,null,null,null);
+        //Cursor c = db.query(true, TABELA_USUARIO, UsuarioDAO.colunas,null, null, null,null,null,null);
+        c.moveToFirst();
         clsUsuario objUsuario = null;
         if (c.getCount() > 0)
         {
             objUsuario = new clsUsuario();
-            c.moveToFirst();
+
             objUsuario.setCodigoUsuario(c.getInt(0));
             objUsuario.setNome(c.getString(1));
             objUsuario.setTelefone(c.getString(2));
             objUsuario.setImagemPerfil(c.getBlob(3));
             objUsuario.setCaminhoFoto(c.getString(4));
-            objUsuario.setNr_codigo_valida_telefone(c.getString(5));
+            objUsuario.setCodigoVerificardor(c.getString(5));
         }
         return objUsuario;
     }

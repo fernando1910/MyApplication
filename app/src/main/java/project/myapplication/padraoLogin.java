@@ -3,7 +3,6 @@ package project.myapplication;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,19 +16,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 
 public class padraoLogin extends Activity {
-    EditText etNome, etTelefone;
+    EditText etNome;
     ImageButton b;
     RoundImage roundedImage;
     Uri imgPerfil;
     Button btAvancar;
-    Spinner spDDI;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +53,8 @@ public class padraoLogin extends Activity {
         }
 
         etNome = (EditText)findViewById(R.id.etNome);
-        etTelefone = (EditText)findViewById(R.id.etTelefone);
         btAvancar = (Button)findViewById(R.id.btAvancar);
-        spDDI = (Spinner)findViewById(R.id.spDDI);
+
 
         b=(ImageButton)findViewById(R.id.btnSelectPhoto);
         Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.image);
@@ -191,10 +189,6 @@ public class padraoLogin extends Activity {
             Toast.makeText(this, "Seu nome não foi informado", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if (etTelefone.getText().length() == 0) {
-            Toast.makeText(this, "Seu telefone não foi informado", Toast.LENGTH_SHORT).show();
-            return false;
-        }
         else
         {
             return true;
@@ -203,40 +197,30 @@ public class padraoLogin extends Activity {
 
     public boolean SalvarUsuario()
     {
-            clsUsuario objUsuario = new clsUsuario();
-            try
-            {
-                if(imgPerfil != null) {
-                    Bitmap pic = roundedImage.getBitmap();
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                    objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
-                    objUsuario.setCaminhoFoto(imgPerfil.getPath());
-                }
-
-                objUsuario.setNome(etNome.getText().toString());
-                objUsuario.setTelefone(etTelefone.getText().toString());
-                objUsuario.setDDI(spDDI.getSelectedItem().toString());
-
-                String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
-                int codigoUsuario = Integer.parseInt(enviarUsuarioServidor(usuario));
-
-                if (codigoUsuario == 0)
-                {
-                    Toast.makeText(this, "Erro: Falha ao criar o perfil", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-                else {
-                    objUsuario.setCodigoUsuario(codigoUsuario);
-                    objUsuario.InserirUsuario(this.getApplicationContext(), objUsuario);
-                    return true;
-                }
-            }catch (Exception e)
-            {
-                Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
-                return false;
-
+        clsUsuario objUsuario = new clsUsuario();
+        objUsuario.carregar(this);
+        try
+        {
+            if(imgPerfil != null) {
+                Bitmap pic = roundedImage.getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
+                objUsuario.setCaminhoFoto(imgPerfil.getPath());
             }
+
+            objUsuario.setNome(etNome.getText().toString());
+
+            String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
+
+            objUsuario.atualizar(this);
+            return true;
+
+        }catch (Exception e)
+        {
+            Toast.makeText(this, "Erro: Perfil nao foi salvo", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
     }
 
