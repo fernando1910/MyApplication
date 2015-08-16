@@ -1,5 +1,9 @@
 package project.myapplication;
 
+import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -7,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -15,8 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -47,8 +50,6 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Locati
 
     private SearchView mSearchView;
     private clsUtil util;
-    private ImageButton ibPesquisar;
-    private EditText etLocalizacao;
     private GoogleMap mMap;
     private LatLng latLng;
     private Address address;
@@ -72,27 +73,28 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Locati
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         tvInstrucao = (TextView)findViewById(R.id.tvInstrucao);
-        ibPesquisar = (ImageButton)findViewById(R.id.ibPesquisar);
-        etLocalizacao = (EditText)findViewById(R.id.etLocalizacao);
         lvEndereco =  (ListView)findViewById(R.id.lvEndereco);
         wvCarregando = (WebView)findViewById(R.id.wvCarregando);
         wvCarregando.loadUrl("file:///android_asset/carregandoGIF.gif");
 
         util = new clsUtil();
-        ibPesquisar.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_pesquisar), getResources()));
-
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         float density = getResources().getDisplayMetrics().density;
         int height = (int) (displayMetrics.heightPixels / density);
 
-        ViewGroup.LayoutParams params = supportMapFragment.getView().getLayoutParams();
-        params.height = height ;
-        supportMapFragment.getView().setLayoutParams(params);
+        try {
+            ViewGroup.LayoutParams params = supportMapFragment.getView().getLayoutParams();
+            params.height = height ;
+            supportMapFragment.getView().setLayoutParams(params);
+        }catch (NullPointerException e)
+        {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
         if(util.verificaGPS(getApplicationContext()))
-        {;
+        {
             try {
                 latLng = util.retornaLocalizacao(getApplicationContext(), this);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
@@ -104,60 +106,124 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Locati
         }
         else
         {
+            new AlertDialog.Builder(this)
+                    .setMessage("GPS Desligado! \nDeseja ligar o GPS ?")
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(intent,1);
+                        }
+                    })
+                    .setNegativeButton("Não", null)
+                    .show();
+
             Toast.makeText(this,"GPS desligado", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void procurarEndereco(View view)
-    {
-        String stLocalizacao = etLocalizacao.getText().toString();
-
-        List<Address> addressList;
-        if (stLocalizacao.length() > 0)
-        {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(stLocalizacao, 1);
-                address = addressList.get(0);
-                latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-                lvEndereco.setVisibility(View.INVISIBLE);
-                wvCarregando.setVisibility(View.VISIBLE);
-                tvInstrucao.setVisibility(View.INVISIBLE);
-
-                new carregarLocais().execute();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 1){
+            if(util.verificaGPS(getApplicationContext()))
             {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                try {
+                    latLng = util.retornaLocalizacao(getApplicationContext(), this);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
+            else
+            {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-233251,-463810),15.0f));
 
+            }
         }
-        else
-        {
-            Toast.makeText(getApplicationContext(),"Endereço não informado", Toast.LENGTH_LONG).show();
-
-        }
-
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_padrao_pesquisar_endereco, menu);
 
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView = (SearchView) item.getActionView();
+        try{
+
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setQueryHint("Pesquisar");
+
+        }
+        catch (Exception e){
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        searchView.setIconifiedByDefault(false);
         return true;
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        hendleSearch(intent);
+    }
+
+    public void hendleSearch( Intent intent)
+    {
+        if (Intent.ACTION_SEARCH.equalsIgnoreCase( intent.getAction() ))
+        {
+            String stLocalizacao = intent.getStringExtra( SearchManager.QUERY );
+
+            List<Address> addressList;
+            if (stLocalizacao.length() > 0)
+            {
+                Geocoder geocoder = new Geocoder(this);
+                try {
+                    addressList = geocoder.getFromLocationName(stLocalizacao, 1);
+                    if(addressList.size() > 0) {
+                        address = addressList.get(0);
+                        latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        mMap.clear();
+                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                        lvEndereco.setVisibility(View.INVISIBLE);
+                        wvCarregando.setVisibility(View.VISIBLE);
+                        tvInstrucao.setVisibility(View.INVISIBLE);
+
+                        new carregarLocais().execute();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Endereço não encontrado", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"Endereço não informado", Toast.LENGTH_LONG).show();
+
+            }
+
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -298,7 +364,7 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Locati
                 }
                 catch (Exception ex)
                 {
-
+                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -6,33 +6,6 @@
     tools:context="project.myapplication.padraoPesquisarEndereco">
 
 
-    <RelativeLayout
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/etLocalizacao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Digite o endereço"
-            android:inputType="textPostalAddress" />
-
-
-
-        <ImageButton
-            android:id="@+id/ibPesquisar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="Button"
-            android:onClick="procurarEndereco"
-            android:background="@null" />
-    </RelativeLayout>
     <fragment
 
         android:layout_width="match_parent"
