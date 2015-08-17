@@ -123,6 +123,22 @@ public class clsEvento {
 
     //region Metodos comunicação com servidor Online
 
+    public void enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException {
+        JSONObject jsonObject = new JSONObject();
+        clsUtil util = new clsUtil();
+        try{
+            jsonObject.put("cd_evento", codigoEvento);
+            jsonObject.put("cd_usuario", codigoUsuario);
+            jsonObject.put("ds_comentario", comentario);
+
+        }catch (JSONException e)
+        {
+
+        }
+
+        util.enviarServidor(url,jsonObject.toString(),"send-json");
+    }
+
     public void gerarEventoJSON(clsEvento objEvento, String url) throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();

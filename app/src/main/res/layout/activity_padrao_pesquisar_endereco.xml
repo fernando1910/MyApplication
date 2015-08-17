@@ -36,6 +36,7 @@
 
 
             <WebView
+                android:layout_centerHorizontal="true"
                 android:id="@+id/wvCarregando"
                 android:visibility="invisible"
                 android:layout_width="match_parent"

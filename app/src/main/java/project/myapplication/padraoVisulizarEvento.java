@@ -1,11 +1,12 @@
 package project.myapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,9 +14,9 @@ import android.widget.Toast;
 public class padraoVisulizarEvento extends ActionBarActivity {
 
     private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado;
-    private ImageButton ibEndereco;
     private clsUtil util;
     private int codigoEvento;
+    private clsEvento objEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,18 +30,18 @@ public class padraoVisulizarEvento extends ActionBarActivity {
         tvDescricaoEvento = (TextView)findViewById(R.id.tvDescricaoEvento);
         tvEndereco = (TextView)findViewById(R.id.tvEndereco);
         tvPrivado = (TextView)findViewById(R.id.tvPrivado);
-        ibEndereco = (ImageButton)findViewById(R.id.ibEndereco);
 
         //endregion
 
         util = new clsUtil();
-        ibEndereco.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
+
+        tvEndereco.setCompoundDrawables(null,null,util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()),null);
 
         Bundle parameters = getIntent().getExtras();
         if(parameters != null)
         {
             codigoEvento =  parameters.getInt("codigoEvento");
-            clsEvento objEvento = new clsEvento();
+            objEvento = new clsEvento();
             objEvento = objEvento.carregar(String.valueOf(codigoEvento),getString(R.string.padrao_evento));
             tvTituloEvento.setText(objEvento.getTituloEvento());
             tvDescricaoEvento.setText(objEvento.getDescricao());
@@ -73,7 +74,6 @@ public class padraoVisulizarEvento extends ActionBarActivity {
         if (id == android.R.id.home)
         {
             this.finish();
-            startActivity(new Intent(this,padraoMeusEventos.class));
             return true;
         }
         if (id == R.id.action_convidar)
@@ -92,5 +92,25 @@ public class padraoVisulizarEvento extends ActionBarActivity {
         this.finish();
         startActivity(new Intent(this,padraoMeusEventos.class));
 
+    }
+
+    public void visualizarMapa(View view)
+    {
+        String nr_latitude = String.valueOf(objEvento.getLatitude());
+        String nr_longitude = String.valueOf(objEvento.getLongitude());
+        String ds_evento = objEvento.getTituloEvento();
+
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" +nr_latitude+","+nr_longitude+"("+ds_evento+")");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+
+    }
+
+    public void onClickChamarComentarios(View view)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("codigoEvento", codigoEvento);
+        startActivity(intent);
     }
 }

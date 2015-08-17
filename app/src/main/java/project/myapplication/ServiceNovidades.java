@@ -27,8 +27,7 @@ public class ServiceNovidades extends Service {
         Worker w = new Worker(startId);
         w.start();
         threads.add(w);
-        //return (START_REDELIVER_INTENT); RETORNDA DADOS DA INTENT
-        return (START_STICKY); //retornar da onde parou caso
+        return (START_REDELIVER_INTENT); //RETORNDA DADOS DA INTENT
         //return (START_NOT_STICKY); NAO STARTAR SERVICO
         //return super.onStartCommand(intent, flags, startId);
     }

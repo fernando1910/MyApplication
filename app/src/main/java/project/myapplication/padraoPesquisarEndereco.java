@@ -62,7 +62,7 @@ public class padraoPesquisarEndereco extends ActionBarActivity implements Locati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_pesquisar_endereco);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true); BOTÃO DE VOLTAR NA ACTION BAR
 
         setUpMapIfNeeded();
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);

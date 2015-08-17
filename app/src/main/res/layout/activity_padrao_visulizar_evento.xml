@@ -1,13 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context="project.myapplication.padraoVisulizarEvento"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
     <TextView
         android:text="Título do Evento"
@@ -33,39 +44,17 @@
         android:padding="10dp"/>
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
         <TextView
             android:padding="10dp"
             android:id="@+id/tvEndereco"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Endereço"
+            android:drawableRight="@android:drawable/ic_delete"
+            android:onClick="visualizarMapa"
+            android:clickable="true" />
 
-            />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:weightSum="1">
-
-            <ImageButton
-                android:id="@+id/ibEndereco"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="10dp"
-                android:text="Button"
-                android:background="@null"
-                />
-
-        </LinearLayout>
-
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvPrivado"
@@ -74,4 +63,50 @@
         android:padding="10dp"
         android:text="Este evento é" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:layout_gravity="bottom"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btComentario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comentarios"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:onClick="onClickChamarComentarios"
+                android:background="@null" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <Button
+                android:id="@+id/btSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Convidados"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:background="@null" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
 </LinearLayout>
