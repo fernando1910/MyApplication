@@ -6,11 +6,13 @@ import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,10 +82,17 @@ public class padraoCriarEvento extends ActionBarActivity {
                 selecionarFoto();
             }
         });
+
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        ibFotoCapa.getLayoutParams().width = width;
+        ibFotoCapa.getLayoutParams().height = (int) Math.ceil (height / 2.5);
+
     }
 
-    public void selecionarFoto()
-    {
+    public void selecionarFoto(){
         final CharSequence[] options = {"Tirar foto", "Escolher da Galeria","Cancelar" };
         AlertDialog.Builder builder = new AlertDialog.Builder(padraoCriarEvento.this);
         builder.setTitle("Adcionar Foto");
@@ -109,7 +118,7 @@ public class padraoCriarEvento extends ActionBarActivity {
 
                     try {
                         intent.putExtra("return-data", true);
-                        startActivityForResult(intent, 1);
+                        startActivityForResult(intent, 2);
                     } catch (ActivityNotFoundException e) {
 
                     }
@@ -118,7 +127,7 @@ public class padraoCriarEvento extends ActionBarActivity {
                 else if (options[item].equals("Escolher da Galeria"))
                 {
                     Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
+                    startActivityForResult(intent, 3);
                 }
 
                 else if (options[item].equals("Cancelar")) {
@@ -128,6 +137,26 @@ public class padraoCriarEvento extends ActionBarActivity {
         });
 
         builder.show();
+    }
+
+
+    public void cortarFoto(Uri selectedImage)    {
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        // indicate image type and Uri
+        cropIntent.setDataAndType(selectedImage, "image/*");
+        // set crop properties
+        cropIntent.putExtra("crop", "true");
+        // indicate aspect of desired crop
+        cropIntent.putExtra("aspectX", 1.5);
+        cropIntent.putExtra("aspectY", 1);
+        // indicate output X and Y
+        cropIntent.putExtra("outputX", 1080);
+        cropIntent.putExtra("outputY", 710);
+        // retrieve data on return
+        cropIntent.putExtra("return-data", true);
+        // start the activity - we handle returning in onActivityResult
+        startActivityForResult(cropIntent, 4);
+
     }
 
     public void onClickCriarEvento(View v)
@@ -286,7 +315,6 @@ public class padraoCriarEvento extends ActionBarActivity {
         if (id == android.R.id.home)
         {
             this.finish();
-            startActivity(new Intent(this,padraoMeusEventos.class));
             return true;
         }
 
@@ -298,7 +326,6 @@ public class padraoCriarEvento extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this,padraoMeusEventos.class));
 
     }
 
@@ -327,6 +354,22 @@ public class padraoCriarEvento extends ActionBarActivity {
                 endereco = data.getStringExtra("endereco");
                 tvEndereco.setText(endereco);
 
+            }
+        }
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 2) {
+                cortarFoto(imgEvento);
+
+            } else if (requestCode == 3) {
+                imgEvento = data.getData();
+                cortarFoto(imgEvento);
+            }
+            else if (requestCode == 4)
+            {
+                Bundle extras = data.getExtras();
+                Bitmap imgRetorno = extras.getParcelable("data");
+
+                ibFotoCapa.setImageBitmap(imgRetorno);
             }
         }
 
