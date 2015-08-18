@@ -16,6 +16,7 @@ public class padraoCadTelefone extends Activity {
     private ProgressDialog progressDialog;
     clsConfiguracoes objConfig;
     String strCodigo;
+    int codigoUsuario;
     private clsUtil util;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class padraoCadTelefone extends Activity {
             objUsuario.setTelefone(etTelefone.getText().toString());
             objUsuario.setCodigoVerificardor(strCodigo.toString());
             String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
-            int codigoUsuario = Integer.parseInt(EnviarTelefoneServidor(usuario));
+            codigoUsuario = Integer.parseInt(EnviarTelefoneServidor(usuario));
 
             if (codigoUsuario == 0)
             {
@@ -162,15 +163,17 @@ public class padraoCadTelefone extends Activity {
             progressDialog.dismiss();
             if(criou == true)
             {
-
                 ConfiguracoesDAO config_dao = new ConfiguracoesDAO(padraoCadTelefone.this);
                 objConfig = config_dao.Carregar();
-                objConfig.setStatusPerfil(3);
+                objConfig.setStatusPerfil(4);
 
                 config_dao.Atualizar(objConfig);
 
                 Toast.makeText(padraoCadTelefone.this, "Telefone Salvo", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(padraoCadTelefone.this,padraoValidarTelefone.class));
+
+                Intent intent = new Intent(padraoCadTelefone.this,padraoLogin.class);
+                intent.putExtra("Parametro",codigoUsuario);
+                startActivity(intent);
 
 
             }else

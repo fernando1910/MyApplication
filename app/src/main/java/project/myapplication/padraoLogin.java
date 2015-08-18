@@ -38,6 +38,7 @@ public class padraoLogin extends Activity {
         clsConfiguracoes objConfig;
         ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
         objConfig = config_dao.Carregar();
+        pegarParametro();
 
         switch (objConfig.getStatusPerfil())
         {
@@ -45,10 +46,13 @@ public class padraoLogin extends Activity {
                 startActivity(new Intent(this,MainActivity.class));
                 break;
             case 1:
-                startActivity(new Intent(this,padraoLogin.class));
+                startActivity(new Intent(this,padraoBoasVindas.class));
+                break;
+            case 2:
+                startActivity(new Intent(this,padraoCadTelefone.class));
                 break;
             case 3:
-                startActivity(new Intent(this,padraoMenu.class));
+                startActivity(new Intent(this,padraoValidarTelefone.class));
                 break;
         }
 
@@ -141,6 +145,17 @@ public class padraoLogin extends Activity {
         builder.show();
     }
 
+    public int pegarParametro(){
+        int parametro=0;
+        int teste = 0;
+        Intent intent = getIntent();
+
+        if(intent != null )
+           parametro = intent.getIntExtra("Parametro",teste);
+
+        return parametro;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -212,6 +227,18 @@ public class padraoLogin extends Activity {
             objUsuario.setNome(etNome.getText().toString());
 
             String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
+           /* usuario = Integer.parseInt(enviarUsuarioServidor(usuario));
+
+            if (usuario == 0)
+            {
+                Toast.makeText(this, "Erro1:Telefone não foi Salvo", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            else {
+                objUsuario.setCodigoUsuario(usuario);
+                objUsuario.salvar(this.getApplicationContext(), objUsuario);
+                return true;
+            } */
 
             objUsuario.atualizar(this);
             return true;
@@ -230,7 +257,7 @@ public class padraoLogin extends Activity {
         try{
             Thread thread =  new Thread( new Runnable(){
             public void run(){
-                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb(getString(R.string.padrao_login), "send-json",data);
+                resposta[0] =  project.myapplication.HttpConnection.getSetDataWeb(getString(R.string.padrao_atualiza_usuario), "send-json",data);
 
             }
         });

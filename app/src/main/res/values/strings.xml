@@ -66,6 +66,7 @@
     <!-- Tela de Criação de Perfil / Login (padraoLogin) -->
     <string name="padrao_login">http://www.fiesta1.hol.es/CadUsuario.php</string>
     <string name="padrao_telefone">http://www.fiesta1.hol.es/CadTelefone.php</string>
+    <string name="padrao_atualiza_usuario">http://www.fiesta1.hol.es/padraoAtualizarUsuario.php</string>
 
     <!-- String da tela de configuração -->
     <string name="item_config_perfil">Perfil</string>
