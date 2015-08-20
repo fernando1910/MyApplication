@@ -2,16 +2,19 @@ package project.myapplication;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -44,6 +48,8 @@ public class padraoCriarEvento extends ActionBarActivity {
     private double nr_latitude, nr_longitude;
     private clsConfiguracoes objConf;
     private Uri imgEvento;
+    private Bitmap imgRetorno;
+    private boolean fg_criou;
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,7 @@ public class padraoCriarEvento extends ActionBarActivity {
 
     }
 
+    //region Validações de Imagens
     public void selecionarFoto(){
         final CharSequence[] options = {"Tirar foto", "Escolher da Galeria","Cancelar" };
         AlertDialog.Builder builder = new AlertDialog.Builder(padraoCriarEvento.this);
@@ -102,8 +109,7 @@ public class padraoCriarEvento extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if (options[item].equals("Tirar foto"))
-                {
+                if (options[item].equals("Tirar foto")) {
 
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
@@ -122,15 +128,10 @@ public class padraoCriarEvento extends ActionBarActivity {
                     } catch (ActivityNotFoundException e) {
 
                     }
-                }
-
-                else if (options[item].equals("Escolher da Galeria"))
-                {
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                } else if (options[item].equals("Escolher da Galeria")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 3);
-                }
-
-                else if (options[item].equals("Cancelar")) {
+                } else if (options[item].equals("Cancelar")) {
                     dialog.dismiss();
                 }
             }
@@ -138,7 +139,6 @@ public class padraoCriarEvento extends ActionBarActivity {
 
         builder.show();
     }
-
 
     public void cortarFoto(Uri selectedImage)    {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -159,105 +159,20 @@ public class padraoCriarEvento extends ActionBarActivity {
 
     }
 
-    public void onClickCriarEvento(View v)
-    {
-        if(ValidarCampos())
-        {
-            if(SalvarEvento()) {
-                ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
+    //endregion
 
-                Toast.makeText(this, "O evento foi criado", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, padraoMenu.class));
-                objConf = config_dao.Carregar();
-                if(objConf.getPermiteAlarme() == 1)
-                {
-                    criarEventoCalendarioAndroid();
-                }
-                this.finish();
-            }
-            else
-            {
-                Toast.makeText(this, "Algo deu errado", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public boolean SalvarEvento()
-    {
-        clsEvento objEvento = new clsEvento();
-        try {
-            if (ValidarCampos()) {
-                clsUsuario objUsuario = new clsUsuario();
-                objUsuario = objUsuario.SelecionarUsuario(this);
-
-                objEvento.setTituloEvento(etTitulo.getText().toString());
-                objEvento.setDescricao(etDescricao.getText().toString());
-                objEvento.setEndereco(tvEndereco.getText().toString());
-                if (rbPrivate.isChecked())
-                    objEvento.setEventoPrivado(1);
-                else
-                    objEvento.setEventoPrivado(0);
-                objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
-
-                objEvento.setDataEvento(calendar.getTime());
-                objEvento.setLatitude(nr_latitude);
-                objEvento.setLongitude(nr_longitude);
-
-            }
-            objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
-
-            objEvento.InserirEvento(this.getApplicationContext(), objEvento);
-            return true;
-            }catch (Exception e)
-            {
-                Toast.makeText(this, "Erro: Evento não foi criado", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-    }
-
-    public boolean ValidarCampos()
-    {
-        if(etTitulo.getText().length()==0)
-        {
-            Toast.makeText(this, "Necessário informar um Titulo", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else if(tvEndereco.getText().length()==0)
-        {
-            Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else if(rgStatusEvento.getCheckedRadioButtonId()==0)
-        {
-            Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-
-    }
-    public void atualizarData()
-    {
-
+    //region Validações de data e hora
+    public void atualizarData(){
         tvData.setText(formatDate.format(calendar.getTime()));
     }
-
     public void atualizarHora()
     {
         tvHora.setText(formatHour.format(calendar.getTime()));
     }
-
-
-    public void setDate()
-    {
+    public void setDate(){
         new DatePickerDialog(padraoCriarEvento.this,d,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-
     }
-
-    public void setHour()
-    {
+    public void setHour(){
         new TimePickerDialog(padraoCriarEvento.this,timePickerDialog,calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
     }
 
@@ -294,6 +209,10 @@ public class padraoCriarEvento extends ActionBarActivity {
 
         }
     };
+
+    //endregion
+
+    //region Métodos do Android
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_padrao_criar_evento, menu);
@@ -302,12 +221,7 @@ public class padraoCriarEvento extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -317,28 +231,14 @@ public class padraoCriarEvento extends ActionBarActivity {
             this.finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
 
-    }
-
-    public void chamarMapa(View view)
-    {
-        try {
-            Bundle parameters = new Bundle();
-            Intent intent = new Intent(getApplicationContext(), padraoPesquisarEndereco.class);
-            startActivityForResult(intent, 1, parameters);
-        }catch (Exception e)
-        {
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -367,7 +267,7 @@ public class padraoCriarEvento extends ActionBarActivity {
             else if (requestCode == 4)
             {
                 Bundle extras = data.getExtras();
-                Bitmap imgRetorno = extras.getParcelable("data");
+                imgRetorno = extras.getParcelable("data");
 
                 ibFotoCapa.setImageBitmap(imgRetorno);
             }
@@ -376,8 +276,22 @@ public class padraoCriarEvento extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void criarEventoCalendarioAndroid()
-    {
+    //endregion
+
+    public void chamarMapa(View view){
+        try {
+            Bundle parameters = new Bundle();
+            Intent intent = new Intent(getApplicationContext(), padraoPesquisarEndereco.class);
+            startActivityForResult(intent, 1, parameters);
+        }catch (Exception e)
+        {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //region validações criação de evento
+
+    public void criarEventoCalendarioAndroid() {
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra("beginTime", calendar.getTimeInMillis());
@@ -387,4 +301,118 @@ public class padraoCriarEvento extends ActionBarActivity {
         intent.putExtra("title", etTitulo.getText().toString());
         startActivity(intent);
     }
+
+    public class compartilharEvento extends AsyncTask<Void,Integer,Void>{
+        @Override
+        protected void onPreExecute()
+        {
+            ProgressDialog progressDialog;
+            //Create a new progress dialog
+            progressDialog = new ProgressDialog(padraoCriarEvento.this);
+
+            progressDialog = ProgressDialog.show(padraoCriarEvento.this,"Carregando...",
+                    "Compartilhando seu evento, por favor aguarde...", false, false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                synchronized (this) {
+                    SalvarEvento();
+                }
+            }catch (Exception e)
+            {
+                fg_criou = false;
+            }
+
+            return null;
+        }
+    }
+
+    public void onClickCriarEvento(View v){
+        if (ValidarCampos()) {
+            new compartilharEvento().execute();
+            if (fg_criou) {
+                ConfiguracoesDAO config_dao = new ConfiguracoesDAO(padraoCriarEvento.this);
+                startActivity(new Intent(padraoCriarEvento.this, padraoMenu.class));
+                objConf = config_dao.Carregar();
+                if (objConf.getPermiteAlarme() == 1) {
+                    criarEventoCalendarioAndroid();
+                }
+                padraoCriarEvento.this.finish();
+            } else {
+                Toast.makeText(padraoCriarEvento.this, "Lamentamos, algo deu errado, por favor tente novamente.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public boolean SalvarEvento(){
+        clsEvento objEvento = new clsEvento();
+        try {
+            if (ValidarCampos()) {
+                clsUsuario objUsuario = new clsUsuario();
+                objUsuario = objUsuario.SelecionarUsuario(this);
+
+                objEvento.setTituloEvento(etTitulo.getText().toString());
+                objEvento.setDescricao(etDescricao.getText().toString());
+                objEvento.setEndereco(tvEndereco.getText().toString());
+                if (rbPrivate.isChecked())
+                    objEvento.setEventoPrivado(1);
+                else
+                    objEvento.setEventoPrivado(0);
+                objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
+
+                objEvento.setDataEvento(calendar.getTime());
+                objEvento.setLatitude(nr_latitude);
+                objEvento.setLongitude(nr_longitude);
+
+                if(imgEvento != null)
+                {
+
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    imgRetorno.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    String imagemServidor = Base64.encodeToString(byteArray,0);
+                    objEvento.setFotoCapa(imagemServidor);
+
+                }
+
+            }
+            objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
+
+            objEvento.InserirEvento(this.getApplicationContext(), objEvento);
+            fg_criou = true;
+            return true;
+        }catch (Exception e)
+        {
+            fg_criou = false;
+            return false;
+        }
+    }
+
+    public boolean ValidarCampos()    {
+        if(etTitulo.getText().length()==0)
+        {
+            Toast.makeText(this, "Necessário informar um Titulo", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(tvEndereco.getText().length()==0)
+        {
+            Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(rgStatusEvento.getCheckedRadioButtonId()==0)
+        {
+            Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
+
+    //endregion
+
 }

@@ -25,6 +25,9 @@ public class clsEvento {
         private double nr_latitude;
         private double nr_longitude;
         private clsUtil util;
+        private String ds_caminho_foto_capa;
+        private String ds_foto_capa;
+        private String ds_nome_arquivo_foto;
         protected final String caminhoSevidor = "";
 
     //endregion
@@ -119,6 +122,30 @@ public class clsEvento {
             this.nr_longitude = nr_longitude;
         }
 
+        public String getCaminhoFotoCapa() {
+            return ds_caminho_foto_capa;
+        }
+
+        public void setCaminhoFotoCapa(String ds_caminho_foto_capa) {
+            this.ds_caminho_foto_capa = ds_caminho_foto_capa;
+        }
+
+        public String getFotoCapa() {
+            return ds_foto_capa;
+        }
+
+        public void setFotoCapa(String ds_caminho_foto_capa) {
+            this.ds_foto_capa = ds_caminho_foto_capa;
+        }
+
+        public String getNomeArquivoFoto() {
+            return ds_nome_arquivo_foto;
+        }
+
+        public void setNomeArquivoFoto(String ds_nome_arquivo_foto) {
+            this.ds_nome_arquivo_foto = ds_nome_arquivo_foto;
+        }
+
     //endregion
 
     //region Metodos comunicação com servidor Online
@@ -154,6 +181,7 @@ public class clsEvento {
             jsonObject.put("ds_endereco", objEvento.getEndereco());
             jsonObject.put("nr_latitude", objEvento.getLatitude());
             jsonObject.put("nr_longitude", objEvento.getLongitude());
+            jsonObject.put("ds_foto_capa", objEvento.getFotoCapa());
 
 
         } catch (Exception e) {

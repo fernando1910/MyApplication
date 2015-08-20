@@ -15,6 +15,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String[] SCRIPT_DATABASE_DELETE =  new String[] {
             "DROP TABLE IF EXISTS tb_configuracoes",
             "DROP TABLE IF EXISTS tb_usuario",
+            "DROP TABLE IF EXISTS tb_contato ",
+            "DROP TABLE IF EXISTS tb_evento"
 
     };
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"" +
@@ -37,7 +39,23 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "CREATE TABLE tb_contato" +
                     "(cd_contato INTEGER, ds_contato TEXT, img_contato BLOB )",
 
-            "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)"  };
+            "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)",
+
+            "CREATE TABLE tb_evento " +
+                    "( cd_evento INTEGER," +
+                    "ds_titulo_evento TEXT," +
+                    "ds_descricao TEXT ," +
+                    "nr_latitude DOUBLE," +
+                    "nr_longitude DOUBLE ," +
+                    "cd_usuario_inclusao INTEGER," +
+                    "dt_evento DATETIME," +
+                    "dt_inclusao DATETIME," +
+                    "dt_alteracao DATETIME ," +
+                    "fg_evento_privado INTEGER," +
+                    "ds_endereco TEXT " +
+                    "ds_caminho_foto_capa TEXT  )"
+
+    };
 
 
     private static final String NOME_BANCO = "fiesta_louca";
