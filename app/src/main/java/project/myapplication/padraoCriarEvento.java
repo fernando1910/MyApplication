@@ -380,7 +380,7 @@ public class padraoCriarEvento extends ActionBarActivity {
             }
             objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
 
-            objEvento.InserirEvento(this.getApplicationContext(), objEvento);
+            objEvento.salvarEvento(this.getApplicationContext(), objEvento);
             fg_criou = true;
             return true;
         }catch (Exception e)

@@ -191,8 +191,9 @@ public class clsEvento {
         enviarEventoServidor(url, jsonObject.toString(),"send-json" );
     }
 
-        public void InserirEvento(Context context, clsEvento objEvento) {
-            //Criar Evento DAO
+        public void salvarEvento(Context context, clsEvento objEvento) {
+            EventoDAO eventoDAO = new EventoDAO(context);
+            eventoDAO.salvar(objEvento);
         }
 
     public String enviarEventoServidor(final String url,final String data, final String comando) throws InterruptedException {
