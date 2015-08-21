@@ -1,19 +1,27 @@
 package project.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class clsUsuario {
+
+    //region Váriaveis
     private int cd_usuario;
     private String ds_nome;
     private String ds_telefone;
     private byte[] img_perfil;
     private String ds_caminho_foto;
     private String nr_ddi;
-    private  String nr_codigo_valida_telefone;
+    private String nr_codigo_valida_telefone;
+    private String ds_token;
+
+
+    private static final String TAG = "USUARIO";
+    //endregion
 
     //region propriedades
     public String getNome() {
@@ -72,7 +80,17 @@ public class clsUsuario {
         this.nr_codigo_valida_telefone = nr_codigo_valida_telefone;
     }
 
+    public String getToken() {
+        return ds_token;
+    }
+
+    public void setToken(String ds_token) {
+        this.ds_token = ds_token;
+    }
+
     //endregion
+
+    //region Métodos
     public void atualizar(Context context) {
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
         usuario_dao.atualizar(this);
@@ -83,16 +101,14 @@ public class clsUsuario {
         usuario_dao.AtualizarNome(ds_nome);
     }
 
-    public clsUsuario SelecionarUsuario(Context context)
-    {
+    public clsUsuario SelecionarUsuario(Context context){
         clsUsuario objUsuario;
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
         objUsuario = usuario_dao.getUsuario();
         return objUsuario;
     }
 
-    public void carregar(Context context)
-    {
+    public void carregar(Context context){
         clsUsuario objUsuario;
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
         objUsuario = usuario_dao.getUsuario();
@@ -100,34 +116,67 @@ public class clsUsuario {
             this.cd_usuario = objUsuario.getCodigoUsuario();
             this.ds_nome = objUsuario.getNome();
             this.ds_telefone = objUsuario.getTelefone();
+            this.ds_token = objUsuario.getToken();
         }
 
     }
 
-    public void salvar(Context context, clsUsuario objUsuario) {
+    public void salvar(Context context) {
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        usuario_dao.salvar(objUsuario);
+        usuario_dao.salvar(this);
 
     }
 
-    public String gerarUsuarioJSON(clsUsuario objUsuario) {
+    public String gerarUsuarioJSON() {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
 
         try {
-            jsonObject.put("ds_nome", objUsuario.getNome());
-            jsonObject.put("ds_telefone", objUsuario.getTelefone());
-            jsonObject.put("nr_ddi", objUsuario.getDDI());
-            jsonObject.put("img_perfil", objUsuario.getImagemPerfil());
-            jsonObject.put("nr_codigo_valida_telefone", objUsuario.getCodigoVerificardor());
+            jsonObject.put("ds_nome", this.getNome());
+            jsonObject.put("ds_telefone", this.getTelefone());
+            jsonObject.put("nr_ddi", this.getDDI());
+            jsonObject.put("img_perfil", this.getImagemPerfil());
+            jsonObject.put("nr_codigo_valida_telefone", this.getCodigoVerificardor());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return jsonObject.toString();
-
     }
 
+    public boolean salvarPerfilOnline(Context context){
+        try {
 
+            final String caminhoServidor = context.getResources().getString(R.string.padrao_atualiza_usuario);
+            final String jsonString = gerarUsuarioJSON();
+            final String[] resposta = new String[1];
+            try {
+                Thread thread = new Thread(new Runnable() {
+                    public void run() {
+                        resposta[0] = project.myapplication.HttpConnection.getSetDataWeb(caminhoServidor, "send-json", jsonString);
+                    }
+                });
+                thread.start();
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (Integer.parseInt(resposta[0]) != 0) {
+                this.cd_usuario = Integer.parseInt(resposta[0]);
+                this.atualizar(context);
+
+            } else {
+                return false;
+            }
+        }catch (Exception e){
+            Log.i(TAG,e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    //endregion
 }

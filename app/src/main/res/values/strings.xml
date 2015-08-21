@@ -17,6 +17,7 @@
     <integer name="versao_banco">1</integer>
 
     <string name="google_map_key_browser">AIzaSyC8IwurYOdZXbTtZalkxGDzGqQNfPIxQmM</string>
+    <string name="clound_messaging_key">329570660675</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -112,5 +113,6 @@
     <string name="padrao_convidar">http://www.fiesta1.hol.es/padraoConvidar.php</string>
     <string name="title_activity_padrao_comentario">padraoComentario</string>
     <string name="padrao_comentar">http://www.fiesta1.hol.es/padraoComentar.php</string>
+    <string name="padrao_push_message">http://www.fiesta1.hol.es/padraoEnviarTokenPush.php</string>
 
 </resources>

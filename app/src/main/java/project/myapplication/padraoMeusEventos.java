@@ -81,9 +81,7 @@ public class padraoMeusEventos extends ActionBarActivity {
         @Override
         protected void onPreExecute()
         {
-            //Create a new progress dialog
             progressDialog = new ProgressDialog(padraoMeusEventos.this);
-
             progressDialog = ProgressDialog.show(padraoMeusEventos.this,"Carregando...",
                     "Carregando seus eventos, por favor aguarde...", false, false);
         }

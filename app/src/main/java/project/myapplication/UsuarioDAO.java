@@ -40,12 +40,13 @@ public class UsuarioDAO {
 
     public void atualizar(clsUsuario objUsuario) {
         ContentValues valores = new ContentValues();
+        valores.put(cd_usuario, objUsuario.getCodigoUsuario());
         valores.put(ds_nome, objUsuario.getNome());
         valores.put(ds_telefone, objUsuario.getTelefone());
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
         valores.put(nr_codigo_valida_telefone,objUsuario.getCodigoVerificardor());
-        db.update(TABELA_USUARIO, valores, " cd_usuario = ? ", new String[]{objUsuario.getCodigoUsuario() + ""});
+        db.update(TABELA_USUARIO, valores, null,null);
     }
 
     public void AtualizarNome(String ds_nome){

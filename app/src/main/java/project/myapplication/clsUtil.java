@@ -16,6 +16,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
@@ -215,5 +217,46 @@ class clsUtil {
         Random gerador = new Random();
         return  String.valueOf(gerador.nextInt(100000)+100000);
     }
+
+    public boolean checarServico(Context context){
+        int resultado = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+        if(resultado != ConnectionResult.SUCCESS)
+        {
+            if(GooglePlayServicesUtil.isUserRecoverableError(resultado)){
+
+            }else {
+                Log.i("LOG", "Não suportado");
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public Intent validarTela(Context context, int ind_status, int ind_tela)
+    {
+        Intent intent = null;
+        switch (ind_status) {
+            case 0:
+                intent = new Intent(context, MainActivity.class);
+                break;
+            case 1:
+                intent = new Intent(context, padraoBoasVindas.class);
+                break;
+            case 2:
+                intent = new Intent(context, padraoCadTelefone.class);
+                break;
+            case 3:
+                intent = new Intent(context, padraoValidarTelefone.class);
+                break;
+            case 4:
+                intent = new Intent(context, padraoLogin.class);
+                break;
+            case 5:
+                intent = new Intent(context, padraoLogin.class);
+                break;
+        }
+        return  intent;
+    }
+
 
 }

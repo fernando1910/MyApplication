@@ -70,27 +70,15 @@ public class padraoCadTelefone extends Activity {
         clsUsuario objUsuario = new clsUsuario();
         try
         {
-
             objUsuario.setTelefone(etTelefone.getText().toString());
             objUsuario.setCodigoVerificardor(strCodigo.toString());
-            String usuario = objUsuario.gerarUsuarioJSON(objUsuario);
-            codigoUsuario = Integer.parseInt(EnviarTelefoneServidor(usuario));
+            objUsuario.salvar(this.getApplicationContext());
+            return true;
 
-            if (codigoUsuario == 0)
-            {
-                Toast.makeText(this, "Erro1:Telefone não foi Salvo", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            else {
-                objUsuario.setCodigoUsuario(codigoUsuario);
-                objUsuario.salvar(this.getApplicationContext(), objUsuario);
-                return true;
-            }
         }catch (Exception e)
         {
             Toast.makeText(this, "Erro2: Telefone não foi salvo", Toast.LENGTH_SHORT).show();
             return false;
-
         }
 
     }
@@ -127,13 +115,11 @@ public class padraoCadTelefone extends Activity {
         boolean criou;
         @Override
         protected Void doInBackground(Void... params) {
-
             try
             {
                 synchronized (this)
                 {
                     criou= SalvarTelefone();
-
                 }
             }
             catch (InterruptedException e)

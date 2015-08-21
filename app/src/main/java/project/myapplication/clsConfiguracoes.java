@@ -1,16 +1,19 @@
 package project.myapplication;
 
-/**
- * Created by Fernando on 07/06/2015.
- */
+import android.content.Context;
+
 public class clsConfiguracoes {
+
+    //region variáveis
     private int fg_permite_push;
     private int fg_permite_alarme;
     private int fg_notifica_comentario;
     private int fg_notifica_mudanca;
     private int fg_telefone_visivel;
     private int ind_status_perfil;
+    //endregion
 
+    //region propriedades
     public int getStatusPerfil() {
         return ind_status_perfil;
     }
@@ -59,6 +62,16 @@ public class clsConfiguracoes {
         this.fg_telefone_visivel = fg_telefone_visivel;
     }
 
-    //TESTE
+    //endregion
+
+    //region métodos
+    public void atualizarStatus(Context context , int ind_status_perfil){
+        ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
+        configuracoesDAO.Carregar();
+        this.setStatusPerfil(ind_status_perfil);
+        configuracoesDAO.Atualizar(this);
+    }
+
+    //endregion
 
 }
