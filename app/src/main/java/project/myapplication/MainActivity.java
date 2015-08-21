@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
     MyPagerAdapter myPagerAdapter;
     Button btAvancar;
     clsConfiguracoes objConfig;
+    clsUtil util;
 
 
     @Override
@@ -39,23 +40,8 @@ public class MainActivity extends Activity {
         btAvancar = (Button)findViewById(R.id.btAvancar);
         btAvancar.setVisibility(View.INVISIBLE);
 
-        objConfig = null;
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        objConfig = config_dao.Carregar();
-
-        switch (objConfig.getStatusPerfil())
-        {
-            case 1:
-                startActivity(new Intent(this,padraoBoasVindas.class));
-                break;
-            case 2:
-                startActivity(new Intent(this,padraoLogin.class));
-                break;
-            case 3:
-                startActivity(new Intent(this,padraoMenu.class));
-                break;
-        }
-
+        clsUtil util = new clsUtil();
+        util.validarTela(this, 0);
     }
 
     /*public void onClick_Confirmar(View v)
@@ -154,10 +140,8 @@ public class MainActivity extends Activity {
 
     public void onClick_Avancar(View v)
     {
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        objConfig = config_dao.Carregar();
-        objConfig.setStatusPerfil(1);
-        config_dao.Atualizar(objConfig);
+        objConfig.carregar(this);
+        objConfig.atualizarStatus(this,1);
         startActivity(new Intent(this,padraoBoasVindas.class));
     }
 

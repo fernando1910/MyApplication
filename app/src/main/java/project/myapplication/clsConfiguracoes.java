@@ -72,6 +72,17 @@ public class clsConfiguracoes {
         configuracoesDAO.Atualizar(this);
     }
 
+    public void carregar(Context context){
+        ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
+        clsConfiguracoes objConfig = configuracoesDAO.Carregar();
+        this.setNotificaComentario(objConfig.getNotificaComentario());
+        this.setNotificaMudanca(objConfig.getNotificaMudanca());
+        this.setPermiteAlarme(objConfig.getPermiteAlarme());
+        this.setPermitePush(objConfig.getPermitePush());
+        this.setStatusPerfil(objConfig.getStatusPerfil());
+        this.setTelefoneVisivel(objConfig.getTelefoneVisivel());
+    }
+
     //endregion
 
 }

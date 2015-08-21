@@ -15,41 +15,25 @@ import android.widget.Toast;
 public class padraoBoasVindas extends Activity {
 
     clsConfiguracoes objConfig;
+    clsUtil util;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_boas_vindas);
 
-        clsConfiguracoes objConfig = null;
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        objConfig = config_dao.Carregar();
-
-        switch (objConfig.getStatusPerfil())
-        {
-            case 0:
-                startActivity(new Intent(this,MainActivity.class));
-                break;
-            case 2:
-                startActivity(new Intent(this,padraoCadTelefone.class));
-                break;
-            case 3:
-                startActivity(new Intent(this,padraoMenu.class));
-                break;
-        }
+        util = new clsUtil();
+        util.validarTela(this,1);
 
     }
 
     public void onClick_Avancar(View v)
     {
         try {
-
-
-            ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-            objConfig = config_dao.Carregar();
+            objConfig = new clsConfiguracoes();
+            objConfig.carregar(this);
             objConfig.setStatusPerfil(2);
-
-            config_dao.Atualizar(objConfig);
             startActivity(new Intent(this, padraoCadTelefone.class));
 
         }catch (Exception ex)

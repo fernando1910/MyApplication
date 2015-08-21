@@ -25,23 +25,7 @@ public class padraoCadTelefone extends Activity {
         etTelefone = (EditText)findViewById(R.id.etTelefone);
         util = new clsUtil();
         strCodigo = util.gerarCodigo();
-
-        clsConfiguracoes objConfig = null;
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        objConfig = config_dao.Carregar();
-
-        switch (objConfig.getStatusPerfil())
-        {
-            case 0:
-                startActivity(new Intent(this,MainActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this,padraoBoasVindas.class));
-                break;
-            case 3:
-                startActivity(new Intent(this,padraoValidarTelefone.class));
-                break;
-        }
+        util.validarTela(this,2);
     }
 
     public boolean validarCampos()
@@ -60,6 +44,7 @@ public class padraoCadTelefone extends Activity {
         if (validarCampos()) {
             if (util.verificaInternet(getApplicationContext()))
                 new aguardarTelefone().execute();
+
             else
                 Toast.makeText(this, "Verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
         }
@@ -149,17 +134,6 @@ public class padraoCadTelefone extends Activity {
             progressDialog.dismiss();
             if(criou == true)
             {
-                ConfiguracoesDAO config_dao = new ConfiguracoesDAO(padraoCadTelefone.this);
-                objConfig = config_dao.Carregar();
-                objConfig.setStatusPerfil(4);
-
-                config_dao.Atualizar(objConfig);
-
-                Toast.makeText(padraoCadTelefone.this, "Telefone Salvo", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(padraoCadTelefone.this,padraoLogin.class);
-                intent.putExtra("Parametro",codigoUsuario);
-                startActivity(intent);
 
 
             }else

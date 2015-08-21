@@ -232,30 +232,37 @@ class clsUtil {
         return true;
     }
 
-    public Intent validarTela(Context context, int ind_status, int ind_tela)
+    public void validarTela(Context context, int ind_tela)
     {
-        Intent intent = null;
-        switch (ind_status) {
-            case 0:
-                intent = new Intent(context, MainActivity.class);
-                break;
-            case 1:
-                intent = new Intent(context, padraoBoasVindas.class);
-                break;
-            case 2:
-                intent = new Intent(context, padraoCadTelefone.class);
-                break;
-            case 3:
-                intent = new Intent(context, padraoValidarTelefone.class);
-                break;
-            case 4:
-                intent = new Intent(context, padraoLogin.class);
-                break;
-            case 5:
-                intent = new Intent(context, padraoLogin.class);
-                break;
+        clsConfiguracoes objConfig = new clsConfiguracoes();
+        objConfig.carregar(context);
+        int ind_status = objConfig.getStatusPerfil();
+        if(ind_status != ind_tela) {
+            Intent intent = null;
+            switch (ind_status) {
+                case 0:
+                    intent = new Intent(context, MainActivity.class);
+                    break;
+                case 1:
+                    intent = new Intent(context, padraoBoasVindas.class);
+                    break;
+                case 2:
+                    intent = new Intent(context, padraoCadTelefone.class);
+                    break;
+                case 3:
+                    intent = new Intent(context, padraoValidarTelefone.class);
+                    break;
+                case 4:
+                    intent = new Intent(context, padraoLogin.class);
+                    break;
+                case 5:
+                    intent = new Intent(context, padraoLogin.class);
+                    break;
+            }
+            if (intent != null) {
+                context.startActivity(intent);
+            }
         }
-        return  intent;
     }
 
 
