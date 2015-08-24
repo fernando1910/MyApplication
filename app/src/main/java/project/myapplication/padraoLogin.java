@@ -32,6 +32,8 @@ public class padraoLogin extends Activity {
     private Button btAvancar;
     private boolean fg_criou;
     private ProgressDialog progressDialog;
+    private clsConfiguracoes objConfig ;
+    private clsUtil util;
 
 
     @Override
@@ -39,25 +41,11 @@ public class padraoLogin extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_login);
 
-        clsConfiguracoes objConfig;
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        objConfig = config_dao.Carregar();
-        pegarParametro();
+        util = new clsUtil();
+        util.validarTela(this,5);
 
-        switch (objConfig.getStatusPerfil()) {
-            case 0:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this, padraoBoasVindas.class));
-                break;
-            case 2:
-                startActivity(new Intent(this, padraoCadTelefone.class));
-                break;
-            case 3:
-                startActivity(new Intent(this, padraoValidarTelefone.class));
-                break;
-        }
+        objConfig = new clsConfiguracoes();
+        objConfig.carregar(this);
 
         etNome = (EditText) findViewById(R.id.etNome);
         btAvancar = (Button) findViewById(R.id.btAvancar);

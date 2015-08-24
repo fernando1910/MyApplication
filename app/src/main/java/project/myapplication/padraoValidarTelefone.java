@@ -8,40 +8,23 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class padraoValidarTelefone extends Activity {
-    clsConfiguracoes objConfig;
+    private clsConfiguracoes objConfig;
+    private clsUtil util;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_validar_telefone);
+        util.validarTela(this, 3);
+        objConfig = new clsConfiguracoes();
+        objConfig.carregar(this);
 
-        clsConfiguracoes objConfig = null;
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        objConfig = config_dao.Carregar();
-
-        switch (objConfig.getStatusPerfil())
-        {
-            case 0:
-                startActivity(new Intent(this,MainActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this,padraoBoasVindas.class));
-                break;
-            case 2:
-                startActivity(new Intent(this,padraoCadTelefone.class));
-                break;
-            case 4:
-                startActivity(new Intent(this,padraoLogin.class));
-                break;
-        }
     }
 
     public void onClick_Avancar(View v){
-
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(padraoValidarTelefone.this);
-        objConfig = config_dao.Carregar();
-        objConfig.setStatusPerfil(4);
-        config_dao.Atualizar(objConfig);
-
+        objConfig = new clsConfiguracoes();
+        objConfig.carregar(this);
+        objConfig.setStatusPerfil(5);
         startActivity(new Intent(this,padraoLogin.class));
 
     }

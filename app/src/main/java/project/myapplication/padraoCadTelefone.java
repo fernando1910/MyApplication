@@ -134,7 +134,10 @@ public class padraoCadTelefone extends Activity {
             progressDialog.dismiss();
             if(criou == true)
             {
-
+                objConfig = new clsConfiguracoes();
+                objConfig.carregar(padraoCadTelefone.this);
+                objConfig.atualizarStatus(padraoCadTelefone.this,3);
+                startActivity(new Intent(padraoCadTelefone.this, padraoValidarTelefone.class));
 
             }else
             {
