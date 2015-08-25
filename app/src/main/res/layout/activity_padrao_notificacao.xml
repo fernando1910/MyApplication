@@ -6,7 +6,7 @@
     android:paddingRight="10dp"
     android:paddingBottom="10dp"
     android:orientation="vertical"
-    tools:context="project.myapplication.padraoNotificacao">
+    tools:context="project.myapplication.CadConfiguracao">
 
     <CheckBox
         android:layout_width="wrap_content"

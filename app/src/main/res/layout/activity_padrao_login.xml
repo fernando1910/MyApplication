@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context="project.myapplication.padraoLogin">
+    tools:context="project.myapplication.CadPerfil">
 
     <LinearLayout
         android:orientation="horizontal"

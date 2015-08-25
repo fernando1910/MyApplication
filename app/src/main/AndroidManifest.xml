@@ -45,45 +45,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".padraoMenu"
+            android:name=".MenuPrincipal"
             android:label="@string/title_activity_padrao_menu" >
         </activity>
         <activity
-            android:name=".padraoConfiguracao"
+            android:name=".PainelConfiguracao"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/title_activity_padrao_config"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
-            android:name=".padraoLogin"
+            android:name=".CadPerfil"
             android:label="@string/title_activity_padrao_login" >
         </activity>
         <activity
-            android:name=".padraoBoasVindas"
+            android:name=".BoasVindas"
             android:label="@string/title_activity_padrao_boas_vindas" >
         </activity>
         <activity
-            android:name=".padraoPerfil"
+            android:name=".VisualizarPerfil"
             android:label="@string/title_activity_padrao_perfil" >
         </activity>
         <activity
-            android:name=".padraoRanking"
+            android:name=".VisualizarRanking"
             android:label="@string/title_activity_padrao_ranking" >
         </activity>
         <activity
-            android:name=".padraoMeusEventos"
+            android:name=".PainelMeusEventos"
             android:label="@string/title_activity_padrao_meus_eventos" >
         </activity>
         <activity
-            android:name=".padraoCriarEvento"
+            android:name=".CadEvento"
             android:label="@string/title_activity_padrao_criar_evento" >
         </activity>
         <activity
-            android:name=".padraoNotificacao"
+            android:name=".CadConfiguracao"
             android:label="@string/title_activity_padrao_notificacao" >
         </activity>
         <activity
-            android:name=".padraoSobre"
+            android:name=".Sobre"
             android:label="@string/title_activity_padrao_sobre" >
         </activity>
 
@@ -95,19 +95,15 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".padraoMapa"
-            android:label="@string/title_activity_padrao_mapa" >
-        </activity>
-        <activity
-            android:name=".padraoContatos"
+            android:name=".CadContato"
             android:label="@string/title_activity_padrao_contatos" >
         </activity>
         <activity
-            android:name=".padraoCadTelefone"
+            android:name=".CadTelefone"
             android:label="@string/title_activity_padrao_contatos" >
         </activity>
         <activity
-            android:name=".padraoPesquisarEndereco"
+            android:name=".PesquisarEndereco"
             android:hardwareAccelerated="false"
             android:label="@string/title_activity_padrao_pesquisar_endereco"
             android:launchMode="singleTop"
@@ -121,16 +117,16 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".padraoVisulizarEvento"
+            android:name=".VisulizarEvento"
             android:label="@string/title_activity_padrao_visulizar_evento" >
         </activity>
         <activity
-            android:name=".padraoValidarTelefone"
+            android:name=".ValidarTelefone"
             android:label="@string/title_activity_padrao_validar_telefone" >
         </activity>
 
         <service
-            android:name=".ServiceNovidades"
+            android:name="services.ServiceNovidades"
             android:exported="false" >
             <intent-filter>
                 <category android:name="ANDROID.INTENT.CATEGORY.DEFAULT" />
@@ -140,7 +136,7 @@
         </service>
 
         <receiver
-            android:name=".BroadcastPadrao"
+            android:name="services.BroadcastPadrao"
             android:permission="ANDROID.PERMISSION.RECEIVE_BOOT_COMPLETED" >
             <intent-filter>
                 <action android:name="ANDROID.INTENT.ACTION.BOOT_COMPLETED" />
@@ -158,7 +154,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".RegistrationIntentService"
+        <service android:name="services.RegistrationIntentService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -166,7 +162,7 @@
         </service>
 
         <activity
-            android:name=".padraoComentario"
+            android:name=".CadComentario"
             android:label="@string/title_activity_padrao_comentario" >
         </activity>
     </application>

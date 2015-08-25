@@ -1,5 +1,5 @@
 <menu
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="project.myapplication.padraoCriarEvento">
+    tools:context="project.myapplication.CadEvento">
 
 </menu>

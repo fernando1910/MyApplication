@@ -1,11 +1,14 @@
 package project.myapplication;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -13,10 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Bundle;
+
+import classes.Configuracoes;
+import classes.Util;
 
 
 public class MainActivity extends Activity {
@@ -24,8 +26,8 @@ public class MainActivity extends Activity {
     ViewPager viewPager;
     MyPagerAdapter myPagerAdapter;
     Button btAvancar;
-    clsConfiguracoes objConfig;
-    clsUtil util;
+    Configuracoes objConfig;
+    Util util;
 
 
     @Override
@@ -40,7 +42,9 @@ public class MainActivity extends Activity {
         btAvancar = (Button)findViewById(R.id.btAvancar);
         btAvancar.setVisibility(View.INVISIBLE);
 
-        clsUtil util = new clsUtil();
+        util = new Util();
+        objConfig = new Configuracoes();
+
         util.validarTela(this, 0);
     }
 
@@ -140,9 +144,15 @@ public class MainActivity extends Activity {
 
     public void onClick_Avancar(View v)
     {
-        objConfig.carregar(this);
-        objConfig.atualizarStatus(this,1);
-        startActivity(new Intent(this,padraoBoasVindas.class));
+        try {
+
+            objConfig.carregar(getApplicationContext());
+            objConfig.atualizarStatus(this, 1);
+            startActivity(new Intent(this, BoasVindas.class));
+        }
+        catch (Exception e){
+            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

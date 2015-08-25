@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="project.myapplication.padraoPesquisarEndereco">
+    tools:context="project.myapplication.PesquisarEndereco">
 
     <item android:title="Search"
         android:id="@+id/action_search"
