@@ -117,7 +117,9 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
     @Override
     public void onClickListener(View view, int position) {
         int codigoEvento = adapter.getCodigoEvento(position);
-        Toast.makeText(PainelMeusEventos.this, String.valueOf(codigoEvento), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, VisulizarEvento.class);
+        intent.putExtra("codigoEvento", codigoEvento);
+        startActivity(intent);
     }
 
     public class Carregar extends AsyncTask<Void,Integer,Void>
