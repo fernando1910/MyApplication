@@ -3,6 +3,7 @@ package project.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -18,10 +19,14 @@ public class BoasVindas extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_padrao_boas_vindas);
+        try {
+            setContentView(R.layout.activity_padrao_boas_vindas);
 
-        util = new Util();
-        util.validarTela(this,1);
+            util = new Util();
+            util.validarTela(this, 1);
+        }catch (Exception e){
+            Toast.makeText(BoasVindas.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 

@@ -1,13 +1,20 @@
 <resources>
 
-    <style name="Theme.MyTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorControlNormal">@android:color/white</item>
+
+        <item name="material_drawer_primary_text">@color/Black</item>
+        <item name="material_drawer_selected_text">@color/colorPrimary</item>
+    </style>
+
+    <style name="Padrao" parent="Theme.AppCompat.Light.DarkActionBar">
+
     </style>
 
 </resources>

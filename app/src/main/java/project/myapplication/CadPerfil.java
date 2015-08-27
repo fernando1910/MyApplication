@@ -75,7 +75,7 @@ public class CadPerfil extends Activity {
         if (ValidarCampos()) {
             new criarPerfil().execute();
             objConfig.atualizarStatus(this, 5);
-            startActivity(new Intent(this,MenuPrincipal.class));
+            startActivity(new Intent(this,MenuPrincipalNovo.class));
         }
     }
 

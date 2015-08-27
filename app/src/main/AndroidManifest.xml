@@ -32,7 +32,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_padrao"
         android:label="@string/app_name"
-        android:theme="@style/Theme.MyTheme" >
+        android:theme="@style/Padrao" >
         <meta-data
             android:name="android.app.default_searchable"
             android:value=".padraoPesquisarEndereco" />
@@ -45,6 +45,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".MenuPrincipal"
@@ -53,8 +54,7 @@
         <activity
             android:name=".PainelConfiguracao"
             android:icon="@mipmap/ic_launcher"
-            android:label="@string/title_activity_padrao_config"
-            android:theme="@style/Theme.MyTheme" >
+            android:label="@string/title_activity_padrao_config">
         </activity>
         <activity
             android:name=".CadPerfil"
@@ -170,7 +170,9 @@
         </activity>
         <activity
             android:name=".MenuPrincipalNovo"
-            android:label="@string/title_activity_menu_principal_novo" >
+            android:label="@string/title_activity_menu_principal_novo"
+            android:theme="@style/AppTheme">
+
         </activity>
     </application>
 

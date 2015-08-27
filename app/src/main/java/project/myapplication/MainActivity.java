@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -21,7 +22,7 @@ import classes.Configuracoes;
 import classes.Util;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     MyPagerAdapter myPagerAdapter;
