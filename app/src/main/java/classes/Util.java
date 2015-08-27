@@ -32,7 +32,7 @@ import project.myapplication.BoasVindas;
 import project.myapplication.CadPerfil;
 import project.myapplication.CadTelefone;
 import project.myapplication.MainActivity;
-import project.myapplication.MenuPrincipal;
+import project.myapplication.MenuPrincipalNovo;
 import project.myapplication.ValidarTelefone;
 
 public class Util {
@@ -264,7 +264,7 @@ public class Util {
                     intent = new Intent(context, CadPerfil.class);
                     break;
                 case 5:
-                    intent = new Intent(context, MenuPrincipal.class);
+                    intent = new Intent(context, MenuPrincipalNovo.class);
                     break;
             }
             if (intent != null) {
