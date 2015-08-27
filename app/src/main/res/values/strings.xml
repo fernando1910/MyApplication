@@ -115,5 +115,6 @@
     <string name="padrao_comentar">http://www.fiesta1.hol.es/padraoComentar.php</string>
     <string name="padrao_push_message">http://www.fiesta1.hol.es/padraoEnviarTokenPush.php</string>
     <string name="caminho_foto_capa_evento">http://www.fiesta1.hol.es/capa_evento/</string>
+    <string name="title_activity_menu_principal_novo">MenuPrincipalNovo</string>
 
 </resources>

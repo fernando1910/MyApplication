@@ -39,7 +39,7 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_padrao_meus_eventos);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lvEventos = (ListView)findViewById(R.id.lvEventos);
         rvEvento = (RecyclerView)findViewById(R.id.rvEvento);
         rvEvento.setHasFixedSize(true);
@@ -89,7 +89,6 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
         if (id == android.R.id.home)
         {
             this.finish();
-            startActivity(new Intent(this,MenuPrincipal.class));
             return true;
         }
 
@@ -110,8 +109,6 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this, MenuPrincipal.class));
-
     }
 
     @Override

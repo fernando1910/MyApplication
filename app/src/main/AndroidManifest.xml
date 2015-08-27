@@ -14,10 +14,12 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="ANDROID.PERMISSION.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:name="com.example.gcm.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.example.gcm.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -142,7 +144,6 @@
                 <action android:name="ANDROID.INTENT.ACTION.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -150,12 +151,14 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
 
-        <service android:name="services.RegistrationIntentService"
-            android:exported="false">
+        <service
+            android:name="services.RegistrationIntentService"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
@@ -164,6 +167,10 @@
         <activity
             android:name=".CadComentario"
             android:label="@string/title_activity_padrao_comentario" >
+        </activity>
+        <activity
+            android:name=".MenuPrincipalNovo"
+            android:label="@string/title_activity_menu_principal_novo" >
         </activity>
     </application>
 
