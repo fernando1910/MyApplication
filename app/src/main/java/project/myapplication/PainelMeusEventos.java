@@ -39,7 +39,11 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_padrao_meus_eventos);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }catch (Exception e){
+            Toast.makeText(PainelMeusEventos.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
         lvEventos = (ListView)findViewById(R.id.lvEventos);
         rvEvento = (RecyclerView)findViewById(R.id.rvEvento);
         rvEvento.setHasFixedSize(true);

@@ -1,112 +1,136 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="project.myapplication.VisulizarEvento"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    >
-
-<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+    tools:context="project.myapplication.VisulizarEvento">
 
-
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_height="300dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:fitsSystemWindows="true">
 
-    <TextView
-        android:text="Título do Evento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvTituloEvento"
-        android:layout_gravity="center"
-        android:padding="10dp"
-        android:textSize="16dp" />
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/colorPrimary"
+            app:expandedTitleMarginStart="30dp"
+            app:expandedTitleMarginEnd="30dp">
 
+            <ImageView
+                android:id="@+id/ivEvento"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:transitionName="element1"
+                app:layout_collapseMode="parallax"/>
 
-    <ImageView
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tb_main"
+                android:elevation="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent"
+                android:minHeight="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+                app:layout_collapseMode="pin"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#d5d5d5" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingTop="0dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-    <TextView
-        android:text="Descrição do evento"
-        android:id="@+id/tvDescricaoEvento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"/>
-
-
-        <TextView
-            android:padding="10dp"
-            android:id="@+id/tvEndereco"
-            android:layout_width="fill_parent"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Endereço"
-            android:drawableRight="@android:drawable/ic_delete"
-            android:onClick="visualizarMapa"
-            android:clickable="true" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTituloEvento"
+                android:paddingTop="10dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ll_tv_description"
+                android:orientation="vertical"
+                android:layout_below="@+id/tvTituloEvento">
+
+                <TextView
+                    android:id="@+id/tvDescricaoEvento"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Button
+                android:drawableRight="@drawable/comment_text"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/ll_tv_description"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/btComentar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@android:color/transparent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="Comentar"
+                android:textSize="16sp" />
+
+            <Button
+                android:drawableRight="@drawable/comment_text"
+                android:layout_marginTop="10dp"
+                android:layout_alignRight="@id/btComentar"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/btConvidar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@android:color/transparent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="Convidar"
+                android:textSize="16sp" />
 
 
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/tvPrivado"
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="Este evento é" />
+        android:clickable="true"
+        android:src="@drawable/ic_calendar"
+        app:fabSize="mini"
+        app:borderWidth="0dp"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:layout_gravity="bottom"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/btComentario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Comentarios"
-                android:drawableLeft="@android:drawable/ic_menu_search"
-                android:onClick="onClickChamarComentarios"
-                android:background="@null" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+</android.support.design.widget.CoordinatorLayout>
 
 
-            <Button
-                android:id="@+id/btSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Convidados"
-                android:drawableLeft="@android:drawable/ic_menu_search"
-                android:background="@null" />
 
-        </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
-</LinearLayout>

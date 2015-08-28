@@ -120,7 +120,9 @@
         </activity>
         <activity
             android:name=".VisulizarEvento"
-            android:label="@string/title_activity_padrao_visulizar_evento" >
+            android:label="@string/title_activity_padrao_visulizar_evento"
+            android:theme="@style/AppTheme"
+            >
         </activity>
         <activity
             android:name=".ValidarTelefone"

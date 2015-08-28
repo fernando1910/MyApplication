@@ -10,7 +10,7 @@
         <item name="colorControlNormal">@android:color/white</item>
 
         <item name="material_drawer_primary_text">@color/Black</item>
-        <item name="material_drawer_selected_text">@color/colorPrimary</item>
+        <item name="material_drawer_selected_text">@color/DarkGray</item>
     </style>
 
     <style name="Padrao" parent="Theme.AppCompat.Light.DarkActionBar">

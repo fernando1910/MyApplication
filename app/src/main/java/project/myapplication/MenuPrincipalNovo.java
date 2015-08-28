@@ -29,8 +29,8 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         try {
             mToolbar = (Toolbar) findViewById(R.id.tb_main);
             mToolbar.setTitle("Inicial");
-            mToolbar.setSubtitle("just a subtitle");
-            mToolbar.setLogo(R.drawable.ic_calendar1);
+            // ATENÇÃO ACERTAR LOGO
+            //mToolbar.setLogo(R.drawable.ic_calendar1);
             setSupportActionBar(mToolbar);
         }catch (Exception e){
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
