@@ -14,7 +14,9 @@ import android.widget.Toast;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -36,6 +38,23 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+        headerNavigationLeft = new AccountHeader ()
+                .withActivity(this)
+                .withCompactStyle(false)
+                .withSavedInstance(savedInstanceState)
+                .withThreeSmallProfileImages(false)
+                .withHeaderBackground(R.drawable.batman)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("Danilo").withEmail("danilo.santos@gmail.com.br").withIcon(getResources().getDrawable(R.drawable.rosto))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                        return false;
+                    }
+                })
+                .build();
+
         navigationDrawerLeft  = new Drawer()
                 .withActivity(this)
                 .withToolbar(mToolbar)
@@ -44,6 +63,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withDrawerGravity(Gravity.LEFT)
                 .withSavedInstance(savedInstanceState)
                 .withSelectedItem(0)
+                .withAccountHeader(headerNavigationLeft)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
