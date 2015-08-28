@@ -117,10 +117,14 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
 
     @Override
     public void onClickListener(View view, int position) {
-        int codigoEvento = adapter.getCodigoEvento(position);
-        Intent intent = new Intent(this, VisulizarEvento.class);
-        intent.putExtra("codigoEvento", codigoEvento);
-        startActivity(intent);
+        try {
+            int codigoEvento = adapter.getCodigoEvento(position);
+            Intent intent = new Intent(this, VisulizarEvento.class);
+            intent.putExtra("codigoEvento", codigoEvento);
+            startActivity(intent);
+        }catch (Exception e){
+            Toast.makeText(PainelMeusEventos.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class Carregar extends AsyncTask<Void,Integer,Void>
@@ -142,6 +146,31 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
                 {
                     objEvento = new Evento();
                     jsonString =  objEvento.carregarEventos(getString(R.string.padrao_evento),null);
+
+                    eventos = new ArrayList<>();
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(jsonString);
+                        JSONObject jsonObject;
+
+                        for (int i = 0 ; i < jsonArray.length(); i++)
+                        {
+                            jsonObject = new JSONObject(jsonArray.getString(i));
+                            Evento evento = new Evento();
+                            evento.setTituloEvento((jsonObject.getString("ds_titulo_evento")));
+                            evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
+                            evento.setUrlFoto(getString(R.string.caminho_foto_capa_evento) + evento.getCodigoEvento() + ".png");
+                            eventos.add(evento);
+                            adapter = new EventoAdapter(PainelMeusEventos.this,eventos);
+                            adapter.setRecyclerViewOnClickListenerHack(PainelMeusEventos.this);
+
+
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             catch (InterruptedException e)
@@ -161,32 +190,7 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
         protected void onPostExecute(Void result)
         {
             progressDialog.dismiss();
-
-            eventos = new ArrayList<>();
-
-            try {
-                JSONArray jsonArray = new JSONArray(jsonString);
-                JSONObject jsonObject;
-
-                for (int i = 0 ; i < jsonArray.length(); i++)
-                {
-                    jsonObject = new JSONObject(jsonArray.getString(i));
-                    Evento evento = new Evento();
-                    evento.setTituloEvento((jsonObject.getString("ds_titulo_evento")));
-                    evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
-                    evento.setUrlFoto(getString(R.string.caminho_foto_capa_evento) + evento.getCodigoEvento() + ".png");
-                    eventos.add(evento);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            adapter = new EventoAdapter(PainelMeusEventos.this,eventos);
-            adapter.setRecyclerViewOnClickListenerHack(PainelMeusEventos.this);
             rvEvento.setAdapter(adapter);
-
-
         }
 
     }

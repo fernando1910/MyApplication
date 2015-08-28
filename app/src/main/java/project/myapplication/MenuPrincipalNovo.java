@@ -18,15 +18,21 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import classes.Usuario;
+
 public class MenuPrincipalNovo extends AppCompatActivity {
     private Toolbar mToolbar;
     private Drawer.Result navigationDrawerLeft;
     private Drawer.Result navigationDrawerRight;
     private AccountHeader.Result headerNavigationLeft;
+    private Usuario objUsuario;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal_novo);
+
+        objUsuario = new Usuario();
+        objUsuario.carregar(this);
 
         try {
             mToolbar = (Toolbar) findViewById(R.id.tb_main);
@@ -38,6 +44,8 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+
+
         headerNavigationLeft = new AccountHeader ()
                 .withActivity(this)
                 .withCompactStyle(false)
@@ -45,7 +53,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withThreeSmallProfileImages(false)
                 .withHeaderBackground(R.drawable.batman)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Danilo").withEmail("danilo.santos@gmail.com.br").withIcon(getResources().getDrawable(R.drawable.rosto))
+                        new ProfileDrawerItem().withName(objUsuario.getNome()).withEmail("danilo.santos@gmail.com.br").withIcon(getResources().getDrawable(R.drawable.rosto))
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override

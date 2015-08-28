@@ -92,7 +92,6 @@ public class VisulizarEvento extends AppCompatActivity {
             objEvento = new Evento();
             objEvento = objEvento.carregar(String.valueOf(codigoEvento),getString(R.string.padrao_evento));
             tvTituloEvento.setText(objEvento.getTituloEvento());
-            tvTituloEvento2.setText(objEvento.getTituloEvento());
             tvDescricaoEvento.setText(objEvento.getDescricao());
             /*
             tvEndereco.setText(objEvento.getEndereco());
