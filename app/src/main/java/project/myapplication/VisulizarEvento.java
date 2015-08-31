@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.io.InputStream;
 import java.net.URL;
 
@@ -21,7 +24,7 @@ import classes.Evento;
 import classes.Util;
 
 
-public class VisulizarEvento extends AppCompatActivity {
+public class VisulizarEvento extends AppCompatActivity implements View.OnClickListener {
 
     private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado, tvTituloEvento2;
     private Util util;
@@ -30,6 +33,7 @@ public class VisulizarEvento extends AppCompatActivity {
     private ImageView ivEvento;
     private CollapsingToolbarLayout collapsingToolbarLayout ;
     private Toolbar mToolbar;
+    private FloatingActionMenu mFloatingActionMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class VisulizarEvento extends AppCompatActivity {
         ivEvento = (ImageView)findViewById(R.id.ivEvento);
         tvTituloEvento = (TextView)findViewById(R.id.tvTituloEvento);
         tvDescricaoEvento = (TextView)findViewById(R.id.tvDescricaoEvento);
+        mFloatingActionMenu = (FloatingActionMenu)findViewById(R.id.menu);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("Seu evento");
@@ -54,6 +59,21 @@ public class VisulizarEvento extends AppCompatActivity {
         }catch (Exception e){
             Toast.makeText(VisulizarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
+        mFloatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean b) {
+
+            }
+        });
+
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+        fab3.setOnClickListener(this);
+
 /*
 
 
@@ -104,7 +124,7 @@ public class VisulizarEvento extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
 
         }
 
@@ -141,11 +161,10 @@ public class VisulizarEvento extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this,PainelMeusEventos.class));
 
     }
 
-    public void visualizarMapa(View view)
+    public void visualizarMapa()
     {
         String nr_latitude = String.valueOf(objEvento.getLatitude());
         String nr_longitude = String.valueOf(objEvento.getLongitude());
@@ -158,10 +177,34 @@ public class VisulizarEvento extends AppCompatActivity {
 
     }
 
-    public void onClickChamarComentarios(View view)
+    public void comentar()
     {
-        Intent intent = new Intent();
+        Intent intent = new Intent(this,CadComentario.class);
         intent.putExtra("codigoEvento", codigoEvento);
         startActivity(intent);
+    }
+
+    public void convidar()
+    {
+        Intent intent = new Intent(this,CadContato.class);
+        intent.putExtra("codigoEvento", codigoEvento);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab1:
+                comentar();
+                break;
+
+            case R.id.fab2:
+                visualizarMapa();
+                break;
+            case R.id.fab3:
+                convidar();
+                break;
+
+        }
     }
 }

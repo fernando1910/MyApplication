@@ -57,30 +57,33 @@ public class CustomListViewContato extends BaseAdapter {
 
         View view =  convertView;
 
-        if(convertView==null)
+        if (cbContatoVisivel) {
+            view = inflater.inflate(R.layout.item_menu_contato_convidar, null);
+            cbContato = (CheckBox) view.findViewById(R.id.cbContato);
+            cbContato.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (cbContato.isChecked())
+                                item.setSelecionado(true);
+                            else
+                                item.setSelecionado(false);
+                        }
+                    }
+            );
+        }
+        else{
             view = inflater.inflate(R.layout.item_menu_contato, null);
+        }
+
         ImageView img = (ImageView) view.findViewById(R.id.imgThumbnail);
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
         img.setImageDrawable(roundedImage);
-        cbContato = (CheckBox) view.findViewById(R.id.cbContato);
-        if (cbContatoVisivel)
-            cbContato.setVisibility(View.VISIBLE);
-        else
-            cbContato.setVisibility(View.GONE);
+
         //TextView txtSubTitle = (TextView) vi.findViewById(R.id.txtSubTitle);
 
 
-        cbContato.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (cbContato.isChecked())
-                            item.setSelecionado(true);
-                        else
-                            item.setSelecionado(false);
-                    }
-                }
-        );
+
         //img.setImageResource(item.t);
         txtTitle.setText(item.getNomeContato());
         //txtSubTitle.setText(item.SubTitle);

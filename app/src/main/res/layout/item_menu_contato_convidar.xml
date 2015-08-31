@@ -6,14 +6,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
+    <CheckBox
+        android:scaleType="centerInside"
+        android:id="@+id/cbContato"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgThumbnail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
+
         android:layout_width="40dip"
         android:layout_height="40dip"
         android:id="@+id/imgThumbnail"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
         android:layout_marginLeft="3dip"
+        android:layout_toRightOf="@id/cbContato"
         android:scaleType="centerInside">
     </ImageView>
 
