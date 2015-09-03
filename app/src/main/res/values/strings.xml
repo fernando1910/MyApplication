@@ -58,6 +58,12 @@
     
     <string-array name="sessao_pais">
         <item>Brasil</item>
+        <item>United States</item>
+        <item>Spain</item>
+        <item>Canada</item>
+        <item>China</item>
+        <item>Italy</item>
+        <item>Japan</item>
     </string-array>
 
     <string-array name="sessao_ddi">
@@ -99,6 +105,7 @@
     <string name="padrao_ajuda">http://www.fiesta1.hol.es/ajuda.html</string>
     <string name="title_activity_padrao_mapa">Mapa</string>
     <string name="title_activity_padrao_contatos">Contatos</string>
+    <string name="title_activity_cad_telefone">Verifique seu número de telefone</string>
     <string name="title_activity_padrao_visulizar_evento">Evento</string>
     <string name="title_activity_padrao_pesquisas_endereco">Map</string>
     <string name="title_activity_padrao_pesquisar_endereco">Pesquisar Endereços</string>

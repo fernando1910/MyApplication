@@ -121,6 +121,7 @@ public class Usuario {
             this.ds_nome = objUsuario.getNome();
             this.ds_telefone = objUsuario.getTelefone();
             this.ds_token = objUsuario.getToken();
+            this.img_perfil = objUsuario.getImagemPerfil();
         }
 
     }

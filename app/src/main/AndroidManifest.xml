@@ -102,7 +102,7 @@
         </activity>
         <activity
             android:name=".CadTelefone"
-            android:label="@string/title_activity_padrao_contatos" >
+            android:label="@string/title_activity_cad_telefone" >
         </activity>
         <activity
             android:name=".PesquisarEndereco"

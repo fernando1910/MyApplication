@@ -15,7 +15,13 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:id="@+id/rl_fragment_container"
+        android:layout_below="@id/tb_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </RelativeLayout >
 
 </RelativeLayout>

@@ -1,6 +1,9 @@
 package project.myapplication;
 
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -19,6 +23,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import classes.Usuario;
+import extras.RoundImage;
+import project.myapplication.fragment.PainelConfiguracoes;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -26,13 +32,25 @@ public class MenuPrincipalNovo extends AppCompatActivity {
     private Drawer.Result navigationDrawerRight;
     private AccountHeader.Result headerNavigationLeft;
     private Usuario objUsuario;
+    private RoundImage roundedImage;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal_novo);
 
         objUsuario = new Usuario();
-        objUsuario.carregar(this);
+        objUsuario.carregar(this);if(objUsuario.getImagemPerfil() != null) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+                roundedImage = new RoundImage(bitmap);
+
+
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
 
         try {
             mToolbar = (Toolbar) findViewById(R.id.tb_main);
@@ -53,7 +71,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withThreeSmallProfileImages(false)
                 .withHeaderBackground(R.drawable.batman)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(objUsuario.getNome()).withEmail("danilo.santos@gmail.com.br").withIcon(getResources().getDrawable(R.drawable.rosto))
+                        new ProfileDrawerItem().withName(objUsuario.getNome()).withEmail("danilo.santos@gmail.com.br").withIcon(roundedImage)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -81,10 +99,18 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                     startActivity(new Intent(getApplicationContext(), PainelMeusEventos.class));
                                     break;
                                 case 2:
-                                    //startActivity(new Intent(getApplicationContext(), PainelMeusEventos.class));
+                                    try {
+                                        PainelConfiguracoes fragment = (PainelConfiguracoes) getSupportFragmentManager().findFragmentByTag("mainFrag");
+                                        if (fragment == null) {
+                                            fragment = new PainelConfiguracoes();
+                                            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                            fragmentTransaction.replace(R.id.rl_fragment_container, fragment);
+                                            fragmentTransaction.commit();
+                                        }
+                                    } catch (Exception e) {
+                                        Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
                                     break;
-
-
                             }
                         } catch (Exception e) {
                             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -103,6 +129,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(android.R.drawable.btn_star)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Configurações").withIcon(getResources().getDrawable(R.drawable.settings)));
+
 
     }
 

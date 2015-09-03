@@ -5,10 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import classes.Configuracoes;
@@ -17,36 +19,35 @@ import classes.Util;
 import classes.clsSms;
 import helpers.HttpConnection;
 
-public class CadTelefone extends Activity {
+public class CadTelefone extends AppCompatActivity {
     private EditText etTelefone;
     private ProgressDialog progressDialog;
-    Configuracoes objConfig;
-    String strCodigo;
-    int codigoUsuario;
+    private Configuracoes objConfig;
+    private String strCodigo;
+    private int codigoUsuario;
     private Util util;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_cad_telefone);
-        etTelefone = (EditText)findViewById(R.id.etTelefone);
+        etTelefone = (EditText) findViewById(R.id.etTelefone);
         util = new Util();
         strCodigo = util.gerarCodigo();
-        util.validarTela(this,2);
+        util.validarTela(this, 2);
+
     }
 
-    public boolean validarCampos()
-    {
-       if (etTelefone.getText().equals("")) {
-           Toast.makeText(this,"Campo telefone invalido", Toast.LENGTH_LONG).show();
-           return false;
-       }
-       else
-        return true;
+    public boolean validarCampos() {
+        if (etTelefone.getText().equals("")) {
+            Toast.makeText(this, "Campo telefone invalido", Toast.LENGTH_LONG).show();
+            return false;
+        } else
+            return true;
     }
 
 
-    public void onClick_Avancar(View v)
-    {
+    public void onClick_Avancar(View v) {
         if (validarCampos()) {
             if (util.verificaInternet(getApplicationContext()))
                 new aguardarTelefone().execute();
@@ -57,32 +58,30 @@ public class CadTelefone extends Activity {
 
     }
 
-    public boolean SalvarTelefone() throws  InterruptedException{
+    public boolean SalvarTelefone() throws InterruptedException {
         Usuario objUsuario = new Usuario();
-        try
-        {
+        try {
             objUsuario.setTelefone(etTelefone.getText().toString());
             objUsuario.setCodigoVerificardor(strCodigo.toString());
             objUsuario.salvar(this.getApplicationContext());
             return true;
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             Toast.makeText(this, "Erro2: Telefone não foi salvo", Toast.LENGTH_SHORT).show();
             return false;
         }
 
     }
 
-    public String EnviarTelefoneServidor(final String data)throws InterruptedException{
+    public String EnviarTelefoneServidor(final String data) throws InterruptedException {
         final String[] resposta = new String[1];
-        try{
-            Thread thread =  new Thread( new Runnable(){
-                public void run(){
-            resposta[0] =  HttpConnection.getSetDataWeb(getString(R.string.padrao_telefone), "send-json", data);
-            }
-        });
-        thread.start();
+        try {
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    resposta[0] = HttpConnection.getSetDataWeb(getString(R.string.padrao_telefone), "send-json", data);
+                }
+            });
+            thread.start();
 
             thread.join();
 
@@ -93,28 +92,25 @@ public class CadTelefone extends Activity {
 
     }
 
-    public boolean EnviarSms(){
-        EditText etTelefone = (EditText)findViewById(R.id.etTelefone);
+    public boolean EnviarSms() {
+        EditText etTelefone = (EditText) findViewById(R.id.etTelefone);
         String numero = etTelefone.getText().toString();
         String mensagem = "Teste";
         clsSms sms = new clsSms();
-        sms.enviarSms(CadTelefone.this,numero,mensagem);
+        sms.enviarSms(CadTelefone.this, numero, mensagem);
         return true;
     }
 
-    public class aguardarTelefone extends AsyncTask <Void, Integer,Void>{
+    public class aguardarTelefone extends AsyncTask<Void, Integer, Void> {
         boolean criou;
+
         @Override
         protected Void doInBackground(Void... params) {
-            try
-            {
-                synchronized (this)
-                {
-                    criou= SalvarTelefone();
+            try {
+                synchronized (this) {
+                    criou = SalvarTelefone();
                 }
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return null;
@@ -125,7 +121,7 @@ public class CadTelefone extends Activity {
 
             progressDialog = new ProgressDialog(CadTelefone.this);
 
-            progressDialog = ProgressDialog.show(CadTelefone.this,"Carregando...",
+            progressDialog = ProgressDialog.show(CadTelefone.this, "Carregando...",
                     "Estamos validando suas informações, por favor aguarde...", false, false);
 
         }
@@ -138,15 +134,13 @@ public class CadTelefone extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
-            if(criou == true)
-            {
+            if (criou == true) {
                 objConfig = new Configuracoes();
                 objConfig.carregar(CadTelefone.this);
-                objConfig.atualizarStatus(CadTelefone.this,3);
+                objConfig.atualizarStatus(CadTelefone.this, 3);
                 startActivity(new Intent(CadTelefone.this, ValidarTelefone.class));
 
-            }else
-            {
+            } else {
 
             }
         }
