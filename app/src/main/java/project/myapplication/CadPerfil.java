@@ -23,9 +23,9 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import classes.Configuracoes;
-import classes.Usuario;
-import classes.Util;
+import domain.Configuracoes;
+import domain.Usuario;
+import domain.Util;
 import extras.RoundImage;
 import services.RegistrationIntentService;
 

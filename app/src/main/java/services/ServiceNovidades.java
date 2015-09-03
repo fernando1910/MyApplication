@@ -8,8 +8,8 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Usuario;
-import classes.Util;
+import domain.Usuario;
+import domain.Util;
 
 
 public class ServiceNovidades extends Service {

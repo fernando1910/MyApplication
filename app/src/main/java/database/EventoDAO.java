@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import classes.Evento;
+import domain.Evento;
 import helpers.SQLiteHelper;
 
 public class EventoDAO {

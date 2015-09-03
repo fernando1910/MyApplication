@@ -16,8 +16,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 import adapters.CustomListViewContato;
-import classes.Contatos;
-import classes.Util;
+import domain.Contatos;
+import domain.Util;
 
 
 public class CadContato extends ActionBarActivity{

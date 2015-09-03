@@ -7,8 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import classes.Configuracoes;
-import classes.Util;
+import domain.Configuracoes;
+import domain.Util;
 
 
 public class ValidarTelefone extends Activity {

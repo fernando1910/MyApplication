@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import classes.Endereco;
+import domain.Endereco;
 import project.myapplication.R;
 
 public class CustomListViewEndereco extends BaseAdapter{

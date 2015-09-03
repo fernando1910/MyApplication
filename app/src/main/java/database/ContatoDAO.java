@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import classes.Contatos;
+import domain.Contatos;
 import helpers.SQLiteHelper;
 
 public class ContatoDAO {

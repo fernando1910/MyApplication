@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import classes.Usuario;
+import domain.Usuario;
 
 public class BroadcastPadrao extends BroadcastReceiver {
     @Override

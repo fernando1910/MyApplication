@@ -3,19 +3,19 @@ package project.myapplication;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import classes.Evento;
-import classes.Usuario;
-import classes.Util;
+import domain.Evento;
+import domain.Usuario;
+import domain.Util;
 
 
-public class CadComentario extends ActionBarActivity {
+public class CadComentario extends AppCompatActivity {
 
     private int codigoEvento, codigoUsuario;
     private EditText etComentario;

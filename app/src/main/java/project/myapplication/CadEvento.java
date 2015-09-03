@@ -32,11 +32,11 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-import classes.Configuracoes;
-import classes.Evento;
-import classes.Usuario;
-import classes.Util;
 import database.ConfiguracoesDAO;
+import domain.Configuracoes;
+import domain.Evento;
+import domain.Usuario;
+import domain.Util;
 
 
 public class CadEvento extends ActionBarActivity {

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapters.EventoAdapter;
-import classes.Evento;
+import domain.Evento;
 import interfaces.RecyclerViewOnClickListenerHack;
 
 

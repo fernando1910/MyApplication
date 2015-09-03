@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import classes.Evento;
+import domain.Evento;
 import interfaces.RecyclerViewOnClickListenerHack;
 import project.myapplication.R;
 

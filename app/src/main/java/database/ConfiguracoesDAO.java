@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import classes.Configuracoes;
+import domain.Configuracoes;
 import helpers.SQLiteHelper;
 
 public class ConfiguracoesDAO {
