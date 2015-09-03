@@ -104,7 +104,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                 case 1:
                                     startActivity(new Intent(getApplicationContext(), PainelMeusEventos.class));
                                     break;
-                                case 2:
+                                case 4:
                                     PainelConfiguracaoNovo fragment2 = (PainelConfiguracaoNovo) getSupportFragmentManager().findFragmentByTag("tagConfig");
                                     if (fragment2 == null) {
                                         fragment2 = new PainelConfiguracaoNovo();
