@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
-import classes.Usuario;
+import domain.Usuario;
 import helpers.SQLiteHelper;
 
 public class UsuarioDAO {

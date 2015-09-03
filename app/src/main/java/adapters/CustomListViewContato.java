@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import classes.Contatos;
+import domain.Contatos;
 import extras.RoundImage;
 import project.myapplication.R;
 

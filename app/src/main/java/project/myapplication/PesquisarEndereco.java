@@ -46,8 +46,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapters.CustomListViewEndereco;
-import classes.Endereco;
-import classes.Util;
+import domain.Endereco;
+import domain.Util;
 
 
 public class PesquisarEndereco extends ActionBarActivity implements LocationListener {

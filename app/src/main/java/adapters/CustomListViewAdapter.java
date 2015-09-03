@@ -11,16 +11,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import project.myapplication.PainelConfiguracao;
+import domain.Configuracoes;
 import project.myapplication.R;
 
 public class CustomListViewAdapter extends BaseAdapter
 {
 
     LayoutInflater inflater;
-    List<PainelConfiguracao.ListViewItem> items;
+    List<Configuracoes.MenuConfiguracao> items;
 
-    public CustomListViewAdapter(Activity context, List<PainelConfiguracao.ListViewItem> items) {
+    public CustomListViewAdapter(Activity context, List<Configuracoes.MenuConfiguracao> items) {
         super();
 
         this.items = items;
@@ -49,7 +49,7 @@ public class CustomListViewAdapter extends BaseAdapter
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
 
-        PainelConfiguracao.ListViewItem item = items.get(position);
+        Configuracoes.MenuConfiguracao item = items.get(position);
 
 
         View vi=convertView;
@@ -60,7 +60,7 @@ public class CustomListViewAdapter extends BaseAdapter
             TextView txtTitle = (TextView) vi.findViewById(R.id.txtTitle);
            //TextView txtSubTitle = (TextView) vi.findViewById(R.id.txtSubTitle);
 
-        img.setImageResource(item.t);
+        img.setImageResource(item.codigo);
         txtTitle.setText(item.Title);
         //txtSubTitle.setText(item.SubTitle);
 
@@ -70,8 +70,8 @@ public class CustomListViewAdapter extends BaseAdapter
 
     public int getValue(final int position)
     {
-        PainelConfiguracao.ListViewItem item = items.get(position);
-        return item.t;
+        Configuracoes.MenuConfiguracao item = items.get(position);
+        return item.codigo;
     }
 
 }

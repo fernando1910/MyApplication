@@ -6,8 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 
-import classes.Configuracoes;
 import database.ConfiguracoesDAO;
+import domain.Configuracoes;
 
 public class CadConfiguracao extends ActionBarActivity {
     private CheckBox ckPermitePush;

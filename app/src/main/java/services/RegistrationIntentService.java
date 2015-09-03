@@ -13,8 +13,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import classes.Usuario;
-import classes.Util;
+import domain.Usuario;
+import domain.Util;
 import project.myapplication.R;
 
 public class RegistrationIntentService extends IntentService {

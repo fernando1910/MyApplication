@@ -20,8 +20,8 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.io.InputStream;
 import java.net.URL;
 
-import classes.Evento;
-import classes.Util;
+import domain.Evento;
+import domain.Util;
 
 
 public class VisulizarEvento extends AppCompatActivity implements View.OnClickListener {

@@ -62,7 +62,7 @@ public class MenuPrincipal extends ActionBarActivity
                 this.finish();
                 break;
             case 4:
-                startActivity(new Intent(this,PainelConfiguracao.class));
+                //startActivity(new Intent(this,PainelConfiguracao.class));
                 this.finish();
                 break;
             case 5:

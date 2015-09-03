@@ -52,11 +52,6 @@
             android:label="@string/title_activity_padrao_menu" >
         </activity>
         <activity
-            android:name=".PainelConfiguracao"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/title_activity_padrao_config">
-        </activity>
-        <activity
             android:name=".CadPerfil"
             android:label="@string/title_activity_padrao_login" >
         </activity>

@@ -9,15 +9,16 @@
         <shape android:shape="rectangle" >
             <stroke
                 android:width="2dp"
-                android:color="@android:color/darker_gray" />
+
+                android:color="#ddd" />
 
             <solid android:color="@android:color/transparent" />
 
             <padding
-                android:bottom="5dp"
-                android:left="5dp"
-                android:right="5dp"
-                android:top="5dp" />
+                android:bottom="10dp"
+                android:left="10dp"
+                android:right="10dp"
+                android:top="10dp" />
         </shape>
     </item>
     </layer-list>

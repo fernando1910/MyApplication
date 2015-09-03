@@ -1,7 +1,6 @@
 package project.myapplication;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -18,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import classes.Configuracoes;
-import classes.Util;
+import domain.Configuracoes;
+import domain.Util;
 
 
 public class MainActivity extends AppCompatActivity {

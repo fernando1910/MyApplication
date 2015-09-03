@@ -7,9 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import classes.Usuario;
+import domain.Usuario;
 
 
 /**
@@ -27,13 +26,7 @@ public class Painel extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        try {
-            objUsuario = new Usuario();
-            objUsuario.carregar(getActivity().getApplicationContext());
-        }catch (Exception e)
-        {
-            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     @Override
@@ -43,7 +36,6 @@ public class Painel extends Fragment {
         // Inflate the layout for this fragment
         getActivity().setTitle(R.string.title_home);
         view = inflater.inflate(R.layout.fragment_padrao_painel, container, false);
-        lvEventos = (ListView) view.findViewById(R.id.lvEventos);
 
         return view ;
     }

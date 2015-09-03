@@ -11,10 +11,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import classes.Configuracoes;
-import classes.Usuario;
-import classes.Util;
-import classes.clsSms;
+import domain.Configuracoes;
+import domain.Usuario;
+import domain.Util;
+import domain.clsSms;
 import helpers.HttpConnection;
 
 public class CadTelefone extends Activity {

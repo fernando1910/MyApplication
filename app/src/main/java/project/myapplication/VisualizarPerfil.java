@@ -1,6 +1,5 @@
 package project.myapplication;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,9 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import classes.Usuario;
-import classes.Util;
 import database.UsuarioDAO;
+import domain.Usuario;
+import domain.Util;
 import extras.RoundImage;
 
 
@@ -29,14 +28,14 @@ public class VisualizarPerfil extends ActionBarActivity {
         setContentView(R.layout.activity_padrao_perfil);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ibPerfil = (ImageButton)findViewById(R.id.ibPerfil);
-        ibEditarNome = (ImageButton)findViewById(R.id.ibEditarNome);
-        ibSalvarNome = (ImageButton)findViewById(R.id.ibSalvarNome);
-        etNome = (EditText)findViewById(R.id.etNome);
+        ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
+        ibEditarNome = (ImageButton) findViewById(R.id.ibEditarNome);
+        ibSalvarNome = (ImageButton) findViewById(R.id.ibSalvarNome);
+        etNome = (EditText) findViewById(R.id.etNome);
         etNome.setEnabled(false);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.image);
-        roundedImage  = new RoundImage(bm);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+        roundedImage = new RoundImage(bm);
         ibPerfil.setImageDrawable(roundedImage);
 
         Usuario objUsuario;
@@ -48,7 +47,7 @@ public class VisualizarPerfil extends ActionBarActivity {
         ibEditarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_edit), getResources()));
         ibSalvarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_salvar_perfil), getResources()));
 
-        if(objUsuario.getImagemPerfil() != null) {
+        if (objUsuario.getImagemPerfil() != null) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
                 roundedImage = new RoundImage(bitmap);
@@ -67,10 +66,8 @@ public class VisualizarPerfil extends ActionBarActivity {
 
         int id = item.getItemId();
 
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             this.finish();
-            startActivity(new Intent(this,PainelConfiguracao.class));
             return true;
         }
 
@@ -86,18 +83,14 @@ public class VisualizarPerfil extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this,PainelConfiguracao.class));
-
     }
 
-    public void onClickEditarNome(View v)
-    {
+    public void onClickEditarNome(View v) {
         etNome.setEnabled(true);
 
     }
 
-    public void onClickSalvarNome(View v)
-    {
+    public void onClickSalvarNome(View v) {
         etNome.setEnabled(false);
         Usuario objUsuario = new Usuario();
         objUsuario.AtualizarNome(this, String.valueOf(etNome.getText()));
