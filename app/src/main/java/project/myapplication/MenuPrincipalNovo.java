@@ -2,7 +2,6 @@ package project.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -92,19 +91,25 @@ public class MenuPrincipalNovo extends AppCompatActivity {
 
                             switch (i) {
                                 case 0:
-                                    Fragment fragment0 = (Painel) getSupportFragmentManager().findFragmentByTag("tagInicial");
+                                    Painel fragment0 = (Painel) getSupportFragmentManager().findFragmentByTag("tagInicial");
                                     if (fragment0 == null) {
                                         fragment0 = new Painel();
                                         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                                         fragmentTransaction.replace(R.id.rlConteudo, fragment0, "tagInicial");
                                         fragmentTransaction.commit();
-
                                     }
+                                    break;
 
                                 case 1:
-                                    startActivity(new Intent(getApplicationContext(), PainelMeusEventos.class));
+                                    PainelEvento fragment1 = (PainelEvento) getSupportFragmentManager().findFragmentByTag("tagEvento");
+                                    if (fragment1 == null) {
+                                        fragment1 = new PainelEvento();
+                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                        fragmentTransaction.replace(R.id.rlConteudo, fragment1, "tagEvento");
+                                        fragmentTransaction.commit();
+                                    }
                                     break;
-                                case 4:
+                                case 6:
                                     PainelConfiguracaoNovo fragment2 = (PainelConfiguracaoNovo) getSupportFragmentManager().findFragmentByTag("tagConfig");
                                     if (fragment2 == null) {
                                         fragment2 = new PainelConfiguracaoNovo();
@@ -134,6 +139,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
         navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
         navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
@@ -149,13 +155,16 @@ public class MenuPrincipalNovo extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_example) {
+            startActivity(new Intent(this,CadEvento.class));
             return true;
         }
 
