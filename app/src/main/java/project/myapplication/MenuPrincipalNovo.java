@@ -1,9 +1,6 @@
 package project.myapplication;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -21,10 +17,13 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
 
-import classes.Usuario;
+import domain.Usuario;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -49,7 +48,14 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         }catch (Exception e){
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        Painel fragment = (Painel) getSupportFragmentManager().findFragmentByTag("tagInicial");
+        if (fragment == null){
+            fragment = new Painel();
+            FragmentTransaction fragmentTransaction  = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.rlConteudo, fragment,"tagInicial");
+            fragmentTransaction.commit();
 
+        }
 
 
         headerNavigationLeft = new AccountHeader ()
@@ -82,6 +88,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
                         try {
+
                             switch (i) {
                                 case 0:
                                     Painel fragment0 = (Painel) getSupportFragmentManager().findFragmentByTag("tagInicial");
@@ -102,8 +109,6 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         fragmentTransaction.commit();
                                     }
                                     break;
-                                case 2:
-                                    //startActivity(new Intent(getApplicationContext(), PainelMeusEventos.class));
                                 case 6:
                                     PainelConfiguracaoNovo fragment2 = (PainelConfiguracaoNovo) getSupportFragmentManager().findFragmentByTag("tagConfig");
                                     if (fragment2 == null) {
@@ -132,8 +137,6 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .build();
 
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(android.R.drawable.btn_star)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Configurações").withIcon(getResources().getDrawable(R.drawable.settings)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
         navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
@@ -179,6 +182,13 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         finish();
         System.exit(0);
     }
+
+    private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
+            Toast.makeText(MenuPrincipalNovo.this, "onCheckedChanged: "+( b ? "true" : "false" ), Toast.LENGTH_SHORT).show();
+        }
+    };
 
 
 }
