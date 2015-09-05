@@ -52,7 +52,7 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) rvEvento.getLayoutManager();
                 EventoAdapter adapter = (EventoAdapter) rvEvento.getAdapter();
 
-                if(eventos.size()== linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
+                if (eventos.size() == linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
 
                 }
             }
@@ -63,9 +63,9 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvEvento.setLayoutManager(linearLayoutManager);
-
-
+        getActivity().setProgressBarIndeterminateVisibility(true);
         new Carregar().execute();
+        getActivity().setProgressBarIndeterminateVisibility(false);
 
         return view;
     }

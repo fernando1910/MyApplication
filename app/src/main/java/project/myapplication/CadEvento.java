@@ -339,7 +339,6 @@ public class CadEvento extends ActionBarActivity {
             new compartilharEvento().execute();
             if (fg_criou) {
                 ConfiguracoesDAO config_dao = new ConfiguracoesDAO(CadEvento.this);
-                startActivity(new Intent(CadEvento.this, MenuPrincipal.class));
                 objConf = config_dao.Carregar();
                 if (objConf.getPermiteAlarme() == 1) {
                     criarEventoCalendarioAndroid();

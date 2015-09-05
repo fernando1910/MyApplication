@@ -1,6 +1,8 @@
 package project.myapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -24,26 +27,25 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
 
 import domain.Usuario;
+import extras.RoundImage;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private Toolbar mToolbar;
-    private Drawer.Result navigationDrawerLeft;
-    private Drawer.Result navigationDrawerRight;
-    private AccountHeader.Result headerNavigationLeft;
-    private Usuario objUsuario;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_menu_principal_novo);
+        setProgressBarIndeterminateVisibility(Boolean.TRUE);
 
-        objUsuario = new Usuario();
+        Usuario objUsuario = new Usuario();
         objUsuario.carregar(this);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+        RoundImage roundImage = new RoundImage(bitmap);
 
         try {
             mToolbar = (Toolbar) findViewById(R.id.tb_main);
             mToolbar.setTitle("Inicial");
-            // ATENÇÃO ACERTAR LOGO
-            //mToolbar.setLogo(R.drawable.ic_calendar1);
             setSupportActionBar(mToolbar);
         }catch (Exception e){
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -58,14 +60,14 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         }
 
 
-        headerNavigationLeft = new AccountHeader ()
+        AccountHeader.Result headerNavigationLeft = new AccountHeader()
                 .withActivity(this)
                 .withCompactStyle(false)
                 .withSavedInstance(savedInstanceState)
                 .withThreeSmallProfileImages(false)
                 .withHeaderBackground(R.drawable.batman)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(objUsuario.getNome()).withEmail("danilo.santos@gmail.com.br").withIcon(getResources().getDrawable(R.drawable.rosto))
+                        new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -75,7 +77,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 })
                 .build();
 
-        navigationDrawerLeft  = new Drawer()
+        Drawer.Result navigationDrawerLeft = new Drawer()
                 .withActivity(this)
                 .withToolbar(mToolbar)
                 .withDisplayBelowToolbar(true)
@@ -109,12 +111,21 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         fragmentTransaction.commit();
                                     }
                                     break;
-                                case 6:
-                                    PainelConfiguracaoNovo fragment2 = (PainelConfiguracaoNovo) getSupportFragmentManager().findFragmentByTag("tagConfig");
+                                case 2:
+                                    PainelCalendario fragment2 = (PainelCalendario) getSupportFragmentManager().findFragmentByTag("tagCal");
                                     if (fragment2 == null) {
-                                        fragment2 = new PainelConfiguracaoNovo();
+                                        fragment2 = new PainelCalendario();
                                         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.replace(R.id.rlConteudo, fragment2, "tagConfig");
+                                        fragmentTransaction.replace(R.id.rlConteudo, fragment2, "tagCal");
+                                        fragmentTransaction.commit();
+                                    }
+                                    break;
+                                case 6:
+                                    PainelConfiguracaoNovo fragment6 = (PainelConfiguracaoNovo) getSupportFragmentManager().findFragmentByTag("tagConfig");
+                                    if (fragment6 == null) {
+                                        fragment6 = new PainelConfiguracaoNovo();
+                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                        fragmentTransaction.replace(R.id.rlConteudo, fragment6, "tagConfig");
                                         fragmentTransaction.commit();
 
                                     }
@@ -183,7 +194,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         System.exit(0);
     }
 
-    private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener(){
+    private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener(){
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
             Toast.makeText(MenuPrincipalNovo.this, "onCheckedChanged: "+( b ? "true" : "false" ), Toast.LENGTH_SHORT).show();

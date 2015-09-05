@@ -48,10 +48,6 @@
 
         </activity>
         <activity
-            android:name=".MenuPrincipal"
-            android:label="@string/title_activity_padrao_menu" >
-        </activity>
-        <activity
             android:name=".CadPerfil"
             android:label="@string/title_activity_padrao_login" >
         </activity>

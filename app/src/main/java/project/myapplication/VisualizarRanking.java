@@ -1,6 +1,5 @@
 package project.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +27,6 @@ public class VisualizarRanking extends ActionBarActivity implements ActionBar.Ta
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this,MenuPrincipal.class));
 
     }
 
@@ -92,7 +90,6 @@ public class VisualizarRanking extends ActionBarActivity implements ActionBar.Ta
         if (id == android.R.id.home)
         {
             this.finish();
-            startActivity(new Intent(this,MenuPrincipal.class));
         }
 
         //noinspection SimplifiableIfStatement
