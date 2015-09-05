@@ -16,7 +16,6 @@ public class ContatoDAO {
 
     private SQLiteDatabase db;
     private static final String TABELA = "tb_contato";
-    private SQLiteHelper dbH;
 
     private static final String cd_contato = "cd_contato";
     private static final String ds_contato = "ds_contato ";
@@ -29,7 +28,7 @@ public class ContatoDAO {
     };
 
     public ContatoDAO(Context context) {
-        dbH = new SQLiteHelper(context);
+        SQLiteHelper dbH = new SQLiteHelper(context);
         db = dbH.getWritableDatabase();
     }
 

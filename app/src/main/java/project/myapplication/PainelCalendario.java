@@ -295,9 +295,8 @@ public class PainelCalendario extends Fragment implements OnClickListener {
 
         private HashMap<String, Integer> findNumberOfEventsPerMonth(int year,
                                                                     int month) {
-            HashMap<String, Integer> map = new HashMap<String, Integer>();
 
-            return map;
+            return new HashMap<String, Integer>();
         }
 
         @Override

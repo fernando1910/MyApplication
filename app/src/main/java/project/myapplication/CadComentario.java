@@ -86,7 +86,7 @@ public class CadComentario extends AppCompatActivity {
         }
     }
 
-    public boolean validarCampos()
+    private boolean validarCampos()
     {
         boolean validado = true;
         if (etComentario.getText().length() == 0) {
@@ -101,7 +101,7 @@ public class CadComentario extends AppCompatActivity {
         return  validado;
     }
 
-    public class comentar extends AsyncTask<Void,Integer,Void>
+    private class comentar extends AsyncTask<Void,Integer,Void>
     {
         @Override
         protected void onPreExecute()

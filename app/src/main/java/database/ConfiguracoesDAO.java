@@ -12,9 +12,8 @@ public class ConfiguracoesDAO {
 
         private SQLiteDatabase db;
         private static final String TABELA = "tb_configuracoes";
-        private SQLiteHelper dbH;
 
-        private static final String fg_permite_push = "fg_permite_push";
+    private static final String fg_permite_push = "fg_permite_push";
         private static final String fg_permite_alarme = "fg_permite_alarme";
         private static final String fg_notifica_comentario = "fg_notifica_comentario";
         private static final String fg_notifica_mudanca = "fg_notifica_mudanca";
@@ -28,7 +27,7 @@ public class ConfiguracoesDAO {
         };
 
         public ConfiguracoesDAO(Context context){
-            dbH =  new SQLiteHelper(context);
+            SQLiteHelper dbH = new SQLiteHelper(context);
             db = dbH.getWritableDatabase();
         }
 

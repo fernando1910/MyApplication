@@ -10,7 +10,6 @@ import helpers.SQLiteHelper;
 
 public class EventoDAO {
     private SQLiteDatabase db;
-    private SQLiteHelper dbH;
 
     private static final String TABELA = "tb_evento";
 
@@ -47,7 +46,7 @@ public class EventoDAO {
 
 
     public EventoDAO(Context context) {
-        dbH =  new SQLiteHelper(context);
+        SQLiteHelper dbH = new SQLiteHelper(context);
         db = dbH.getWritableDatabase();
     }
 

@@ -11,8 +11,8 @@ import domain.Util;
 
 public class BoasVindas extends Activity {
 
-    Configuracoes objConfig;
-    Util util;
+    private Configuracoes objConfig;
+    private Util util;
 
 
     @Override

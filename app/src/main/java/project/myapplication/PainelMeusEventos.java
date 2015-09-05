@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -24,12 +24,9 @@ import domain.Evento;
 import interfaces.RecyclerViewOnClickListenerHack;
 
 
-public class PainelMeusEventos extends ActionBarActivity implements RecyclerViewOnClickListenerHack {
+public class PainelMeusEventos extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
 
-    private Evento objEvento;
-    private ListView lvEventos;
     private ProgressDialog progressDialog;
-    private String jsonString;
     private RecyclerView rvEvento;
     private List<Evento> eventos;
     private EventoAdapter adapter = null;
@@ -144,8 +141,8 @@ public class PainelMeusEventos extends ActionBarActivity implements RecyclerView
             {
                 synchronized (this)
                 {
-                    objEvento = new Evento();
-                    jsonString =  objEvento.carregarEventos(getString(R.string.padrao_evento),null);
+                    Evento objEvento = new Evento();
+                    String jsonString = objEvento.carregarEventos(getString(R.string.padrao_evento), null);
 
                     eventos = new ArrayList<>();
 

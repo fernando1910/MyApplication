@@ -31,9 +31,8 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = layoutInflater.inflate(R.layout.item_menu_evento_card, viewGroup, false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
 
-        return  myViewHolder;
+        return new MyViewHolder(view);
     }
 
     @Override

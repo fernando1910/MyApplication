@@ -14,7 +14,6 @@ public class UsuarioDAO {
     private SQLiteDatabase db;
 
     private static final String TABELA_USUARIO = "tb_usuario";
-    private SQLiteHelper dbH;
 
     private static final String cd_usuario = "cd_usuario";
     private static final String ds_nome = "ds_nome";
@@ -26,7 +25,7 @@ public class UsuarioDAO {
     private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefone, UsuarioDAO.img_perfil, UsuarioDAO.ds_caminho_foto,UsuarioDAO.nr_codigo_valida_telefone};
 
     public UsuarioDAO(Context context) {
-        dbH =  new SQLiteHelper(context);
+        SQLiteHelper dbH = new SQLiteHelper(context);
         db = dbH.getWritableDatabase();
     }
 
@@ -54,7 +53,7 @@ public class UsuarioDAO {
 
     public void AtualizarNome(String ds_nome){
         ContentValues values = new ContentValues();
-        values.put(this.ds_nome,ds_nome);
+        values.put(UsuarioDAO.ds_nome,ds_nome);
         db.update(TABELA_USUARIO, values,null,null);
     }
 
