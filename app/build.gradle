@@ -47,6 +47,6 @@ dependencies {
 
     compile 'com.android.support:design:23.0.0'
     compile 'com.github.clans:fab:1.6.0'
-
+    compile 'de.greenrobot:eventbus:2.4.0'
 
 }

@@ -32,13 +32,15 @@ public class RegistrationIntentService extends IntentService {
         synchronized (LOG){
             InstanceID instanceID = InstanceID.getInstance(this);
             try {
+                if (!status) {
 
                     String token = instanceID.getToken(
                             getResources().getString(R.string.clound_messaging_key),
                             GoogleCloudMessaging.INSTANCE_ID_SCOPE,
                             null);
-                    preferences.edit().putBoolean("status", token != null && token.trim().length() > 0 ).apply();
+                    preferences.edit().putBoolean("status", token != null && token.trim().length() > 0).apply();
                     sendRegistrationId(token);
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -46,7 +48,7 @@ public class RegistrationIntentService extends IntentService {
         }
     }
 
-    public void sendRegistrationId( String token){
+    private void sendRegistrationId( String token){
         String path = getResources().getString(R.string.padrao_push_message);
         Util util = new Util();
         Usuario objUsuario = new Usuario();

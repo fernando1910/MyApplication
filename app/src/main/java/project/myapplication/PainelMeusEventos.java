@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -41,7 +40,7 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
         }catch (Exception e){
             Toast.makeText(PainelMeusEventos.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        lvEventos = (ListView)findViewById(R.id.lvEventos);
+
         rvEvento = (RecyclerView)findViewById(R.id.rvEvento);
         rvEvento.setHasFixedSize(true);
         rvEvento.setOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
     private CollapsingToolbarLayout collapsingToolbarLayout ;
     private Toolbar mToolbar;
     private FloatingActionMenu mFloatingActionMenu;
+    private RatingBar mRatingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
         tvTituloEvento = (TextView)findViewById(R.id.tvTituloEvento);
         tvDescricaoEvento = (TextView)findViewById(R.id.tvDescricaoEvento);
         mFloatingActionMenu = (FloatingActionMenu)findViewById(R.id.menu);
+        mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("Seu evento");
@@ -127,6 +130,13 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
 
         }
+
+        mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                //Toast.makeText(VisulizarEvento.this, String.valueOf(rating), Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
