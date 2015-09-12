@@ -1,60 +1,70 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="10dp"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="10dp"
-    android:orientation="vertical"
+    android:paddingTop="10dp"
     tools:context="project.myapplication.CadConfiguracao">
 
-    <CheckBox
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Permite notificação via push."
-        android:id="@+id/ckPermitePush"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:orientation="vertical">
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Permite criar alarme."
-        android:id="@+id/ckPermiteAlarme"
-        android:layout_below="@+id/ckPermitePush"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp" />
+        <CheckBox
+            android:id="@+id/ckPermitePush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Permite notificação via push." />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Permite notificação de comentários nos seus eventos."
-        android:id="@+id/ckNotificaComentario"
-        android:layout_below="@+id/ckPermiteAlarme"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="42dp" />
+        <CheckBox
+            android:id="@+id/ckPermiteAlarme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ckPermitePush"
+            android:layout_marginTop="37dp"
+            android:text="Permite criar alarme." />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Permite notificação sobre mudanças em geral nos seus eventos."
-        android:id="@+id/ckNotificaMudanca"
-        android:layout_below="@+id/ckNotificaComentario"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="51dp" />
+        <CheckBox
+            android:id="@+id/ckNotificaComentario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ckPermiteAlarme"
+            android:layout_marginTop="42dp"
+            android:text="Permite notificação de comentários nos seus eventos." />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Permite que o número do seu telefone fique visível para outros usuários."
-        android:id="@+id/ckTelefoneVisivel"
-        android:layout_below="@+id/ckNotificaMudanca"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp" />
+        <CheckBox
+            android:id="@+id/ckNotificaMudanca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ckNotificaComentario"
+            android:layout_marginTop="51dp"
+            android:text="Permite notificação sobre mudanças em geral nos seus eventos." />
 
-</LinearLayout>
+        <CheckBox
+            android:id="@+id/ckTelefoneVisivel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Permite que o número do seu telefone fique visível para outros usuários." />
+
+        <CheckBox
+            android:id="@+id/ckCircularLocalizacao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Circular localização ao pesquisar evento." />
+
+        <Spinner
+            android:id="@+id/spRadius"
+            android:entries="@array/sessao_radius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</ScrollView>

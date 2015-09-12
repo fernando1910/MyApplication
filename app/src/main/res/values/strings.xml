@@ -66,6 +66,11 @@
         <item>Japan</item>
     </string-array>
 
+    <string-array name="sessao_radius">
+        <item>1 KM</item>
+        <item>5 KM</item>
+    </string-array>
+
     <string-array name="sessao_ddi">
         <item>+55</item>
     </string-array>
@@ -124,5 +129,6 @@
     <string name="caminho_foto_capa_evento">http://www.fiesta1.hol.es/capa_evento/</string>
     <string name="title_activity_menu_principal_novo">MenuPrincipalNovo</string>
     <string name="texto_padrao_aleracoes_evento">Eventos com aleterações importantes</string>
+    <string name="title_activity_pesquisar_eventos">PesquisarEventos</string>
 
 </resources>

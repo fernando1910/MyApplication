@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,8 +27,11 @@ import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
-import adapters.TabsAdapter;
+import java.util.Date;
+
 import domain.Usuario;
 import extras.RoundImage;
 import extras.SlidingTabLayout;
@@ -55,13 +60,19 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+        /*
         mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
         mViewPager.setAdapter( new TabsAdapter(getSupportFragmentManager(), this, 0));
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
-
         mSlidingTabLayout.setViewPager(mViewPager);
+        */
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.layoutConteudo, Painel.newInstance(), "tagMain");
+        ft.commit();
+
 
         AccountHeader.Result headerNavigationLeft = new AccountHeader()
                 .withActivity(this)
@@ -92,43 +103,47 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withAccountHeader(headerNavigationLeft)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l, IDrawerItem iDrawerItem) {
 
                         try {
-
-                            mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
-                            mViewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), MenuPrincipalNovo.this, i));
-                            mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
-                            mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                            mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
-
-                            mSlidingTabLayout.setViewPager(mViewPager);
-
-
-                            /*
                             Fragment mFragment = null;
                             switch (i) {
                                 case 0:
-
-
+                                    mFragment = Painel.newInstance();
                                     break;
                                 case 1:
                                     mFragment = new PainelEvento();
                                     break;
                                 case 2:
-                                    mFragment = new PainelCalendario();
+                                    CaldroidFragment mCaldroidFragment = new CaldroidFragment();
+                                    final CaldroidListener mCaldroidListener = new CaldroidListener() {
+                                        @Override
+                                        public void onSelectDate(Date date, View view) {
+                                            Intent intent = new Intent(MenuPrincipalNovo.this, PainelMeusEventos.class );
+                                            intent.putExtra("mDataCalendario" , date.toString() );
+                                            startActivity(intent);
+                                        }
+                                    };
+                                    mCaldroidFragment.setCaldroidListener(mCaldroidListener);
+                                    mCaldroidFragment.show(getSupportFragmentManager().beginTransaction(),"tagCalendar");
 
+
+                                    break;
+                                case 3:
+                                    startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class ));
                                     break;
                                 case 6:
                                     mFragment = new PainelConfiguracaoNovo();
                                     break;
-
                             }
 
-                            //FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                           // ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
-                            //ft.commit();
-*/
+                            if (mFragment != null) {
+                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
+                                ft.commit();
+                            }
+
+
                         } catch (Exception e) {
                             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }

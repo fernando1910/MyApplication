@@ -16,26 +16,25 @@
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <!--RelativeLayout
+    <LinearLayout
         android:id="@+id/layoutConteudo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tb_main"
-        android:orientation="vertical"-->
+        android:orientation="vertical">
 
-    <extras.SlidingTabLayout
-        android:id="@+id/stl_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:theme="@style/Secundario">
+        <!--extras.SlidingTabLayout
+            android:id="@+id/stl_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:theme="@style/Secundario">
 
-    </extras.SlidingTabLayout>
+        </extras.SlidingTabLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" /-->
+    </LinearLayout>
 </LinearLayout>

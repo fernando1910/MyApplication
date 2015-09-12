@@ -1,7 +1,7 @@
 package project.myapplication;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import database.ConfiguracoesDAO;
 import domain.Configuracoes;
 
-public class CadConfiguracao extends ActionBarActivity {
+public class CadConfiguracao extends AppCompatActivity {
     private CheckBox ckPermitePush;
     private CheckBox ckPermiteAlarme;
     private CheckBox ckNotificaComentario;

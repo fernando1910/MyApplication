@@ -45,7 +45,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".CadPerfil"
@@ -112,8 +111,7 @@
         <activity
             android:name=".VisulizarEvento"
             android:label="@string/title_activity_padrao_visulizar_evento"
-            android:theme="@style/AppTheme"
-            >
+            android:theme="@style/AppTheme" >
         </activity>
         <activity
             android:name=".ValidarTelefone"
@@ -164,8 +162,11 @@
         <activity
             android:name=".MenuPrincipalNovo"
             android:label="@string/title_activity_menu_principal_novo"
-            android:theme="@style/AppTheme">
-
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".PesquisarEvento"
+            android:label="@string/title_activity_pesquisar_eventos" >
         </activity>
     </application>
 

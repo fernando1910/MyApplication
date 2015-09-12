@@ -4,48 +4,35 @@ package adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-import project.myapplication.PainelEvento;
 import project.myapplication.PainelNovidades;
+import project.myapplication.VisualizarTopFestas;
 
-public class TabsAdapter extends FragmentPagerAdapter {
+public class TabsAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
-    private String[] titles = {"INICIO" };
-    private int positionMenu;
+    private String[] titles = {"INICIO", "TOP FESTAS"};
 
 
-    public TabsAdapter(FragmentManager fm, Context context, int position) {
+
+    public TabsAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
-        positionMenu = position;
+
     }
 
     @Override
     public Fragment getItem(int position) {
         Fragment mFragment = null;
 
-        if (positionMenu == 0) {
             switch (position) {
                 case 0:
                     mFragment = new PainelNovidades();
                     break;
-               /* case 1:
+                case 1:
                     mFragment = new VisualizarTopFestas();
                     break;
-
-                    */
             }
-        }
-        else if (positionMenu ==1){
-
-            switch (position) {
-                case 0:
-                    mFragment = new PainelEvento();
-                    break;
-
-            }
-        }
 
         return mFragment;
     }
@@ -57,6 +44,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+            return titles[position];
+
     }
 }

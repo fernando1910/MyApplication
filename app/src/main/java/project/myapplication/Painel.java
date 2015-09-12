@@ -24,16 +24,28 @@ public class Painel extends Fragment {
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    public static Painel newInstance() {
+        Painel mFragment = new Painel();
+        return mFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
-        // Inflate the layout for this fragment
+
+
         getActivity().setTitle(R.string.title_home);
         view = inflater.inflate(R.layout.fragment_padrao_painel, container, false);
+
+
         mViewPager = (ViewPager) view.findViewById(R.id.vp_tabs);
-        mViewPager.setAdapter( new TabsAdapter(getActivity().getSupportFragmentManager(), getActivity(),0));
+        mViewPager.setAdapter( new TabsAdapter(getActivity().getSupportFragmentManager(), getActivity().getApplicationContext()));
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.stl_tabs);
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
@@ -41,5 +53,6 @@ public class Painel extends Fragment {
         mSlidingTabLayout.setViewPager(mViewPager);
 
         return view ;
+
     }
 }
