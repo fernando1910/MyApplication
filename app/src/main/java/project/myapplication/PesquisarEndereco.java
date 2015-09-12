@@ -19,8 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,16 +57,15 @@ public class PesquisarEndereco extends ActionBarActivity implements LocationList
     private GoogleMap mMap;
     private LatLng latLng;
     private Address address;
-    private WebView wvCarregando;
+    private ProgressBar mProgressBar;
     private TextView tvInstrucao;
-    ListView lvEndereco;
+    private ListView lvEndereco;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_pesquisar_endereco);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true); BOTÃO DE VOLTAR NA ACTION BAR
 
         setUpMapIfNeeded();
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -78,8 +77,9 @@ public class PesquisarEndereco extends ActionBarActivity implements LocationList
 
         tvInstrucao = (TextView)findViewById(R.id.tvInstrucao);
         lvEndereco =  (ListView)findViewById(R.id.lvEndereco);
-        wvCarregando = (WebView)findViewById(R.id.wvCarregando);
-        wvCarregando.loadUrl("file:///android_asset/carregandoGIF.gif");
+        mProgressBar = (ProgressBar)findViewById(R.id.pbFooterLoading);
+
+
 
         util = new Util();
 
@@ -199,7 +199,7 @@ public class PesquisarEndereco extends ActionBarActivity implements LocationList
                         mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
                         lvEndereco.setVisibility(View.INVISIBLE);
-                        wvCarregando.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.VISIBLE);
                         tvInstrucao.setVisibility(View.INVISIBLE);
 
                         new carregarLocais().execute();
@@ -386,7 +386,7 @@ public class PesquisarEndereco extends ActionBarActivity implements LocationList
             lvEndereco.requestLayout();
 
 
-            wvCarregando.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 }

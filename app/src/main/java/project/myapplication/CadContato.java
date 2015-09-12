@@ -1,12 +1,15 @@
 package project.myapplication;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -20,7 +23,7 @@ import domain.Contatos;
 import domain.Util;
 
 
-public class CadContato extends ActionBarActivity{
+public class CadContato extends AppCompatActivity{
 
     private ListView lvContatos;
     private Contatos objContatos;
@@ -30,68 +33,66 @@ public class CadContato extends ActionBarActivity{
     private List<Contatos> contatosList;
     private CustomListViewContato arrayAdapter;
     private Util util;
+    MenuItem mActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_padrao_contatos);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //region Vinculação com XML
-        lvContatos = (ListView)findViewById(R.id.lvContatos);
-        btConfirmar = (Button)findViewById(R.id.btConfirmar);
-        //endregion
-
-        objContatos = new Contatos();
-        util = new Util();
-
-        Bundle parameters = getIntent().getExtras();
-        if(parameters != null) {
-            codigoEvento = parameters.getInt("codigoEvento");
-            btConfirmar.setVisibility(View.VISIBLE);
-            cbContatoVisivel = true;
-        }
-
         try {
+            setContentView(R.layout.activity_padrao_contatos);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+            //region Vinculação com XML
+            lvContatos = (ListView)findViewById(R.id.lvContatos);
+            btConfirmar = (Button)findViewById(R.id.btConfirmar);
+            //endregion
+
+            objContatos = new Contatos();
+            util = new Util();
+
+            Bundle parameters = getIntent().getExtras();
+            if(parameters != null) {
+                codigoEvento = parameters.getInt("codigoEvento");
+                btConfirmar.setVisibility(View.VISIBLE);
+                cbContatoVisivel = true;
+            }
             contatosList = objContatos.retonarContatos(this);
             arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
             lvContatos.setAdapter(arrayAdapter);
 
         }catch (Exception ex)
         {
+            this.finish();
             Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
         }
 
     }
 
+    //region Métodos do Android
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
             this.finish();
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == android.R.id.home)
         {
             this.finish();
             return true;
         }
 
-
         if (id == R.id.action_settings) {
-            atualizarContatos();
+            new sincrozinarContatos().execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,29 +100,50 @@ public class CadContato extends ActionBarActivity{
         return true;
     }
 
-    public void atualizarContatos()
-    {
-        try{
-            objContatos.AtualizarContatos(getContentResolver(),getString(R.string.padrao_contatos),this);
-        }catch (Exception e)
-        {
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
-        }
-
-        try {
-
-            List<Contatos> contatosList = objContatos.retonarContatos(this);
-            final CustomListViewContato arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
-            lvContatos.setAdapter(arrayAdapter);
-        }catch (Exception ex)
-        {
-            Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
-        }
-
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mActionProgressItem = menu.findItem(R.id.miActionProgress);
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(mActionProgressItem);
+        return super.onPrepareOptionsMenu(menu);
     }
 
-    public void onCLickConvidarContatos(View view)
-    {
+    //endregion
+
+    //region Métodos de implementação
+
+    public class sincrozinarContatos extends AsyncTask<Void,Integer,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            //super.onPreExecute();
+            mActionProgressItem.setVisible(true);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try{
+                objContatos.AtualizarContatos(getContentResolver(),getString(R.string.padrao_contatos),CadContato.this);
+                List<Contatos> contatosList = objContatos.retonarContatos(CadContato.this);
+                arrayAdapter = new CustomListViewContato(CadContato.this, contatosList, cbContatoVisivel);
+
+
+            }catch (Exception ex)
+            {
+                Toast.makeText(CadContato.this,ex.getMessage(),Toast.LENGTH_LONG).show();
+                CadContato.this.finish();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            //super.onPostExecute(aVoid);
+            mActionProgressItem.setVisible(false);
+            lvContatos.setAdapter(arrayAdapter);
+        }
+    }
+
+    public void onCLickConvidarContatos(View view){
         boolean checked ;
         boolean selecionou = false;
         JSONObject jsonObject = new JSONObject();
@@ -163,4 +185,7 @@ public class CadContato extends ActionBarActivity{
         }
 
     }
+
+
+    //endregion
 }

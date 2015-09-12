@@ -1,0 +1,40 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="project.myapplication.PainelNovidades">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/White">
+
+
+        <TextView
+            android:id="@+id/tvComentarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:layout_toRightOf="@+id/ivComentario"
+            android:scaleType="centerInside"
+            android:text="@string/texto_padrao_aleracoes_evento"
+            android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+
+        <ImageView
+            android:id="@+id/ivComentario"
+            android:layout_width="@dimen/padrao_icone_painel"
+            android:layout_height="@dimen/padrao_icone_painel"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="3dip"
+            android:layout_marginRight="3dip"
+            android:scaleType="centerInside"></ImageView>
+
+
+    </RelativeLayout>
+
+</FrameLayout>

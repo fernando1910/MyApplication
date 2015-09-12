@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
 
@@ -48,13 +49,21 @@ public class UsuarioDAO {
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
         valores.put(nr_codigo_valida_telefone,objUsuario.getCodigoVerificardor());
-        db.update(TABELA_USUARIO, valores, null,null);
+        db.update(TABELA_USUARIO, valores, null, null);
     }
 
-    public void AtualizarNome(String ds_nome){
+    public void atualizarNome(String ds_nome){
         ContentValues values = new ContentValues();
         values.put(UsuarioDAO.ds_nome,ds_nome);
         db.update(TABELA_USUARIO, values,null,null);
+    }
+
+    public String atualizarFotoPerfil(byte [] img_perfil){
+        ContentValues values =new ContentValues();
+        values.put(UsuarioDAO.img_perfil, img_perfil);
+        db.update(TABELA_USUARIO, values, null, null);
+        SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
+        return mSqLiteStatement.toString();
     }
 
     public void Deletar(Usuario objUsuario)
@@ -102,7 +111,9 @@ public class UsuarioDAO {
         return objUsuario;
     }
 
-    public boolean VerificarPerfil()
+
+
+    public boolean verificarPerfil()
     {
         boolean fg_existe_perfil = false;
         try {

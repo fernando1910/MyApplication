@@ -83,6 +83,7 @@ public class CadEvento extends ActionBarActivity {
         util = new Util();
         objConf = new Configuracoes();
 
+
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1),getResources()));
         ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_clock), getResources()));
         ibEndereco.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
@@ -147,21 +148,15 @@ public class CadEvento extends ActionBarActivity {
 
     public void cortarFoto(Uri selectedImage)    {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        // indicate image type and Uri
+
         cropIntent.setDataAndType(selectedImage, "image/*");
-        // set crop properties
         cropIntent.putExtra("crop", "true");
-        // indicate aspect of desired crop
         cropIntent.putExtra("aspectX", 1.5);
         cropIntent.putExtra("aspectY", 1);
-        // indicate output X and Y
         cropIntent.putExtra("outputX", 1080);
         cropIntent.putExtra("outputY", 710);
-        // retrieve data on return
         cropIntent.putExtra("return-data", true);
-        // start the activity - we handle returning in onActivityResult
         startActivityForResult(cropIntent, 4);
-
     }
 
     //endregion

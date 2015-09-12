@@ -100,9 +100,15 @@ public class Usuario {
         usuario_dao.atualizar(this);
     }
 
-    public void AtualizarNome(Context context, String ds_nome) {
+    public void atualizarNome(Context context, String ds_nome) {
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        usuario_dao.AtualizarNome(ds_nome);
+        usuario_dao.atualizarNome(ds_nome);
+    }
+
+    public void atualizarFoto(Context context, byte[] img_perfil) {
+        UsuarioDAO usuario_dao = new UsuarioDAO(context);
+        String r = usuario_dao.atualizarFotoPerfil(img_perfil);
+        r = "";
     }
 
     public Usuario selecionarUsuario(Context context){

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -26,11 +26,15 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
 
+import adapters.TabsAdapter;
 import domain.Usuario;
 import extras.RoundImage;
+import extras.SlidingTabLayout;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private Toolbar mToolbar;
+    private ViewPager mViewPager;
+    private SlidingTabLayout mSlidingTabLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +51,17 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             mToolbar = (Toolbar) findViewById(R.id.tb_main);
             mToolbar.setTitle("Inicial");
             setSupportActionBar(mToolbar);
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        Painel fragment = (Painel) getSupportFragmentManager().findFragmentByTag("tagInicial");
-        if (fragment == null){
-            fragment = new Painel();
-            FragmentTransaction fragmentTransaction  = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.rlConteudo, fragment,"tagInicial");
-            fragmentTransaction.commit();
 
-        }
+        mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
+        mViewPager.setAdapter( new TabsAdapter(getSupportFragmentManager(), this, 0));
+        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
+        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
 
+        mSlidingTabLayout.setViewPager(mViewPager);
 
         AccountHeader.Result headerNavigationLeft = new AccountHeader()
                 .withActivity(this)
@@ -72,6 +75,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                        startActivity(new Intent(MenuPrincipalNovo.this,VisualizarPerfil.class));
                         return false;
                     }
                 })
@@ -89,53 +93,46 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+
                         try {
 
+                            mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
+                            mViewPager.setAdapter(new TabsAdapter(getSupportFragmentManager(), MenuPrincipalNovo.this, i));
+                            mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
+                            mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                            mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
+
+                            mSlidingTabLayout.setViewPager(mViewPager);
+
+
+                            /*
+                            Fragment mFragment = null;
                             switch (i) {
                                 case 0:
-                                    Painel fragment0 = (Painel) getSupportFragmentManager().findFragmentByTag("tagInicial");
-                                    if (fragment0 == null) {
-                                        fragment0 = new Painel();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.replace(R.id.rlConteudo, fragment0, "tagInicial");
-                                        fragmentTransaction.commit();
-                                    }
-                                    break;
 
+
+                                    break;
                                 case 1:
-                                    PainelEvento fragment1 = (PainelEvento) getSupportFragmentManager().findFragmentByTag("tagEvento");
-                                    if (fragment1 == null) {
-                                        fragment1 = new PainelEvento();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.replace(R.id.rlConteudo, fragment1, "tagEvento");
-                                        fragmentTransaction.commit();
-                                    }
+                                    mFragment = new PainelEvento();
                                     break;
                                 case 2:
-                                    PainelCalendario fragment2 = (PainelCalendario) getSupportFragmentManager().findFragmentByTag("tagCal");
-                                    if (fragment2 == null) {
-                                        fragment2 = new PainelCalendario();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.replace(R.id.rlConteudo, fragment2, "tagCal");
-                                        fragmentTransaction.commit();
-                                    }
+                                    mFragment = new PainelCalendario();
+
                                     break;
                                 case 6:
-                                    PainelConfiguracaoNovo fragment6 = (PainelConfiguracaoNovo) getSupportFragmentManager().findFragmentByTag("tagConfig");
-                                    if (fragment6 == null) {
-                                        fragment6 = new PainelConfiguracaoNovo();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.replace(R.id.rlConteudo, fragment6, "tagConfig");
-                                        fragmentTransaction.commit();
-
-                                    }
+                                    mFragment = new PainelConfiguracaoNovo();
                                     break;
 
-
                             }
+
+                            //FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                           // ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
+                            //ft.commit();
+*/
                         } catch (Exception e) {
                             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
+
 
                     }
                 })
@@ -175,7 +172,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            startActivity(new Intent(this,CadEvento.class));
+            startActivity(new Intent(this, CadEvento.class));
             return true;
         }
 
@@ -194,10 +191,10 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         System.exit(0);
     }
 
-    private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener(){
+    private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
-            Toast.makeText(MenuPrincipalNovo.this, "onCheckedChanged: "+( b ? "true" : "false" ), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MenuPrincipalNovo.this, "onCheckedChanged: " + (b ? "true" : "false"), Toast.LENGTH_SHORT).show();
         }
     };
 

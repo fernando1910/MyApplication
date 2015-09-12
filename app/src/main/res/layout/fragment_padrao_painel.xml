@@ -1,78 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LightGrey"
+    android:orientation="vertical"
     tools:context="project.myapplication.Painel">
 
-    <RelativeLayout
-        android:id="@+id/rl1"
-        android:background="@color/White"
+    <extras.SlidingTabLayout
+        android:id="@+id/stl_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        app:theme="@style/Secundario">
 
+    </extras.SlidingTabLayout>
 
-
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_aleracoes_evento"
-            android:layout_width="wrap_content"
-            android:id="@+id/tvComentarios"
-            android:layout_toRightOf="@+id/ivComentario"
-            android:scaleType="centerInside"
-            android:layout_marginTop="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginBottom="10dip">
-        </TextView>
-        <ImageView
-            android:src="@drawable/ic_alteracoes_evento"
-            android:layout_width="@dimen/padrao_icone_painel"
-            android:layout_height="@dimen/padrao_icone_painel"
-            android:id="@+id/ivComentario"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="3dip"
-            android:layout_marginRight="3dip"
-            android:scaleType="centerInside">
-        </ImageView>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:background="@color/White"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
-
-
-
-        <TextView
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_aleracoes_evento"
-            android:layout_width="wrap_content"
-            android:id="@+id/txtTitle"
-            android:layout_toRightOf="@+id/ivAlteracoes"
-            android:scaleType="centerInside"
-            android:layout_marginTop="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginBottom="10dip">
-        </TextView>
-        <ImageView
-            android:src="@drawable/ic_alteracoes_evento"
-            android:layout_width="@dimen/padrao_icone_painel"
-            android:layout_height="@dimen/padrao_icone_painel"
-            android:id="@+id/ivAlteracoes"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="3dip"
-            android:layout_marginRight="3dip"
-            android:scaleType="centerInside">
-        </ImageView>
-
-
-    </RelativeLayout>
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

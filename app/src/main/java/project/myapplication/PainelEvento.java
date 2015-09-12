@@ -63,9 +63,7 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvEvento.setLayoutManager(linearLayoutManager);
-        getActivity().setProgressBarIndeterminateVisibility(true);
         new Carregar().execute();
-        getActivity().setProgressBarIndeterminateVisibility(false);
 
         return view;
     }

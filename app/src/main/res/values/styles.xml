@@ -2,11 +2,12 @@
 
     <style name="AppTheme" parent="MaterialDrawerTheme.Light.DarkToolbar.TranslucentStatus">
         <item name="colorPrimary">@color/md_grey_900</item>
-        <item name="colorPrimaryDark">@color/md_grey_900</item>
+        <item name="colorPrimaryDark">@color/Black</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
 
         <!-- MaterialDrawer specific values -->
         <item name="android:textColor">@color/material_drawer_primary_text</item>
+
         <item name="material_drawer_background">@color/Silver</item>
         <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>
         <item name="material_drawer_primary_icon">@color/material_drawer_primary_icon</item>
@@ -21,6 +22,10 @@
 
     <style name="Padrao" parent="Theme.AppCompat.Light.DarkActionBar">
 
+    </style>
+
+    <style name="Secundario" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/White</item>
     </style>
 
 </resources>
