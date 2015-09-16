@@ -85,6 +85,11 @@ public class Configuracoes {
         this.setTelefoneVisivel(objConfig.getTelefoneVisivel());
     }
 
+    public void atualizar(Context context){
+        ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
+        configuracoesDAO.Atualizar(this);
+    }
+
     //endregion
 
     public static class MenuConfiguracao

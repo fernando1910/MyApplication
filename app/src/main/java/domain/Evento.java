@@ -33,6 +33,7 @@ public class Evento {
         private String ds_nome_arquivo_foto;
         protected final String caminhoSevidor = "";
         private String ds_url_foto;
+        private byte[] img_foto_capa;
 
     //endregion
 
@@ -156,6 +157,14 @@ public class Evento {
 
         public void setUrlFoto(String ds_url_foto) {
             this.ds_url_foto = ds_url_foto;
+        }
+
+        public byte[] getImagemFotoCapa() {
+            return img_foto_capa;
+        }
+
+        public void setImagemFotoCapa(byte[] img_foto_capa) {
+            this.img_foto_capa = img_foto_capa;
         }
 
     //endregion

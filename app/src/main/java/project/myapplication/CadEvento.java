@@ -371,6 +371,7 @@ public class CadEvento extends ActionBarActivity {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     imgRetorno.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    objEvento.setImagemFotoCapa(byteArray);
                     String imagemServidor = Base64.encodeToString(byteArray,0);
                     objEvento.setFotoCapa(imagemServidor);
 

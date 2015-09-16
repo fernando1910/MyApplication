@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 
-import database.ConfiguracoesDAO;
 import domain.Configuracoes;
 
 public class CadConfiguracao extends AppCompatActivity {
@@ -111,10 +110,7 @@ public class CadConfiguracao extends AppCompatActivity {
         else
             objConfig.setTelefoneVisivel(0);
 
-        objConfig.setStatusPerfil(3);
-
-        ConfiguracoesDAO config_dao = new ConfiguracoesDAO(this.getApplicationContext());
-        config_dao.Atualizar(objConfig);
+        objConfig.atualizar(this);
 
     }
 }

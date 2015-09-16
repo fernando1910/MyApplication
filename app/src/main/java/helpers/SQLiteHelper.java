@@ -52,8 +52,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "dt_inclusao DATETIME," +
                     "dt_alteracao DATETIME ," +
                     "fg_evento_privado INTEGER," +
-                    "ds_endereco TEXT " +
-                    "ds_caminho_foto_capa TEXT  )"
+                    "ds_endereco TEXT, " +
+                    "ds_caminho_foto_capa TEXT," +
+                    "img_foto_capa BLOB  )"
 
     };
 

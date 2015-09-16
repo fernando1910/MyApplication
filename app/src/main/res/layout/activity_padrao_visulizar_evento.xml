@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="project.myapplication.VisulizarEvento">
 
     <android.support.design.widget.AppBarLayout
@@ -51,7 +50,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/LightGrey">
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -69,9 +69,9 @@
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:background="@color/LightGrey"
-                android:orientation="vertical">
+                android:padding="5dp"
+                android:orientation="vertical"
+                android:background="@color/White">
 
 
                 <TextView

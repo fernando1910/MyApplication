@@ -42,23 +42,24 @@ public class MenuPrincipalNovo extends AppCompatActivity {
     private SlidingTabLayout mSlidingTabLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_menu_principal_novo);
-        setProgressBarIndeterminateVisibility(Boolean.TRUE);
-
-        Usuario objUsuario = new Usuario();
-        objUsuario.carregar(this);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
-        RoundImage roundImage = new RoundImage(bitmap);
-
         try {
-            mToolbar = (Toolbar) findViewById(R.id.tb_main);
-            mToolbar.setTitle("Inicial");
-            setSupportActionBar(mToolbar);
-        } catch (Exception e) {
-            Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+            super.onCreate(savedInstanceState);
+            supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+            setContentView(R.layout.activity_menu_principal_novo);
+            setProgressBarIndeterminateVisibility(Boolean.TRUE);
+
+            Usuario objUsuario = new Usuario();
+            objUsuario.carregar(this);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+            RoundImage roundImage = new RoundImage(bitmap);
+
+            try {
+                mToolbar = (Toolbar) findViewById(R.id.tb_main);
+                mToolbar.setTitle("Inicial");
+                setSupportActionBar(mToolbar);
+            } catch (Exception e) {
+                Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         /*
         mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
@@ -69,104 +70,106 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         mSlidingTabLayout.setViewPager(mViewPager);
         */
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.layoutConteudo, Painel.newInstance(), "tagMain");
-        ft.commit();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.layoutConteudo, Painel.newInstance(), "tagMain");
+            ft.commit();
 
 
-        AccountHeader.Result headerNavigationLeft = new AccountHeader()
-                .withActivity(this)
-                .withCompactStyle(false)
-                .withSavedInstance(savedInstanceState)
-                .withThreeSmallProfileImages(false)
-                .withHeaderBackground(R.drawable.batman)
-                .addProfiles(
-                        new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
-                )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
-                        startActivity(new Intent(MenuPrincipalNovo.this,VisualizarPerfil.class));
-                        return false;
-                    }
-                })
-                .build();
-
-        Drawer.Result navigationDrawerLeft = new Drawer()
-                .withActivity(this)
-                .withToolbar(mToolbar)
-                .withDisplayBelowToolbar(true)
-                .withActionBarDrawerToggleAnimated(true)
-                .withDrawerGravity(Gravity.LEFT)
-                .withSavedInstance(savedInstanceState)
-                .withSelectedItem(0)
-                .withAccountHeader(headerNavigationLeft)
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l, IDrawerItem iDrawerItem) {
-
-                        try {
-                            Fragment mFragment = null;
-                            switch (i) {
-                                case 0:
-                                    mFragment = Painel.newInstance();
-                                    break;
-                                case 1:
-                                    mFragment = new PainelEvento();
-                                    break;
-                                case 2:
-                                    CaldroidFragment mCaldroidFragment = new CaldroidFragment();
-                                    final CaldroidListener mCaldroidListener = new CaldroidListener() {
-                                        @Override
-                                        public void onSelectDate(Date date, View view) {
-                                            Intent intent = new Intent(MenuPrincipalNovo.this, PainelMeusEventos.class );
-                                            intent.putExtra("mDataCalendario" , date.toString() );
-                                            startActivity(intent);
-                                        }
-                                    };
-                                    mCaldroidFragment.setCaldroidListener(mCaldroidListener);
-                                    mCaldroidFragment.show(getSupportFragmentManager().beginTransaction(),"tagCalendar");
-
-
-                                    break;
-                                case 3:
-                                    startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class ));
-                                    break;
-                                case 6:
-                                    mFragment = new PainelConfiguracaoNovo();
-                                    break;
-                            }
-
-                            if (mFragment != null) {
-                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                                ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
-                                ft.commit();
-                            }
-
-
-                        } catch (Exception e) {
-                            Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            AccountHeader.Result headerNavigationLeft = new AccountHeader()
+                    .withActivity(this)
+                    .withCompactStyle(false)
+                    .withSavedInstance(savedInstanceState)
+                    .withThreeSmallProfileImages(false)
+                    .withHeaderBackground(R.drawable.batman)
+                    .addProfiles(
+                            new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
+                    )
+                    .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                        @Override
+                        public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                            startActivity(new Intent(MenuPrincipalNovo.this, VisualizarPerfil.class));
+                            return false;
                         }
+                    })
+                    .build();
+
+            Drawer.Result navigationDrawerLeft = new Drawer()
+                    .withActivity(this)
+                    .withToolbar(mToolbar)
+                    .withDisplayBelowToolbar(true)
+                    .withActionBarDrawerToggleAnimated(true)
+                    .withDrawerGravity(Gravity.LEFT)
+                    .withSavedInstance(savedInstanceState)
+                    .withSelectedItem(0)
+                    .withAccountHeader(headerNavigationLeft)
+                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l, IDrawerItem iDrawerItem) {
+
+                            try {
+                                Fragment mFragment = null;
+                                switch (i) {
+                                    case 0:
+                                        mFragment = Painel.newInstance();
+                                        break;
+                                    case 1:
+                                        mFragment = new PainelEvento();
+                                        break;
+                                    case 2:
+                                        CaldroidFragment mCaldroidFragment = new CaldroidFragment();
+                                        final CaldroidListener mCaldroidListener = new CaldroidListener() {
+                                            @Override
+                                            public void onSelectDate(Date date, View view) {
+                                                Intent intent = new Intent(MenuPrincipalNovo.this, PainelMeusEventos.class);
+                                                intent.putExtra("mDataCalendario", date.toString());
+                                                startActivity(intent);
+                                            }
+                                        };
+                                        mCaldroidFragment.setCaldroidListener(mCaldroidListener);
+                                        mCaldroidFragment.show(getSupportFragmentManager().beginTransaction(), "tagCalendar");
 
 
-                    }
-                })
-                .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-                        return false;
-                    }
-                })
-                .build();
+                                        break;
+                                    case 3:
+                                        startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class));
+                                        break;
+                                    case 6:
+                                        mFragment = new PainelConfiguracaoNovo();
+                                        break;
+                                }
 
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
-        navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
-        navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
+                                if (mFragment != null) {
+                                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                    ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
+                                    ft.commit();
+                                }
 
+
+                            } catch (Exception e) {
+                                Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    })
+                    .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                            return false;
+                        }
+                    })
+                    .build();
+
+            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
+            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
+            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
+            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
+            navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
+            navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
+            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
+        }catch (Exception ex){
+            Toast.makeText(MenuPrincipalNovo.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
