@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -185,6 +186,7 @@ public class CadPerfil extends Activity {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
+                objUsuario.setFotoPerfil(Base64.encodeToString(objUsuario.getImagemPerfil(), 0));
                 objUsuario.setCaminhoFoto(imgPerfil.getPath());
             }
             objUsuario.setNome(etNome.getText().toString());

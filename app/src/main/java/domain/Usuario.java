@@ -22,6 +22,7 @@ public class Usuario {
     private String nr_ddi;
     private String nr_codigo_valida_telefone;
     private String ds_token;
+    private String ds_foto_perfil;
 
 
     private static final String TAG = "USUARIO";
@@ -92,6 +93,14 @@ public class Usuario {
         this.ds_token = ds_token;
     }
 
+    public String getFotoPerfil() {
+        return ds_foto_perfil;
+    }
+
+    public void setFotoPerfil(String ds_foto_perfil) {
+        this.ds_foto_perfil = ds_foto_perfil;
+    }
+
     //endregion
 
     //region Métodos
@@ -148,6 +157,7 @@ public class Usuario {
             jsonObject.put("nr_ddi", this.getDDI());
             jsonObject.put("img_perfil", this.getImagemPerfil());
             jsonObject.put("nr_codigo_valida_telefone", this.getCodigoVerificardor());
+            jsonObject.put("ds_foto_perfil", this.getFotoPerfil());
 
         } catch (JSONException e) {
             e.printStackTrace();
