@@ -75,8 +75,7 @@ public class CadPerfil extends Activity {
 
         if (ValidarCampos()) {
             new criarPerfil().execute();
-            objConfig.atualizarStatus(this, 5);
-            startActivity(new Intent(this,MenuPrincipalNovo.class));
+
         }
     }
 
@@ -227,6 +226,9 @@ public class CadPerfil extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
+            objConfig.atualizarStatus(CadPerfil.this, 5);
+            startActivity(new Intent(CadPerfil.this, MenuPrincipalNovo.class));
+            CadPerfil.this.finish();
         }
 
     }

@@ -50,7 +50,12 @@ public class MenuPrincipalNovo extends AppCompatActivity {
 
             Usuario objUsuario = new Usuario();
             objUsuario.carregar(this);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+            Bitmap bitmap = null;
+            if (objUsuario.getImagemPerfil() != null)
+                bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+            else
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+
             RoundImage roundImage = new RoundImage(bitmap);
 
             try {
