@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import helpers.SQLiteHelper;
 
 public class EventoDAO {
     private SQLiteDatabase db;
+    private Context context;
 
     private static final String TABELA = "tb_evento";
 
@@ -55,7 +57,7 @@ public class EventoDAO {
         db = dbH.getWritableDatabase();
     }
 
-    public void salvar(Evento objEvento){
+    public boolean salvar(Evento objEvento){
         ContentValues values = new ContentValues();
         values.put("cd_evento", objEvento.getCodigoEvento());
         values.put("ds_titulo_evento", objEvento.getTituloEvento());
@@ -65,11 +67,15 @@ public class EventoDAO {
         values.put("cd_usuario_inclusao", objEvento.getCodigoUsarioInclusao());
         values.put("dt_evento", objEvento.getDataEvento().toString());
         values.put("dt_inclusao", objEvento.getDataInclusao().toString());
-        values.put("dt_alteracao", objEvento.getDataAlteracao().toString());
         values.put("fg_evento_privado", objEvento.getEventoPrivado());
         values.put("ds_endereco", objEvento.getEndereco());
         values.put("ds_caminho_foto_capa", objEvento.getCaminhoFotoCapa());
-        db.insert(TABELA, null,values);
+        db.insert(TABELA, null, values);
+        SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT changes()");
+        if (mSqLiteStatement.simpleQueryForString() == "1")
+            return true;
+        else
+            return false;
     }
 
     public void deletarTudo()
@@ -95,11 +101,12 @@ public class EventoDAO {
                 objEvento.setCodigoUsarioInclusao(mCursor.getInt(5));
                 objEvento.setDataEvento(util.formataData(mCursor.getString(6)));
                 objEvento.setDataInclusao(util.formataData(mCursor.getString(7)));
-                objEvento.setDataAlteracao(util.formataData(mCursor.getString(8)));
+//                /objEvento.setDataAlteracao(util.formataData(mCursor.getString(8)));
                 objEvento.setEventoPrivado(mCursor.getInt(9));
                 objEvento.setEndereco(mCursor.getString(10));
                 objEvento.setCaminhoFotoCapa(mCursor.getString(11));
                 objEvento.setImagemFotoCapa(mCursor.getBlob(12));
+
 
                 mEventos.add(objEvento);
             }while (mCursor.moveToNext());

@@ -39,6 +39,15 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setOnMyLocationButtonClickListener(
+                new GoogleMap.OnMyLocationButtonClickListener() {
+                    @Override
+                    public boolean onMyLocationButtonClick() {
+                        mostrarMensagemGPSDesligado();
+                        return false;
+                    }
+                }
+        );
 
         util = new Util();
 
@@ -52,19 +61,8 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } else {
-            new AlertDialog.Builder(this)
-                    .setMessage("GPS Desligado! \nDeseja ligar o GPS ?")
-                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            startActivityForResult(intent, 1);
-                        }
-                    })
-                    .setNegativeButton("Não", null)
-                    .show();
+            mostrarMensagemGPSDesligado();
 
-            Toast.makeText(this, "GPS desligado", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -140,5 +138,19 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
                         .strokeWidth(2)
 
         );
+    }
+
+    public void mostrarMensagemGPSDesligado(){
+        new AlertDialog.Builder(this)
+                .setMessage("GPS Desligado! \nDeseja ligar o GPS ?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 1);
+                    }
+                })
+                .setNegativeButton("Não", null)
+                .show();
     }
 }

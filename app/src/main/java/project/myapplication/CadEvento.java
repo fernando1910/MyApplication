@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import database.ConfiguracoesDAO;
 import domain.Configuracoes;
@@ -318,7 +319,7 @@ public class CadEvento extends ActionBarActivity {
         protected Void doInBackground(Void... params) {
             try {
                 synchronized (this) {
-                    SalvarEvento();
+                    salvarEvento();
                 }
             }catch (Exception e)
             {
@@ -345,7 +346,7 @@ public class CadEvento extends ActionBarActivity {
         }
     }
 
-    public boolean SalvarEvento(){
+    public boolean salvarEvento(){
         Evento objEvento = new Evento();
         try {
             if (ValidarCampos()) {
@@ -362,6 +363,7 @@ public class CadEvento extends ActionBarActivity {
                 objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
 
                 objEvento.setDataEvento(calendar.getTime());
+                objEvento.setDataInclusao(new Date());
                 objEvento.setLatitude(nr_latitude);
                 objEvento.setLongitude(nr_longitude);
 
@@ -378,11 +380,11 @@ public class CadEvento extends ActionBarActivity {
                 }
 
             }
-            objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
+            //objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
 
-            objEvento.salvarEvento(this.getApplicationContext(), objEvento);
-            fg_criou = true;
-            return true;
+
+            fg_criou = objEvento.salvarEventoOnline(this);
+            return fg_criou;
         }catch (Exception e)
         {
             fg_criou = false;

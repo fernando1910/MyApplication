@@ -8,9 +8,11 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import database.EventoDAO;
 import helpers.HttpConnection;
+import project.myapplication.R;
 
 public class Evento {
 
@@ -171,6 +173,38 @@ public class Evento {
 
     //region Metodos comunicação com servidor Online
 
+    public boolean salvarEventoOnline(Context context){
+        try {
+            final String caminhoServidor = context.getResources().getString(R.string.padrao_evento);
+            final String jsonString = gerarEventoJSON();
+            final String[] mResposta = new String[1];
+            Thread thread = new Thread(){
+                public void run(){
+                    mResposta[0] =  HttpConnection.getSetDataWeb(caminhoServidor, "send-json", jsonString);
+
+                }
+            };
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return  false;
+            }
+
+            if (Integer.parseInt(mResposta[0]) != 0) {
+                this.cd_evento = Integer.parseInt(mResposta[0]);
+                this.salvarEventoLocal(context);
+            } else {
+                return false;
+            }
+        }
+        catch (Exception e){
+            return  false;
+        }
+        return true;
+    }
+
     public void enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
@@ -187,50 +221,39 @@ public class Evento {
         util.enviarServidor(url,jsonObject.toString(),"send-json");
     }
 
-    public void gerarEventoJSON(Evento objEvento, String url) throws InterruptedException {
+    public String gerarEventoJSON() throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        String dataEvento = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(objEvento.getDataEvento());
+        String dataEvento = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.getDataEvento());
 
 
         try {
-            jsonObject.put("ds_titulo_evento", objEvento.getTituloEvento());
-            jsonObject.put("ds_descricao", objEvento.getDescricao());
-            jsonObject.put("cd_usario_inclusao", objEvento.getCodigoUsarioInclusao());
+            jsonObject.put("ds_titulo_evento", this.getTituloEvento());
+            jsonObject.put("ds_descricao", this.getDescricao());
+            jsonObject.put("cd_usario_inclusao", this.getCodigoUsarioInclusao());
             jsonObject.put("dt_evento", dataEvento);
-            jsonObject.put("fg_evento_privado",objEvento.getEventoPrivado() );
-            jsonObject.put("ds_endereco", objEvento.getEndereco());
-            jsonObject.put("nr_latitude", objEvento.getLatitude());
-            jsonObject.put("nr_longitude", objEvento.getLongitude());
-            jsonObject.put("ds_foto_capa", objEvento.getFotoCapa());
+            jsonObject.put("fg_evento_privado",this.getEventoPrivado() );
+            jsonObject.put("ds_endereco", this.getEndereco());
+            jsonObject.put("nr_latitude", this.getLatitude());
+            jsonObject.put("nr_longitude", this.getLongitude());
+            jsonObject.put("ds_foto_capa", this.getFotoCapa());
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        enviarEventoServidor(url, jsonObject.toString(),"send-json" );
+        return jsonObject.toString();
     }
 
-        public void salvarEvento(Context context, Evento objEvento) {
-            EventoDAO eventoDAO = new EventoDAO(context);
-            eventoDAO.salvar(objEvento);
-        }
+    public void salvarEventoLocal(Context context) {
+        EventoDAO eventoDAO = new EventoDAO(context);
+        eventoDAO.salvar(this);
+    }
 
     public String enviarEventoServidor(final String url,final String data, final String comando) throws InterruptedException {
         final String[] resposta = new String[1];
-        Thread thread = new Thread(){
-            public void run(){
-                resposta[0] =  HttpConnection.getSetDataWeb(url, comando, data);
 
-            }
-        };
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return resposta[0];
     }
 
@@ -288,6 +311,13 @@ public class Evento {
 
         return objEvento;
     }
+
+
+    public List<Evento> selecionarTodosEventosLocal(Context context){
+        EventoDAO eventoDAO = new EventoDAO(context);
+        return eventoDAO.selecionarTodosEventos();
+    }
+
 
     //endregion
 

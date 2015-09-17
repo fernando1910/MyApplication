@@ -39,6 +39,8 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_painel_evento, container, false);
+        objEvento = new Evento();
+
         rvEvento = (RecyclerView) view.findViewById(R.id.rvEvento);
         rvEvento.setHasFixedSize(true);
         rvEvento.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -63,7 +65,15 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvEvento.setLayoutManager(linearLayoutManager);
-        new Carregar().execute();
+        eventos = objEvento.selecionarTodosEventosLocal(getContext());
+        for (Evento objEvento: eventos) {
+            objEvento.setUrlFoto(getActivity().getString(R.string.caminho_foto_capa_evento) + objEvento.getCodigoEvento() +".png");
+        }
+        adapter =  new EventoAdapter(getActivity(), eventos);
+        adapter.setRecyclerViewOnClickListenerHack(PainelEvento.this);
+        rvEvento.setAdapter(adapter);
+
+        //new Carregar().execute();
 
         return view;
     }
@@ -97,7 +107,7 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
             {
                 synchronized (this)
                 {
-                    objEvento = new Evento();
+
                     jsonString =  objEvento.carregarEventos(getString(R.string.padrao_evento),null);
 
                     eventos = new ArrayList<>();
