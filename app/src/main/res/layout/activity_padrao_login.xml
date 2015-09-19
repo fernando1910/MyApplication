@@ -2,69 +2,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/LightGrey"
     android:orientation="vertical"
-    android:background="#FFFFFF"
     tools:context="project.myapplication.CadPerfil">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="310dp"
-        android:layout_height="310dp"
-        android:layout_gravity="center"
-        android:padding="5dp" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_marginBottom"
+        android:layout_marginLeft="@dimen/layout_marginLeft"
+        android:layout_marginRight="@dimen/layout_marginRight"
+        android:layout_marginTop="@dimen/layout_marginTop"
+        android:layout_weight="1"
+        android:background="@color/White"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Você esta quase lá! \nSelecione uma foto para seu perfil e informe seu nome para exibição."
+            android:textIsSelectable="false"
+            android:textSize="20dp" />
 
 
         <ImageButton
-            android:text="Select Photo"
+            android:layout_marginTop="20dp"
             android:id="@+id/btnSelectPhoto"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:scaleType="centerCrop"
-            android:background="#FFFFFF"
+            android:layout_width="275dp"
+            android:layout_height="275dp"
             android:layout_gravity="center"
+            android:background="#FFFFFF"
             android:onClick="onClick_Avancar"
+            android:scaleType="centerCrop"
+            android:text="Select Photo"
 
             />
 
 
+        <EditText
+            android:id="@+id/etNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome"
+            android:inputType="textPersonName"
+            android:padding="20dp"
+
+            />
     </LinearLayout>
 
-
-    <EditText
-        android:padding="20dp"
-        android:id="@+id/etNome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nome"
-        android:inputType="textPersonName"
-
-        />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:weightSum="1">
-
-     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_weight="0"
         android:gravity="bottom|center">
 
         <Button
+            android:id="@+id/btAvancar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btAvancar"
-            android:text="Avançar"
-            android:onClick="onClick_Avancar"
             android:background="#255E69"
-            android:textColor="#D8E9EB"
-             />
+            android:onClick="onClick_Avancar"
+            android:text="Avançar"
+            android:textColor="#D8E9EB" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 
 </LinearLayout>
