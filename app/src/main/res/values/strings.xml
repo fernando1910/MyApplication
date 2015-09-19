@@ -75,6 +75,8 @@
         <item>+55</item>
     </string-array>
 
+    <string name="wsBlueDate">http://www.fiesta1.hol.es/wsBlueDate.php</string>
+
     <!-- Tela de Criação de Perfil / Login (padraoLogin) -->
     <string name="padrao_login">http://www.fiesta1.hol.es/CadUsuario.php</string>
     <string name="padrao_telefone">http://www.fiesta1.hol.es/CadTelefone.php</string>

@@ -100,8 +100,16 @@ public class Contatos {
                         output.append("\n Phone number:" + phoneNumber);
 
                         if (Patterns.PHONE.matcher(phoneNumber).matches()) {
-                            final String finalPhoneNumber = phoneNumber;
-                            if (finalPhoneNumber.length() > 8) {
+                            phoneNumber = phoneNumber
+                                    .replace("-","")
+                                    .replace(" ","")
+                                    .replace("+","")
+                                    .replace("/","")
+                                    .replace("(","")
+                                    .replace(")","");
+
+                            if (phoneNumber.length() > 7) {
+                                String finalPhoneNumber = phoneNumber.substring((phoneNumber.length() - 8), phoneNumber.length());
                                 arrayNumeros.add(finalPhoneNumber);
                             }
                         }
@@ -130,7 +138,7 @@ public class Contatos {
 
                 Util util = new Util();
                 String jsonString;
-                jsonString = util.enviarServidor(url,jsonObject.toString(),"send-json");
+                jsonString = util.enviarServidor(url,jsonObject.toString(),"atualizarContatos");
                 JSONArray jsonArrayResultado = new JSONArray(jsonString);
                 JSONObject jsonObjectResultado;
                 ContatoDAO contatoDAO = new ContatoDAO(context);
@@ -145,22 +153,20 @@ public class Contatos {
 
                 }
 
-            } catch (JSONException e) {
-                e.printStackTrace(); // Erro JSON
-            } catch (InterruptedException e) {
-                e.printStackTrace(); // Erro enviar servidor
+            } catch (JSONException | InterruptedException e) {
+                e.printStackTrace();
             }
 
         }
 
     }
 
-    public List<Contatos> retonarContatos(Context context)
-    {
+    public List<Contatos> retonarContatos(Context context){
         List<Contatos> list = new ArrayList<>();
         ContatoDAO contatoDAO = new ContatoDAO(context);
         list = contatoDAO.Carregar();
         return  list;
     }
+
     //endregion
 }

@@ -171,7 +171,7 @@ public class CadContato extends AppCompatActivity{
 
             try {
                 jsonObject.put("convidados", jsonArray);
-                util.enviarServidor(getString(R.string.padrao_convidar), jsonObject.toString(), "send-json");
+                util.enviarServidor(getString(R.string.wsBlueDate), jsonObject.toString(), "send-json");
 
             } catch (JSONException e) {
                 e.printStackTrace();

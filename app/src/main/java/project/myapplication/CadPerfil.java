@@ -189,8 +189,7 @@ public class CadPerfil extends Activity {
                 objUsuario.setCaminhoFoto(imgPerfil.getPath());
             }
             objUsuario.setNome(etNome.getText().toString());
-            objUsuario.salvarPerfilOnline(getApplicationContext());
-            return true;
+            return objUsuario.salvarPerfilOnline(getApplicationContext());
         } catch (Exception e) {
             return false;
         }
@@ -226,9 +225,14 @@ public class CadPerfil extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
-            objConfig.atualizarStatus(CadPerfil.this, 5);
-            startActivity(new Intent(CadPerfil.this, MenuPrincipalNovo.class));
-            CadPerfil.this.finish();
+            if (fg_criou) {
+                objConfig.atualizarStatus(CadPerfil.this, 5);
+                startActivity(new Intent(CadPerfil.this, MenuPrincipalNovo.class));
+                CadPerfil.this.finish();
+            }
+            else{
+                Toast.makeText(getApplication(), "Lamentamos ocorreu um erro interno", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

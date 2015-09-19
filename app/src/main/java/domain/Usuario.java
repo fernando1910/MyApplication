@@ -169,13 +169,13 @@ public class Usuario {
     public boolean salvarPerfilOnline(Context context){
         try {
 
-            final String caminhoServidor = context.getResources().getString(R.string.padrao_atualiza_usuario);
+            final String caminhoServidor = context.getResources().getString(R.string.wsBlueDate);
             final String jsonString = gerarUsuarioJSON();
             final String[] resposta = new String[1];
             try {
                 Thread thread = new Thread(new Runnable() {
                     public void run() {
-                        resposta[0] = HttpConnection.getSetDataWeb(caminhoServidor, "send-json", jsonString);
+                        resposta[0] = HttpConnection.getSetDataWeb(caminhoServidor, "inserirUsuario", jsonString);
                     }
                 });
                 thread.start();
@@ -184,10 +184,10 @@ public class Usuario {
                 e.printStackTrace();
             }
 
-            if (Integer.parseInt(resposta[0]) != 0) {
+                if (Integer.parseInt(resposta[0]) != 0) {
                 this.cd_usuario = Integer.parseInt(resposta[0]);
                 this.atualizar(context);
-
+                return true;
             } else {
                 return false;
             }
@@ -196,7 +196,6 @@ public class Usuario {
             return false;
         }
 
-        return true;
     }
 
     //endregion
