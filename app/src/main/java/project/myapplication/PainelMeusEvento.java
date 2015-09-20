@@ -18,7 +18,7 @@ import domain.Evento;
 import interfaces.RecyclerViewOnClickListenerHack;
 
 
-public class PainelEvento extends Fragment implements RecyclerViewOnClickListenerHack {
+public class PainelMeusEvento extends Fragment implements RecyclerViewOnClickListenerHack {
 
     private Evento objEvento;
     private ProgressDialog progressDialog;
@@ -63,7 +63,7 @@ public class PainelEvento extends Fragment implements RecyclerViewOnClickListene
             objEvento.setUrlFoto(getActivity().getString(R.string.caminho_foto_capa_evento) + objEvento.getCodigoEvento() +".png");
         }
         adapter =  new EventoAdapter(getActivity(), eventos);
-        adapter.setRecyclerViewOnClickListenerHack(PainelEvento.this);
+        adapter.setRecyclerViewOnClickListenerHack(PainelMeusEvento.this);
         rvEvento.setAdapter(adapter);
 
         return view;

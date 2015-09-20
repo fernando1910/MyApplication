@@ -63,7 +63,7 @@
             android:label="@string/title_activity_padrao_ranking" >
         </activity>
         <activity
-            android:name=".PainelMeusEventos"
+            android:name=".PainelEventosPadrao"
             android:label="@string/title_activity_padrao_meus_eventos" >
         </activity>
         <activity

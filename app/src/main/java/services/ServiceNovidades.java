@@ -71,7 +71,7 @@ public class ServiceNovidades extends Service {
 
                     String JSONString;
                     JSONString =  util.enviarServidor(getResources().getString(R.string.wsBlueDate) , jsonObject.toString(), "buscarNovidades");
-                    // PRECISA IMPREMENTAR
+
                     ativo = false;
                 }
             }

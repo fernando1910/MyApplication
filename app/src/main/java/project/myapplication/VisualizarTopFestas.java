@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class VisualizarTopFestas extends Fragment {
     private List<Evento> mItems;
     private CustomListViewRanking mAdapter;
     private ProgressDialog mProgressDialog;
+    private ProgressBar mProgressBar;
     private Evento objEvento;
 
     @Override
@@ -27,9 +29,10 @@ public class VisualizarTopFestas extends Fragment {
 
         View view =inflater.inflate(R.layout.fragment_padrao_top_festas, container, false);
         mListView = (ListView) view.findViewById(R.id.lvTopFestas);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.pbFooterLoading);
         objEvento = new Evento();
 
-        //new listarEventos().execute();
+        new listarEventos().execute();
         return view;
     }
 
@@ -37,16 +40,18 @@ public class VisualizarTopFestas extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(getContext());
-            mProgressDialog = ProgressDialog.show(getContext(), "Carregando...",
-                    "Por favor aguarde...", false, false);
+            mProgressBar.setVisibility(View.VISIBLE);
+            //mProgressDialog = new ProgressDialog(getContext());
+            //mProgressDialog = ProgressDialog.show(getContext(), "Carregando...",
+            //        "Por favor aguarde...", false, false);
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             try {
-                mProgressDialog.dismiss();
+                mProgressBar.setVisibility(View.INVISIBLE);
+                //mProgressDialog.dismiss();
                 mListView.setAdapter(mAdapter);
             }catch (Exception ex){
 
@@ -61,7 +66,8 @@ public class VisualizarTopFestas extends Fragment {
                     mItems  = objEvento.selecionarTopFestas(getContext());
                     mAdapter = new CustomListViewRanking(getContext(),mItems);
                 }catch (Exception e){
-                    mProgressDialog.dismiss();
+                    //mProgressDialog.dismiss();
+
                 }
             }
             return null;

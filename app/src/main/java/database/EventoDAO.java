@@ -33,6 +33,7 @@ public class EventoDAO {
     private static String fg_evento_privado = "fg_evento_privado";
     private static String ds_endereco ="ds_endereco";
     private static String ds_caminho_foto_capa ="ds_caminho_foto_capa";
+    private static String ind_classificacao = "ind_classificacao";
 
     public static final String colunas[] = {
             EventoDAO.cd_evento,
@@ -46,7 +47,8 @@ public class EventoDAO {
             EventoDAO.dt_alteracao,
             EventoDAO.fg_evento_privado,
             EventoDAO.ds_endereco,
-            EventoDAO.ds_caminho_foto_capa
+            EventoDAO.ds_caminho_foto_capa,
+            EventoDAO.ind_classificacao
     };
 
     //endregion
@@ -130,5 +132,14 @@ public class EventoDAO {
             }while (mCursor.moveToNext());
         }
         return mEventos;
+    }
+
+    public String classificarEvento(int cd_evento, float ind_classificacao){
+        ContentValues values = new ContentValues();
+        values.put(EventoDAO.ind_classificacao, ind_classificacao);
+        db.update(TABELA,values,"cd_evento = ?", new String[]{String.valueOf(ind_classificacao)});
+        SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
+        return mSqLiteStatement.toString();
+
     }
 }

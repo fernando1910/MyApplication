@@ -131,7 +131,7 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                    //Toast.makeText(VisulizarEvento.this, String.valueOf(rating), Toast.LENGTH_SHORT).show();
+
                 }
             });
 

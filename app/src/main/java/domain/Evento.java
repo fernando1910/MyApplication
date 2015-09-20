@@ -343,7 +343,25 @@ public class Evento {
         return  mEventos;
     }
 
+    public boolean classificarEventoOnline(Context context,int codigoEvento, float classificacaoEvento, int codigoUsuario) throws JSONException, InterruptedException, Exception {
+        JSONObject jsonObject = new JSONObject();
+        Util util = new Util();
 
+        jsonObject.put("cd_evento", String.valueOf(codigoEvento));
+        jsonObject.put("ind_classificacao", String.valueOf(classificacaoEvento));
+        jsonObject.put("codigoUsuario", String.valueOf(codigoUsuario));
+        String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonObject.toString(),"classificarEvento");
+        this.classificarEventoLocal(context, codigoEvento, classificacaoEvento);
+
+
+        return true;
+    }
+
+    public boolean classificarEventoLocal(Context context, int codigoEvento, float classificacaoEvento){
+        EventoDAO eventoDAO = new EventoDAO(context);
+        String mRetorno = eventoDAO.classificarEvento(codigoEvento,classificacaoEvento);
+        return  true;
+    }
     //endregion
 
 }

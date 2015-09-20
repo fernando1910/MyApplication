@@ -118,14 +118,14 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         mFragment = Painel.newInstance();
                                         break;
                                     case 1:
-                                        mFragment = new PainelEvento();
+                                        mFragment = new PainelTodosEventos();
                                         break;
                                     case 2:
                                         CaldroidFragment mCaldroidFragment = new CaldroidFragment();
                                         final CaldroidListener mCaldroidListener = new CaldroidListener() {
                                             @Override
                                             public void onSelectDate(Date date, View view) {
-                                                Intent intent = new Intent(MenuPrincipalNovo.this, PainelMeusEventos.class);
+                                                Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
                                                 intent.putExtra("mDataCalendario", date.toString());
                                                 startActivity(intent);
                                             }

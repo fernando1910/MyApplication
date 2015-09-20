@@ -23,7 +23,7 @@ import domain.Evento;
 import interfaces.RecyclerViewOnClickListenerHack;
 
 
-public class PainelMeusEventos extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
+public class PainelEventosPadrao extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
 
     private ProgressDialog progressDialog;
     private RecyclerView rvEvento;
@@ -66,7 +66,7 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
 
             //new Carregar().execute();
         } catch (Exception ex) {
-            Toast.makeText(PainelMeusEventos.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(PainelEventosPadrao.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -120,15 +120,15 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
             intent.putExtra("codigoEvento", codigoEvento);
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(PainelMeusEventos.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(PainelEventosPadrao.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public class Carregar extends AsyncTask<Void, Integer, Void> {
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(PainelMeusEventos.this);
-            progressDialog = ProgressDialog.show(PainelMeusEventos.this, "Carregando...",
+            progressDialog = new ProgressDialog(PainelEventosPadrao.this);
+            progressDialog = ProgressDialog.show(PainelEventosPadrao.this, "Carregando...",
                     "Carregando seus eventos, por favor aguarde...", false, false);
         }
 
@@ -152,8 +152,8 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
                             evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
                             evento.setUrlFoto(getString(R.string.caminho_foto_capa_evento) + evento.getCodigoEvento() + ".png");
                             eventos.add(evento);
-                            adapter = new EventoAdapter(PainelMeusEventos.this, eventos);
-                            adapter.setRecyclerViewOnClickListenerHack(PainelMeusEventos.this);
+                            adapter = new EventoAdapter(PainelEventosPadrao.this, eventos);
+                            adapter.setRecyclerViewOnClickListenerHack(PainelEventosPadrao.this);
 
 
                         }
