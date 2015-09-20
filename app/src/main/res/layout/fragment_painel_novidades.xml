@@ -2,31 +2,102 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/LightGrey"
     android:orientation="vertical"
     tools:context="project.myapplication.PainelNovidades">
 
-
-    <TextView
-        android:id="@+id/tvComentarios"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginTop="10dip"
-        android:layout_toRightOf="@+id/ivComentario"
-        android:scaleType="centerInside"
-        android:text="@string/texto_padrao_aleracoes_evento"
-        android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+        android:layout_marginBottom="@dimen/layout_marginBottom"
+        android:layout_marginLeft="@dimen/layout_marginLeft"
+        android:layout_marginRight="@dimen/layout_marginRight"
+        android:layout_marginTop="@dimen/layout_marginTop"
+        android:background="@color/White"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
-    <ImageView
-        android:id="@+id/ivComentario"
-        android:layout_width="@dimen/padrao_icone_painel"
-        android:layout_height="@dimen/padrao_icone_painel"
-        android:layout_alignParentLeft="true"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="3dip"
-        android:layout_marginRight="3dip"
-        android:scaleType="centerInside"></ImageView>
+        <ImageButton
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_comentario_evento" />
+
+        <TextView
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Confira seus convites"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_marginBottom"
+        android:layout_marginLeft="@dimen/layout_marginLeft"
+        android:layout_marginRight="@dimen/layout_marginRight"
+        android:layout_marginTop="@dimen/layout_marginTop"
+        android:background="@color/White"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Alterações importantes"
+
+            />
+
+        <ImageButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_alteracoes_evento" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_marginBottom"
+        android:layout_marginLeft="@dimen/layout_marginLeft"
+        android:layout_marginRight="@dimen/layout_marginRight"
+        android:layout_marginTop="@dimen/layout_marginTop"
+        android:background="@color/White"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <ImageButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_comentario_evento" />
+
+        <TextView
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Novos comentarios"
+
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import domain.Usuario;
 import domain.Util;
+import project.myapplication.R;
 
 
 public class ServiceNovidades extends Service {
@@ -54,7 +57,6 @@ public class ServiceNovidades extends Service {
         public Worker(int startId)
         {
             util = new Util();
-            objUsuario = new Usuario();
             this.startId = startId;
         }
 
@@ -62,8 +64,14 @@ public class ServiceNovidades extends Service {
             try
             {
                 if (ativo) {
-                    String retorno;
-                    retorno =  util.enviarServidor("", "", "");// PRECISA IMPREMENTAR
+                    objUsuario = new Usuario();
+                    objUsuario.carregar(getApplicationContext());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("cd_usuario", objUsuario.getCodigoUsuario());
+
+                    String JSONString;
+                    JSONString =  util.enviarServidor(getResources().getString(R.string.wsBlueDate) , jsonObject.toString(), "buscarNovidades");
+                    // PRECISA IMPREMENTAR
                     ativo = false;
                 }
             }

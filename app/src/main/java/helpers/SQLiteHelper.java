@@ -21,12 +21,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     };
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"" +
             " CREATE TABLE tb_configuracoes " +
-            " (fg_permite_push INTEGER DEFAULT 0 , " +
-            " fg_permite_alarme INTEGER DEFAULT 0, " +
-            " fg_notifica_comentario INTEGER DEFAULT 1, " +
-            " fg_notifica_mudanca INTEGER DEFAULT 1, " +
-            " fg_telefone_visivel INTEGER DEFAULT 0 , " +
-            " ind_status_perfil INTEGER NOT NULL)",
+            " (fg_permite_push TINYINT DEFAULT 0 , " +
+            " fg_permite_alarme TINYINT DEFAULT 0, " +
+            " fg_notifica_comentario TINYINT DEFAULT 1, " +
+            " fg_notifica_mudanca TINYINT DEFAULT 1, " +
+            " fg_telefone_visivel TINYINT DEFAULT 0 , " +
+            " ind_status_perfil TINYINT NOT NULL)",
 
             "CREATE TABLE tb_usuario " +
                     "(cd_usuario integer primary key , " +
@@ -54,7 +54,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "fg_evento_privado INTEGER," +
                     "ds_endereco TEXT, " +
                     "ds_caminho_foto_capa TEXT," +
-                    "img_foto_capa BLOB  )"
+                    "img_foto_capa BLOB, " +
+                    "ind_classificacao FLOAT, " +
+                    "fg_ranking_top_festa TINYINT, " +
+                    "fg_ranking_comentarios TINYINT, " +
+                    "fg_ranking_convidados TINYINT  )"
 
     };
 

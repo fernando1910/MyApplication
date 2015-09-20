@@ -6,6 +6,7 @@
         android:left="-2dp"
         android:right="-2dp"
         android:top="-2dp">
+        <color android:color="@color/White"/>
         <shape android:shape="rectangle" >
             <stroke
                 android:width="2dp"

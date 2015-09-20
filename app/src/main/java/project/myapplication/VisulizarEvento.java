@@ -40,42 +40,43 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_padrao_visulizar_evento);
-
-
-        //region Vinculação das variaveis com o layout XML
-        ivEvento = (ImageView)findViewById(R.id.ivEvento);
-        tvTituloEvento = (TextView)findViewById(R.id.tvTituloEvento);
-        tvDescricaoEvento = (TextView)findViewById(R.id.tvDescricaoEvento);
-        mFloatingActionMenu = (FloatingActionMenu)findViewById(R.id.menu);
-        mRatingBar = (RatingBar)findViewById(R.id.ratingBar);
-
-        collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle("Seu evento");
-
-        mToolbar = (Toolbar) findViewById(R.id.tb_main);
-        setSupportActionBar(mToolbar);
-
         try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(false);
-        }catch (Exception e){
-            Toast.makeText(VisulizarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+            setContentView(R.layout.activity_padrao_visulizar_evento);
 
-        mFloatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean b) {
 
+            //region Vinculação das variaveis com o layout XML
+            ivEvento = (ImageView) findViewById(R.id.ivEvento);
+            tvTituloEvento = (TextView) findViewById(R.id.tvTituloEvento);
+            tvDescricaoEvento = (TextView) findViewById(R.id.tvDescricaoEvento);
+            mFloatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu);
+            mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+            collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+            collapsingToolbarLayout.setTitle("Seu evento");
+
+            mToolbar = (Toolbar) findViewById(R.id.tb_main);
+            setSupportActionBar(mToolbar);
+
+            try {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeButtonEnabled(false);
+            } catch (Exception e) {
+                Toast.makeText(VisulizarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        });
 
-        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
-        fab1.setOnClickListener(this);
-        fab2.setOnClickListener(this);
-        fab3.setOnClickListener(this);
+            mFloatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+                @Override
+                public void onMenuToggle(boolean b) {
+
+                }
+            });
+
+            FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+            FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+            FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+            fab1.setOnClickListener(this);
+            fab2.setOnClickListener(this);
+            fab3.setOnClickListener(this);
 
 /*
 
@@ -83,39 +84,37 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
         tvEndereco = (TextView)findViewById(R.id.tvEndereco);
         tvPrivado = (TextView)findViewById(R.id.tvPrivado);
 */
-        //endregion
+            //endregion
 
-        util = new Util();
+            util = new Util();
 
-  //      tvEndereco.setCompoundDrawables(null,null,util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()),null);
+            //      tvEndereco.setCompoundDrawables(null,null,util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()),null);
 
-        Bundle parameters = getIntent().getExtras();
-        if(parameters != null)
-        {
-            codigoEvento =  parameters.getInt("codigoEvento");
-            final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
-            Thread thread = new Thread(){
-                public void run()
-                {
-                    try {
-                        ivEvento.setImageDrawable(Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            Bundle parameters = getIntent().getExtras();
+            if (parameters != null) {
+                codigoEvento = parameters.getInt("codigoEvento");
+                final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
+                Thread thread = new Thread() {
+                    public void run() {
+                        try {
+                            ivEvento.setImageDrawable(Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
 
+                        }
                     }
+                };
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            };
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            objEvento = new Evento();
-            objEvento = objEvento.carregar(String.valueOf(codigoEvento),getString(R.string.padrao_evento));
-            tvTituloEvento.setText(objEvento.getTituloEvento());
-            tvDescricaoEvento.setText(objEvento.getDescricao());
+                objEvento = new Evento();
+                objEvento = objEvento.carregarOnline(String.valueOf(codigoEvento), this);
+                tvTituloEvento.setText(objEvento.getTituloEvento());
+                tvDescricaoEvento.setText(objEvento.getDescricao());
             /*
             tvEndereco.setText(objEvento.getEndereco());
             if (objEvento.getEventoPrivado() == 1)
@@ -124,19 +123,21 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
                 tvPrivado.setText("Este evento é publico");
             */
 
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
 
-        }
-
-        mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                //Toast.makeText(VisulizarEvento.this, String.valueOf(rating), Toast.LENGTH_SHORT).show();
             }
-        });
+
+            mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    //Toast.makeText(VisulizarEvento.this, String.valueOf(rating), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }catch (Exception ex){
+            Toast.makeText(VisulizarEvento.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
 
     }

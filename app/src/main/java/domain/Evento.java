@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class Evento {
         protected final String caminhoSevidor = "";
         private String ds_url_foto;
         private byte[] img_foto_capa;
+        private float ind_classificacao;
 
     //endregion
 
@@ -169,18 +171,26 @@ public class Evento {
             this.img_foto_capa = img_foto_capa;
         }
 
+    public float getClassificacao() {
+        return ind_classificacao;
+    }
+
+    public void setClassificacao(float vlr_classificacao) {
+        this.ind_classificacao = vlr_classificacao;
+    }
+
     //endregion
 
     //region Metodos comunicação com servidor Online
 
     public boolean salvarEventoOnline(Context context){
         try {
-            final String caminhoServidor = context.getResources().getString(R.string.padrao_evento);
+            final String caminhoServidor = context.getResources().getString(R.string.wsBlueDate);
             final String jsonString = gerarEventoJSON();
             final String[] mResposta = new String[1];
             Thread thread = new Thread(){
                 public void run(){
-                    mResposta[0] =  HttpConnection.getSetDataWeb(caminhoServidor, "send-json", jsonString);
+                    mResposta[0] =  HttpConnection.getSetDataWeb(caminhoServidor, "inserirEvento", jsonString);
 
                 }
             };
@@ -195,6 +205,7 @@ public class Evento {
             if (Integer.parseInt(mResposta[0]) != 0) {
                 this.cd_evento = Integer.parseInt(mResposta[0]);
                 this.salvarEventoLocal(context);
+                return true;
             } else {
                 return false;
             }
@@ -202,7 +213,7 @@ public class Evento {
         catch (Exception e){
             return  false;
         }
-        return true;
+
     }
 
     public void enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException {
@@ -238,6 +249,13 @@ public class Evento {
             jsonObject.put("nr_longitude", this.getLongitude());
             jsonObject.put("ds_foto_capa", this.getFotoCapa());
 
+            if (this.getDataInclusao() != null){
+                jsonObject.put("dt_inclusao", this.getDataInclusao());
+            }
+            if (this.getDataAlteracao() != null){
+                jsonObject.put("dt_alteracao", this.getDataAlteracao());
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,37 +269,8 @@ public class Evento {
         eventoDAO.salvar(this);
     }
 
-    public String enviarEventoServidor(final String url,final String data, final String comando) throws InterruptedException {
-        final String[] resposta = new String[1];
 
-        return resposta[0];
-    }
-
-    public String carregarEventos(String url, String data) throws InterruptedException {
-        JSONObject jsonObject = new JSONObject();
-        try {
-
-            jsonObject.put("cd_evento", data);
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
-        return enviarEventoServidor(url,jsonObject.toString(),null);
-    }
-
-
-    public String carregarEventoUnico(String url, String data) throws InterruptedException {
-        JSONObject jsonObject = new JSONObject();
-        try {
-
-            jsonObject.put("cd_evento", data);
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
-        return enviarEventoServidor(url,jsonObject.toString(),"get-json");
-    }
-
-
-    public Evento carregar(String codigoEvento, String url)
+    public Evento carregarOnline(String codigoEvento, Context context)
     {
         Evento objEvento = new Evento();
         Util util = new Util();
@@ -289,7 +278,15 @@ public class Evento {
 
         String jsonString;
         try {
-            jsonString = carregarEventoUnico(url, codigoEvento);
+            JSONObject jsonObjectEnviar = new JSONObject();
+            try {
+
+                jsonObjectEnviar.put("cd_evento", codigoEvento);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+
+            jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObjectEnviar.toString(), "selecionarEvento");
             JSONArray jsonArray = new JSONArray(jsonString);
             jsonObject = new JSONObject(jsonArray.getString(0));
 
@@ -312,10 +309,38 @@ public class Evento {
         return objEvento;
     }
 
+    public Evento carregarLocal(Context context, int codigoEvento){
+        EventoDAO eventoDAO = new EventoDAO(context);
+        return eventoDAO.selecionar(codigoEvento);
+
+    }
+
 
     public List<Evento> selecionarTodosEventosLocal(Context context){
         EventoDAO eventoDAO = new EventoDAO(context);
         return eventoDAO.selecionarTodosEventos();
+    }
+
+    public List<Evento> selecionarTopFestas(Context context) throws InterruptedException, JSONException, NullPointerException {
+        List<Evento> mEventos = new ArrayList<>();
+
+        Util util = new Util();
+        String jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), null, "selecionarTopFestas");
+        JSONArray jsonArrayResultado = new JSONArray(jsonString);
+        JSONObject jsonObjectResultado;
+
+        for (int i = 0 ; i < jsonArrayResultado.length(); i++) {
+            jsonObjectResultado = new JSONObject(jsonArrayResultado.getString(i));
+            Evento mEvento = new Evento();
+            mEvento.setCodigoEvento(Integer.parseInt(jsonObjectResultado.getString("cd_evento")));
+            mEvento.setTituloEvento(jsonObjectResultado.getString("ds_titulo_evento"));
+            mEvento.setClassificacao(3);
+            mEventos.add(mEvento);
+
+        }
+
+
+        return  mEventos;
     }
 
 

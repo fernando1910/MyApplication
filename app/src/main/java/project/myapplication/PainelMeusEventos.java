@@ -64,7 +64,7 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
             rvEvento.setLayoutManager(linearLayoutManager);
 
 
-            new Carregar().execute();
+            //new Carregar().execute();
         } catch (Exception ex) {
             Toast.makeText(PainelMeusEventos.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -137,7 +137,7 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
             try {
                 synchronized (this) {
                     Evento objEvento = new Evento();
-                    String jsonString = objEvento.carregarEventos(getString(R.string.padrao_evento), null);
+                    String jsonString = null;
 
                     eventos = new ArrayList<>();
 
@@ -162,7 +162,7 @@ public class PainelMeusEventos extends AppCompatActivity implements RecyclerView
                         e.printStackTrace();
                     }
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;

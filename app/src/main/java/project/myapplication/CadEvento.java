@@ -42,7 +42,7 @@ import domain.Util;
 
 public class CadEvento extends ActionBarActivity {
     //region Variaveis
-    private DateFormat formatDate  = DateFormat.getDateInstance();
+    private DateFormat formatDate = DateFormat.getDateInstance();
     private DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
     private Calendar calendar = Calendar.getInstance();
     private TextView tvData, tvHora, tvEndereco;
@@ -50,12 +50,14 @@ public class CadEvento extends ActionBarActivity {
     private EditText etTitulo, etDescricao;
     private RadioGroup rgStatusEvento;
     private Util util;
-    private RadioButton rbPublic,rbPrivate;
+    private RadioButton rbPublic, rbPrivate;
     private double nr_latitude, nr_longitude;
     private Configuracoes objConf;
     private Uri imgEvento;
     private Bitmap imgRetorno;
     private boolean fg_criou = true;
+    private ProgressDialog progressDialog;
+
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +65,20 @@ public class CadEvento extends ActionBarActivity {
         setContentView(R.layout.activity_padrao_criar_evento);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    //region Vincular variaveis com interface
-        tvData = (TextView)findViewById(R.id.tvData);
-        tvHora = (TextView)findViewById(R.id.tvHora);
-        btData = (ImageButton)findViewById(R.id.btDataPicker);
-        etTitulo = (EditText)findViewById(R.id.etTitulo);
-        etDescricao = (EditText)findViewById(R.id.etDescricao);
-        tvEndereco = (TextView)findViewById(R.id.tvEndereco);
-        rgStatusEvento = (RadioGroup)findViewById(R.id.rgStatusEvento);
-        ibTimePicker = (ImageButton)findViewById(R.id.ibTimePicker);
-        rbPublic = (RadioButton)findViewById(R.id.rbPublic);
-        rbPrivate = (RadioButton)findViewById(R.id.rbPrivate);
-        ibEndereco = (ImageButton)findViewById(R.id.ibEndereco);
-        ibFotoCapa = (ImageButton)findViewById(R.id.ibFotoCapa);
-    //endregion
+        //region Vincular variaveis com interface
+        tvData = (TextView) findViewById(R.id.tvData);
+        tvHora = (TextView) findViewById(R.id.tvHora);
+        btData = (ImageButton) findViewById(R.id.btDataPicker);
+        etTitulo = (EditText) findViewById(R.id.etTitulo);
+        etDescricao = (EditText) findViewById(R.id.etDescricao);
+        tvEndereco = (TextView) findViewById(R.id.tvEndereco);
+        rgStatusEvento = (RadioGroup) findViewById(R.id.rgStatusEvento);
+        ibTimePicker = (ImageButton) findViewById(R.id.ibTimePicker);
+        rbPublic = (RadioButton) findViewById(R.id.rbPublic);
+        rbPrivate = (RadioButton) findViewById(R.id.rbPrivate);
+        ibEndereco = (ImageButton) findViewById(R.id.ibEndereco);
+        ibFotoCapa = (ImageButton) findViewById(R.id.ibFotoCapa);
+        //endregion
 
         atualizarData();
         atualizarHora();
@@ -85,7 +87,7 @@ public class CadEvento extends ActionBarActivity {
         objConf = new Configuracoes();
 
 
-        btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1),getResources()));
+        btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1), getResources()));
         ibTimePicker.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_clock), getResources()));
         ibEndereco.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()));
 
@@ -101,13 +103,13 @@ public class CadEvento extends ActionBarActivity {
         int height = metrics.heightPixels;
 
         ibFotoCapa.getLayoutParams().width = width;
-        ibFotoCapa.getLayoutParams().height = (int) Math.ceil (height / 2.5);
+        ibFotoCapa.getLayoutParams().height = (int) Math.ceil(height / 2.5);
 
     }
 
     //region Validações de Imagens
-    public void selecionarFoto(){
-        final CharSequence[] options = {"Tirar foto", "Escolher da Galeria","Cancelar" };
+    public void selecionarFoto() {
+        final CharSequence[] options = {"Tirar foto", "Escolher da Galeria", "Cancelar"};
         AlertDialog.Builder builder = new AlertDialog.Builder(CadEvento.this);
         builder.setTitle("Adcionar Foto");
 
@@ -147,7 +149,7 @@ public class CadEvento extends ActionBarActivity {
         builder.show();
     }
 
-    public void cortarFoto(Uri selectedImage)    {
+    public void cortarFoto(Uri selectedImage) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
         cropIntent.setDataAndType(selectedImage, "image/*");
@@ -163,22 +165,23 @@ public class CadEvento extends ActionBarActivity {
     //endregion
 
     //region Validações de data e hora
-    public void atualizarData(){
+    public void atualizarData() {
         tvData.setText(formatDate.format(calendar.getTime()));
     }
-    public void atualizarHora()
-    {
+
+    public void atualizarHora() {
         tvHora.setText(formatHour.format(calendar.getTime()));
     }
-    public void setDate(){
-        new DatePickerDialog(CadEvento.this,d,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-    public void setHour(){
-        new TimePickerDialog(CadEvento.this,timePickerDialog,calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+
+    public void setDate() {
+        new DatePickerDialog(CadEvento.this, d, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    TimePickerDialog.OnTimeSetListener timePickerDialog = new TimePickerDialog.OnTimeSetListener()
-    {
+    public void setHour() {
+        new TimePickerDialog(CadEvento.this, timePickerDialog, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+    }
+
+    TimePickerDialog.OnTimeSetListener timePickerDialog = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -188,24 +191,21 @@ public class CadEvento extends ActionBarActivity {
         }
     };
 
-    public void onClickMostrarDataPicker(View v)
-    {
+    public void onClickMostrarDataPicker(View v) {
         setDate();
     }
 
-    public void onClickShowTimerPicker(View v)
-    {
+    public void onClickShowTimerPicker(View v) {
         setHour();
     }
 
-    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener()
-    {
+    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            calendar.set(Calendar.YEAR,year);
-            calendar.set(Calendar.MONTH,monthOfYear);
-            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, monthOfYear);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             atualizarData();
 
         }
@@ -227,8 +227,7 @@ public class CadEvento extends ActionBarActivity {
             return true;
         }
 
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             this.finish();
             return true;
         }
@@ -245,13 +244,11 @@ public class CadEvento extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1)
-        {
-            if (resultCode == RESULT_OK)
-            {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 String endereco;
-                nr_latitude= data.getDoubleExtra("latitude",0);
-                nr_longitude = data.getDoubleExtra("longitude",0);
+                nr_latitude = data.getDoubleExtra("latitude", 0);
+                nr_longitude = data.getDoubleExtra("longitude", 0);
                 endereco = data.getStringExtra("endereco");
                 tvEndereco.setText(endereco);
 
@@ -264,9 +261,7 @@ public class CadEvento extends ActionBarActivity {
             } else if (requestCode == 3) {
                 imgEvento = data.getData();
                 cortarFoto(imgEvento);
-            }
-            else if (requestCode == 4)
-            {
+            } else if (requestCode == 4) {
                 Bundle extras = data.getExtras();
                 imgRetorno = extras.getParcelable("data");
 
@@ -279,14 +274,13 @@ public class CadEvento extends ActionBarActivity {
 
     //endregion
 
-    public void chamarMapa(View view){
+    public void chamarMapa(View view) {
         try {
             Bundle parameters = new Bundle();
             Intent intent = new Intent(getApplicationContext(), PesquisarEndereco.class);
             startActivityForResult(intent, 1, parameters);
-        }catch (Exception e)
-        {
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -298,20 +292,17 @@ public class CadEvento extends ActionBarActivity {
         intent.putExtra("beginTime", calendar.getTimeInMillis());
         intent.putExtra("allDay", false);
         //intent.putExtra("rrule", "FREQ=DAILY");
-        intent.putExtra("endTime", calendar.getTimeInMillis() + 60 * 60 *1000);
+        intent.putExtra("endTime", calendar.getTimeInMillis() + 60 * 60 * 1000);
         intent.putExtra("title", etTitulo.getText().toString());
         startActivity(intent);
     }
 
-    public class compartilharEvento extends AsyncTask<Void,Integer,Void>{
+    public class compartilharEvento extends AsyncTask<Void, Integer, Void> {
         @Override
-        protected void onPreExecute()
-        {
-            ProgressDialog progressDialog;
-            //Create a new progress dialog
+        protected void onPreExecute() {
             progressDialog = new ProgressDialog(CadEvento.this);
 
-            progressDialog = ProgressDialog.show(CadEvento.this,"Carregando...",
+            progressDialog = ProgressDialog.show(CadEvento.this, "Carregando...",
                     "Compartilhando seu evento, por favor aguarde...", false, false);
         }
 
@@ -319,20 +310,18 @@ public class CadEvento extends ActionBarActivity {
         protected Void doInBackground(Void... params) {
             try {
                 synchronized (this) {
-                    salvarEvento();
+                    fg_criou = salvarEvento();
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 fg_criou = false;
             }
 
             return null;
         }
-    }
 
-    public void onClickCriarEvento(View v){
-        if (ValidarCampos()) {
-            new compartilharEvento().execute();
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
             if (fg_criou) {
                 ConfiguracoesDAO config_dao = new ConfiguracoesDAO(CadEvento.this);
                 objConf = config_dao.Carregar();
@@ -343,14 +332,23 @@ public class CadEvento extends ActionBarActivity {
             } else {
                 Toast.makeText(CadEvento.this, "Lamentamos, algo deu errado, por favor tente novamente.", Toast.LENGTH_SHORT).show();
             }
+
         }
     }
 
-    public boolean salvarEvento(){
+    public void onClickCriarEvento(View v) {
+        if (ValidarCampos()) {
+            new compartilharEvento().execute();
+
+        }
+    }
+
+    public boolean salvarEvento() {
         Evento objEvento = new Evento();
         try {
             if (ValidarCampos()) {
                 Usuario objUsuario = new Usuario();
+
                 objUsuario = objUsuario.selecionarUsuario(this);
 
                 objEvento.setTituloEvento(etTitulo.getText().toString());
@@ -367,14 +365,13 @@ public class CadEvento extends ActionBarActivity {
                 objEvento.setLatitude(nr_latitude);
                 objEvento.setLongitude(nr_longitude);
 
-                if(imgEvento != null)
-                {
+                if (imgEvento != null) {
 
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     imgRetorno.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream.toByteArray();
                     objEvento.setImagemFotoCapa(byteArray);
-                    String imagemServidor = Base64.encodeToString(byteArray,0);
+                    String imagemServidor = Base64.encodeToString(byteArray, 0);
                     objEvento.setFotoCapa(imagemServidor);
 
                 }
@@ -385,31 +382,23 @@ public class CadEvento extends ActionBarActivity {
 
             fg_criou = objEvento.salvarEventoOnline(this);
             return fg_criou;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             fg_criou = false;
             return false;
         }
     }
 
-    public boolean ValidarCampos()    {
-        if(etTitulo.getText().length()==0)
-        {
+    public boolean ValidarCampos() {
+        if (etTitulo.getText().length() == 0) {
             Toast.makeText(this, "Necessário informar um Titulo", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if(tvEndereco.getText().length()==0)
-        {
+        } else if (tvEndereco.getText().length() == 0) {
             Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if(rgStatusEvento.getCheckedRadioButtonId()==0)
-        {
+        } else if (rgStatusEvento.getCheckedRadioButtonId() == 0) {
             Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
 

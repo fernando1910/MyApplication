@@ -78,6 +78,24 @@ public class EventoDAO {
             return false;
     }
 
+    public Evento selecionar(int codigoEvento){
+        Evento objEvento = new Evento();
+        Cursor c = db.rawQuery("SELECT * FROM tb_evento WHERE cd_evento = " + codigoEvento ,null);
+        //Cursor c = db.query(true, TABELA, EventoDAO.colunas,null, null, null,null,null,null);
+        c.moveToFirst();
+        if (c.getCount() > 0){
+            objEvento.setCodigoEvento(codigoEvento);
+            objEvento.setTituloEvento(c.getString(1));
+            objEvento.setDescricao(c.getString(2));
+            objEvento.setLatitude(c.getDouble(3));
+            objEvento.setLongitude(c.getDouble(4));
+            objEvento.setCodigoUsarioInclusao(c.getInt(5));
+            //objEvento.setDataEvento(c.);
+        }
+
+        return objEvento;
+    }
+
     public void deletarTudo()
     {
         db.delete(TABELA,null,null);
