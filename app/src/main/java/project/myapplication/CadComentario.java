@@ -118,7 +118,7 @@ public class CadComentario extends AppCompatActivity {
                 synchronized (this) {
                     objEvento.enviarComentario(codigoEvento, codigoUsuario, comentario, getString(R.string.padrao_comentar));
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
