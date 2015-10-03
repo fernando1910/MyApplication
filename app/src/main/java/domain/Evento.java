@@ -216,18 +216,13 @@ public class Evento {
 
     }
 
-    public void enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException {
+    public void enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException, JSONException {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
-        try{
-            jsonObject.put("cd_evento", codigoEvento);
-            jsonObject.put("cd_usuario", codigoUsuario);
-            jsonObject.put("ds_comentario", comentario);
+        jsonObject.put("cd_evento", codigoEvento);
+        jsonObject.put("cd_usuario", codigoUsuario);
+        jsonObject.put("ds_comentario", comentario);
 
-        }catch (JSONException e)
-        {
-
-        }
 
         util.enviarServidor(url,jsonObject.toString(),"send-json");
     }
@@ -269,9 +264,7 @@ public class Evento {
         eventoDAO.salvar(this);
     }
 
-
-    public Evento carregarOnline(String codigoEvento, Context context)
-    {
+    public Evento carregarOnline(String codigoEvento, Context context){
         Evento objEvento = new Evento();
         Util util = new Util();
         JSONObject jsonObject;
@@ -315,35 +308,16 @@ public class Evento {
 
     }
 
-
     public List<Evento> selecionarTodosEventosLocal(Context context){
         EventoDAO eventoDAO = new EventoDAO(context);
         return eventoDAO.selecionarTodosEventos();
     }
 
     public List<Evento> selecionarTopFestas(Context context) throws InterruptedException, JSONException, NullPointerException {
-        List<Evento> mEventos = new ArrayList<>();
-
-        Util util = new Util();
-        String jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), null, "selecionarTopFestas");
-        JSONArray jsonArrayResultado = new JSONArray(jsonString);
-        JSONObject jsonObjectResultado;
-
-        for (int i = 0 ; i < jsonArrayResultado.length(); i++) {
-            jsonObjectResultado = new JSONObject(jsonArrayResultado.getString(i));
-            Evento mEvento = new Evento();
-            mEvento.setCodigoEvento(Integer.parseInt(jsonObjectResultado.getString("cd_evento")));
-            mEvento.setTituloEvento(jsonObjectResultado.getString("ds_titulo_evento"));
-            mEvento.setClassificacao(3);
-            mEventos.add(mEvento);
-
-        }
-
-
-        return  mEventos;
+        return selecionarEventosOnline(context, "selecionarTopFestas",null);
     }
 
-    public boolean classificarEventoOnline(Context context,int codigoEvento, float classificacaoEvento, int codigoUsuario) throws JSONException, InterruptedException, Exception {
+    public boolean classificarEventoOnline(Context context,int codigoEvento, float classificacaoEvento, int codigoUsuario) throws JSONException, InterruptedException {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
 
@@ -353,14 +327,45 @@ public class Evento {
         String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonObject.toString(),"classificarEvento");
         this.classificarEventoLocal(context, codigoEvento, classificacaoEvento);
 
-
         return true;
     }
 
     public boolean classificarEventoLocal(Context context, int codigoEvento, float classificacaoEvento){
         EventoDAO eventoDAO = new EventoDAO(context);
-        String mRetorno = eventoDAO.classificarEvento(codigoEvento,classificacaoEvento);
+        String mRetorno = eventoDAO.classificarEvento(codigoEvento, classificacaoEvento);
         return  true;
+    }
+
+    public List<Evento>selecionarEventosOnline(Context context, String comando, String parametro) throws InterruptedException, JSONException {
+        List<Evento> mEventos = new ArrayList<>();
+
+        Util util = new Util();
+        String jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), parametro, comando);
+        JSONArray jsonArrayResultado = new JSONArray(jsonString);
+        JSONObject jsonObjectResultado;
+
+        for (int i = 0 ; i < jsonArrayResultado.length(); i++) {
+            jsonObjectResultado = new JSONObject(jsonArrayResultado.getString(i));
+            Evento mEvento = new Evento();
+            mEvento.setCodigoEvento(Integer.parseInt(jsonObjectResultado.getString("cd_evento")));
+            mEvento.setTituloEvento(jsonObjectResultado.getString("ds_titulo_evento"));
+            mEvento.setLatitude(jsonObjectResultado.getDouble("nr_latitude"));
+            mEvento.setLongitude(jsonObjectResultado.getDouble("nr_longitude"));
+            mEvento.setEventoPrivado(jsonObjectResultado.getInt("fg_evento_privado"));
+            mEvento.setEndereco(jsonObjectResultado.getString("ds_endereco"));
+            mEvento.setClassificacao(3);
+            mEventos.add(mEvento);
+
+        }
+        return  mEventos;
+    }
+
+    public List<Evento> pesquisarEventosProximos(Context context) throws JSONException, InterruptedException {
+        return selecionarEventosOnline(context,"buscarEventosProximos",null) ;
+    }
+
+    public List<Evento> pesquisarEventosOnline(Context context, String query) throws JSONException, InterruptedException {
+        return selecionarEventosOnline(context,"pesquisarEvento",query);
     }
     //endregion
 
