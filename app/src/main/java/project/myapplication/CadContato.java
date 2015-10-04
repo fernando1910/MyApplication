@@ -122,7 +122,7 @@ public class CadContato extends AppCompatActivity{
         @Override
         protected Void doInBackground(Void... params) {
             try{
-                objContatos.AtualizarContatos(getContentResolver(),getString(R.string.padrao_contatos),CadContato.this);
+                objContatos.atualizarContatos(getContentResolver(),getString(R.string.wsBlueDate),CadContato.this);
                 List<Contatos> contatosList = objContatos.retonarContatos(CadContato.this);
                 arrayAdapter = new CustomListViewContato(CadContato.this, contatosList, cbContatoVisivel);
 

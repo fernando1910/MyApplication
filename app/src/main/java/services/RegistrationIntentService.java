@@ -49,21 +49,21 @@ public class RegistrationIntentService extends IntentService {
     }
 
     private void sendRegistrationId( String token){
-        String path = getResources().getString(R.string.padrao_push_message);
-        Util util = new Util();
-        Usuario objUsuario = new Usuario();
-        objUsuario.carregar(this);
+        if (!token.equals("")) {
+            String path = getResources().getString(R.string.padrao_push_message);
+            Util util = new Util();
+            Usuario objUsuario = new Usuario();
+            objUsuario.carregar(this);
 
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("ds_token", token);
-            jsonObject.put("cd_usuario", objUsuario.getCodigoUsuario());
-            util.enviarServidor(path,jsonObject.toString(),"send-user");
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("ds_token", token);
+                jsonObject.put("cd_usuario", objUsuario.getCodigoUsuario());
+                util.enviarServidor(path, jsonObject.toString(), "send-user");
 
-        } catch (InterruptedException e ) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (InterruptedException | JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
