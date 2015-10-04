@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="project.myapplication.PainelMeusEvento">
-
+<!--
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvEvento"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        />
+
+        -->
 </FrameLayout>

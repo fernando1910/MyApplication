@@ -80,10 +80,9 @@ public class EventoDAO {
             return false;
     }
 
-    public Evento selecionar(int codigoEvento){
-        Evento objEvento = new Evento();
+    public Evento selecionar(int codigoEvento, Evento objEvento){
+        Util util = new Util();
         Cursor c = db.rawQuery("SELECT * FROM tb_evento WHERE cd_evento = " + codigoEvento ,null);
-        //Cursor c = db.query(true, TABELA, EventoDAO.colunas,null, null, null,null,null,null);
         c.moveToFirst();
         if (c.getCount() > 0){
             objEvento.setCodigoEvento(codigoEvento);
@@ -92,6 +91,13 @@ public class EventoDAO {
             objEvento.setLatitude(c.getDouble(3));
             objEvento.setLongitude(c.getDouble(4));
             objEvento.setCodigoUsarioInclusao(c.getInt(5));
+            objEvento.setDataEvento(util.formataData(c.getString(6)));
+            objEvento.setDataInclusao(util.formataData(c.getString(7)));
+            objEvento.setEventoPrivado(c.getInt(9));
+            objEvento.setEndereco(c.getString(10));
+            objEvento.setCaminhoFotoCapa(c.getString(11));
+            objEvento.setImagemFotoCapa(c.getBlob(12));
+            objEvento.setClassificacao(c.getFloat(13));
             //objEvento.setDataEvento(c.);
         }
 
@@ -126,7 +132,7 @@ public class EventoDAO {
                 objEvento.setEndereco(mCursor.getString(10));
                 objEvento.setCaminhoFotoCapa(mCursor.getString(11));
                 objEvento.setImagemFotoCapa(mCursor.getBlob(12));
-
+                objEvento.setClassificacao(mCursor.getFloat(13));
 
                 mEventos.add(objEvento);
             }while (mCursor.moveToNext());
@@ -134,10 +140,10 @@ public class EventoDAO {
         return mEventos;
     }
 
-    public String classificarEvento(int cd_evento, float ind_classificacao){
+    public String classificarEvento(int cd_evento, float ind_classificacao) throws  Exception{
         ContentValues values = new ContentValues();
         values.put(EventoDAO.ind_classificacao, ind_classificacao);
-        db.update(TABELA,values,"cd_evento = ?", new String[]{String.valueOf(ind_classificacao)});
+        db.update(TABELA,values,"cd_evento = ?", new String[]{String.valueOf(cd_evento)});
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
         return mSqLiteStatement.toString();
 

@@ -216,16 +216,17 @@ public class Evento {
 
     }
 
-    public void enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException, JSONException {
+    public String enviarComentario(int codigoEvento, int codigoUsuario, String comentario, String url ) throws InterruptedException, JSONException {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
         jsonObject.put("cd_evento", codigoEvento);
         jsonObject.put("cd_usuario", codigoUsuario);
         jsonObject.put("ds_comentario", comentario);
 
-
-        util.enviarServidor(url,jsonObject.toString(),"send-json");
+        return util.enviarServidor(url,jsonObject.toString(),"comentarEvento");
     }
+
+
 
     public String gerarEventoJSON() throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
@@ -264,8 +265,8 @@ public class Evento {
         eventoDAO.salvar(this);
     }
 
-    public Evento carregarOnline(String codigoEvento, Context context){
-        Evento objEvento = new Evento();
+    public void  carregarOnline(String codigoEvento, Context context){
+
         Util util = new Util();
         JSONObject jsonObject;
 
@@ -283,14 +284,14 @@ public class Evento {
             JSONArray jsonArray = new JSONArray(jsonString);
             jsonObject = new JSONObject(jsonArray.getString(0));
 
-            objEvento.setCodigoEvento(Integer.parseInt(codigoEvento));
-            objEvento.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
-            objEvento.setDescricao(jsonObject.getString("ds_descricao"));
-            objEvento.setEndereco(jsonObject.getString("ds_endereco"));
-            objEvento.setDataEvento(util.formataData(jsonObject.getString("dt_evento")));
-            objEvento.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
-            objEvento.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
-            objEvento.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
+            this.setCodigoEvento(Integer.parseInt(codigoEvento));
+            this.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
+            this.setDescricao(jsonObject.getString("ds_descricao"));
+            this.setEndereco(jsonObject.getString("ds_endereco"));
+            this.setDataEvento(util.formataData(jsonObject.getString("dt_evento")));
+            this.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
+            this.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
+            this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
 
 
 
@@ -299,12 +300,11 @@ public class Evento {
             e.printStackTrace();
         }
 
-        return objEvento;
     }
 
-    public Evento carregarLocal(Context context, int codigoEvento){
+    public void carregarLocal(int codigoEvento, Context context){
         EventoDAO eventoDAO = new EventoDAO(context);
-        return eventoDAO.selecionar(codigoEvento);
+        eventoDAO.selecionar(codigoEvento, this);
 
     }
 
@@ -317,7 +317,7 @@ public class Evento {
         return selecionarEventosOnline(context, "selecionarTopFestas",null);
     }
 
-    public boolean classificarEventoOnline(Context context,int codigoEvento, float classificacaoEvento, int codigoUsuario) throws JSONException, InterruptedException {
+    public boolean classificarEventoOnline(Context context,int codigoEvento, float classificacaoEvento, int codigoUsuario) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
 
@@ -325,14 +325,14 @@ public class Evento {
         jsonObject.put("ind_classificacao", String.valueOf(classificacaoEvento));
         jsonObject.put("codigoUsuario", String.valueOf(codigoUsuario));
         String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonObject.toString(),"classificarEvento");
-        this.classificarEventoLocal(context, codigoEvento, classificacaoEvento);
+        this.classificarEventoLocal(context, classificacaoEvento);
 
         return true;
     }
 
-    public boolean classificarEventoLocal(Context context, int codigoEvento, float classificacaoEvento){
+    public boolean classificarEventoLocal(Context context, float classificacaoEvento) throws Exception {
         EventoDAO eventoDAO = new EventoDAO(context);
-        String mRetorno = eventoDAO.classificarEvento(codigoEvento, classificacaoEvento);
+        String mRetorno = eventoDAO.classificarEvento(cd_evento, classificacaoEvento);
         return  true;
     }
 

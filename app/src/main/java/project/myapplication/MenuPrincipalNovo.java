@@ -124,7 +124,8 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         mFragment = new PainelTodosEventos();
                                         break;
                                     case 2:
-                                        CaldroidFragment mCaldroidFragment = new CaldroidFragment();
+                                        CaldroidFragment mFragmentCalendar = new CaldroidFragment();
+
                                         final CaldroidListener mCaldroidListener = new CaldroidListener() {
                                             @Override
                                             public void onSelectDate(Date date, View view) {
@@ -133,9 +134,8 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                                 startActivity(intent);
                                             }
                                         };
-                                        mCaldroidFragment.setCaldroidListener(mCaldroidListener);
-                                        mCaldroidFragment.show(getSupportFragmentManager().beginTransaction(), "tagCalendar");
-
+                                        mFragmentCalendar.setCaldroidListener(mCaldroidListener);
+                                        mFragment = mFragmentCalendar;
 
                                         break;
                                     case 3:
