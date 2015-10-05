@@ -23,6 +23,7 @@ public class Usuario {
     private String nr_codigo_valida_telefone;
     private String ds_token;
     private String ds_foto_perfil;
+    private int fg_token_pendente;
 
 
     private static final String TAG = "USUARIO";
@@ -99,6 +100,14 @@ public class Usuario {
 
     public void setFotoPerfil(String ds_foto_perfil) {
         this.ds_foto_perfil = ds_foto_perfil;
+    }
+
+    public int getTokenPendente() {
+        return fg_token_pendente;
+    }
+
+    public void setTokenPendente(int fg_token_pendente) {
+        this.fg_token_pendente = fg_token_pendente;
     }
 
     //endregion

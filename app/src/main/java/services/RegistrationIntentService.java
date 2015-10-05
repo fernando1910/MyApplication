@@ -4,11 +4,11 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -18,10 +18,10 @@ import domain.Util;
 import project.myapplication.R;
 
 public class RegistrationIntentService extends IntentService {
-    private static final String LOG = "LOG";
+    private static final String TAG = "LOG";
 
     public RegistrationIntentService() {
-        super(LOG);
+        super(TAG);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class RegistrationIntentService extends IntentService {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean status = preferences.getBoolean("status",false);
 
-        synchronized (LOG){
+        synchronized (TAG){
             InstanceID instanceID = InstanceID.getInstance(this);
             try {
                 if (!status) {
@@ -50,19 +50,30 @@ public class RegistrationIntentService extends IntentService {
 
     private void sendRegistrationId( String token){
         if (!token.equals("")) {
-            String path = getResources().getString(R.string.padrao_push_message);
+            String path = getResources().getString(R.string.wsBlueDate);
             Util util = new Util();
             Usuario objUsuario = new Usuario();
             objUsuario.carregar(this);
+            objUsuario.setToken(token);
+            objUsuario.atualizar(this);
+            final String[] mResposta = new String[1];
 
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("ds_token", token);
                 jsonObject.put("cd_usuario", objUsuario.getCodigoUsuario());
-                util.enviarServidor(path, jsonObject.toString(), "send-user");
+                mResposta[0] = util.enviarServidor(path, jsonObject.toString(), "atualizarToken");
 
-            } catch (InterruptedException | JSONException e) {
-                e.printStackTrace();
+                if (Integer.parseInt(mResposta[0]) > 0) {
+                    objUsuario.setTokenPendente(0);
+                    objUsuario.atualizar(this);
+                }
+                else{
+                    Log.i(TAG,"Erro parte servidor");
+                }
+
+            } catch (Exception e) {
+                Log.i(TAG, e.getMessage());
             }
         }
     }

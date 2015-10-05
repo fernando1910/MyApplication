@@ -101,9 +101,6 @@
     <!-- String tela de Perfil -->
     <string name="action_update">Atualizar</string>
 
-    <!-- String tela de eventos -->
-    <string name="padrao_evento">http://www.fiesta1.hol.es/CadEvento.php</string>
-    <string name="padrao_seleciona_evento">http://www.fiesta1.hol.es/padraoSelecionaEvento.php</string>
 
     <!-- Tela Sobre -->
     <string name="padrao_sobre">"Aplicativo com fins academicos"</string>
@@ -116,7 +113,6 @@
     <string name="title_activity_padrao_visulizar_evento">Evento</string>
     <string name="title_activity_padrao_pesquisas_endereco">Map</string>
     <string name="title_activity_padrao_pesquisar_endereco">Pesquisar Endereços</string>
-    <string name="padrao_contatos">http://www.fiesta1.hol.es/padraoAtualizarContatos.php</string>
 
     <!--Tela Visualizar Evento -->
     <string name="action_comentar">Comentar</string>
@@ -124,9 +120,8 @@
     <string name="title_activity_padrao_validar_telefone">padraoValidarTelefone</string>
 
     <!--Tela Convidar-->
-    <string name="padrao_convidar">http://www.fiesta1.hol.es/padraoConvidar.php</string>
+
     <string name="title_activity_padrao_comentario">padraoComentario</string>
-    <string name="padrao_push_message">http://www.fiesta1.hol.es/padraoEnviarTokenPush.php</string>
     <string name="caminho_foto_capa_evento">http://www.fiesta1.hol.es/capa_evento/</string>
     <string name="title_activity_menu_principal_novo">MenuPrincipalNovo</string>
     <string name="texto_padrao_aleracoes_evento">Eventos com aleterações importantes</string>
