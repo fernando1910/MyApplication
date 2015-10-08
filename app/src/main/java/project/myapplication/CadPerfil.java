@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ import services.RegistrationIntentService;
 
 
 public class CadPerfil extends Activity {
+    private final String TAG = "ERRO";
     private EditText etNome;
     private ImageButton ibPerfil;
     private RoundImage roundedImage;
@@ -113,7 +115,7 @@ public class CadPerfil extends Activity {
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, 1);
                     } catch (ActivityNotFoundException e) {
-
+                        Log.i(TAG, e.getMessage());
                     }
                 } else if (options[item].equals("Escolher da Galeria")) {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -176,9 +178,8 @@ public class CadPerfil extends Activity {
         }
     }
 
-    public boolean salvarUsuario() {
-        Usuario objUsuario = new Usuario();
-        objUsuario.carregar(this);
+    public void preencherObjeto(Usuario objUsuario) {
+
         try {
             if (imgPerfil != null) {
                 Bitmap pic = roundedImage.getBitmap();
@@ -189,9 +190,9 @@ public class CadPerfil extends Activity {
                 objUsuario.setCaminhoFoto(imgPerfil.getPath());
             }
             objUsuario.setNome(etNome.getText().toString());
-            return objUsuario.salvarPerfilOnline(getApplicationContext());
+
         } catch (Exception e) {
-            return false;
+            Log.i(TAG, e.getMessage());
         }
     }
 
@@ -212,13 +213,16 @@ public class CadPerfil extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             synchronized (this) {
-                fg_criou = salvarUsuario();
-                if (fg_criou) {
-                    Util util = new Util();
-                    if (util.checarServico(CadPerfil.this)) {
-                        Intent intent = new Intent(CadPerfil.this, RegistrationIntentService.class);
-                        startService(intent);
-                    }
+                try{
+                    Usuario objUsuario = new Usuario();
+                    objUsuario.carregar(CadPerfil.this);
+                    preencherObjeto(objUsuario);
+                    fg_criou = objUsuario.salvarPerfilOnline(CadPerfil.this);
+                }catch (Exception e){
+                    fg_criou = false;
+                    progressDialog.dismiss();
+                    Toast.makeText(CadPerfil.this, "Lamentamos houve um erro", Toast.LENGTH_SHORT).show();
+
                 }
             }
             return null;
@@ -228,6 +232,8 @@ public class CadPerfil extends Activity {
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
             if (fg_criou) {
+                Intent intent = new Intent(CadPerfil.this, RegistrationIntentService.class);
+                CadPerfil.this.startService(intent);
                 objConfig.atualizarStatus(CadPerfil.this, 5);
                 startActivity(new Intent(CadPerfil.this, MenuPrincipalNovo.class));
                 CadPerfil.this.finish();
@@ -236,6 +242,5 @@ public class CadPerfil extends Activity {
                 Toast.makeText(getApplication(), "Lamentamos ocorreu um erro interno", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 }

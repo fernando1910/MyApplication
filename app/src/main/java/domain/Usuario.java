@@ -1,15 +1,14 @@
 package domain;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import database.UsuarioDAO;
-import helpers.HttpConnection;
 import project.myapplication.R;
+
 
 public class Usuario {
 
@@ -175,35 +174,28 @@ public class Usuario {
         return jsonObject.toString();
     }
 
-    public boolean salvarPerfilOnline(Context context){
-        try {
-
+    public boolean salvarPerfilOnline(Context context)throws  Exception {
+        boolean mRetorno = true;
+        Util util = new Util();
+        if (util.checarServico(context)) {
             final String caminhoServidor = context.getResources().getString(R.string.wsBlueDate);
             final String jsonString = gerarUsuarioJSON();
             final String[] resposta = new String[1];
-            try {
-                Thread thread = new Thread(new Runnable() {
-                    public void run() {
-                        resposta[0] = HttpConnection.getSetDataWeb(caminhoServidor, "inserirUsuario", jsonString);
-                    }
-                });
-                thread.start();
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-                if (Integer.parseInt(resposta[0]) != 0) {
+            resposta[0] = util.enviarServidor(caminhoServidor, jsonString, "inserirUsuario");
+            if (Integer.parseInt(resposta[0]) != 0) {
                 this.cd_usuario = Integer.parseInt(resposta[0]);
                 this.atualizar(context);
-                return true;
-            } else {
-                return false;
+
             }
-        }catch (Exception e){
-            Log.i(TAG,e.getMessage());
-            return false;
+            else{
+                mRetorno = false;
+            }
         }
+        else{
+            mRetorno = false;
+        }
+
+        return mRetorno;
 
     }
 
