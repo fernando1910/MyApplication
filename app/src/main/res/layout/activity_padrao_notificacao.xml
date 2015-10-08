@@ -60,7 +60,7 @@
             android:text="Circular localização ao pesquisar evento." />
 
         <Spinner
-            android:id="@+id/spRadius"
+            android:id="@+id/spKm"
             android:entries="@array/sessao_radius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

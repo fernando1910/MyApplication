@@ -71,7 +71,7 @@
             android:label="@string/title_activity_padrao_criar_evento" >
         </activity>
         <activity
-            android:name=".CadConfiguracao"
+            android:name=".CadNotificacao"
             android:label="@string/title_activity_padrao_notificacao" >
         </activity>
         <activity

@@ -67,12 +67,8 @@
     </string-array>
 
     <string-array name="sessao_radius">
-        <item>1 KM</item>
-        <item>5 KM</item>
-    </string-array>
-
-    <string-array name="sessao_ddi">
-        <item>+55</item>
+        <item>1 Km</item>
+        <item>5 Km</item>
     </string-array>
 
     <string name="wsBlueDate">http://www.fiesta1.hol.es/wsBlueDate.php</string>

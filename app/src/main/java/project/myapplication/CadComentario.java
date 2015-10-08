@@ -1,6 +1,7 @@
 package project.myapplication;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -113,6 +114,11 @@ public class CadComentario extends AppCompatActivity {
                     "Enviando seu comentario, por favor aguarde...", false, false);
         }
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setProgress(values[0]);
+        }
+
+        @Override
         protected Void doInBackground(Void... params) {
             try {
                 synchronized (this) {
@@ -123,6 +129,12 @@ public class CadComentario extends AppCompatActivity {
             }
 
             return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            progressDialog.dismiss();
+            startActivity(new Intent(CadComentario.this, VisulizarEvento.class));
+            CadComentario.this.finish();
         }
     }
 }

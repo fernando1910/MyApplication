@@ -19,11 +19,12 @@ public class ConfiguracoesDAO {
         private static final String fg_notifica_mudanca = "fg_notifica_mudanca";
         private static final String fg_telefone_visivel = "fg_telefone_visivel";
         private static final String ind_status_perfil = "ind_status_perfil";
+        private static final String nr_alcance_km = "nr_alcance_km";
 
         private static final String [] colunas = {ConfiguracoesDAO.fg_permite_push,
                 ConfiguracoesDAO.fg_permite_alarme,ConfiguracoesDAO.fg_notifica_comentario ,
                 ConfiguracoesDAO.fg_notifica_mudanca, ConfiguracoesDAO.fg_telefone_visivel,
-                ConfiguracoesDAO.ind_status_perfil
+                ConfiguracoesDAO.ind_status_perfil,ConfiguracoesDAO.nr_alcance_km
         };
 
         public ConfiguracoesDAO(Context context){
@@ -45,6 +46,7 @@ public class ConfiguracoesDAO {
             objConfig.setNotificaMudanca(c.getInt(3));
             objConfig.setTelefoneVisivel(c.getInt(4));
             objConfig.setStatusPerfil(c.getInt(5));
+
         }
 
         return objConfig;
@@ -59,6 +61,7 @@ public class ConfiguracoesDAO {
         valores.put(fg_notifica_mudanca, objConfiguracoes.getNotificaMudanca());
         valores.put(fg_telefone_visivel, objConfiguracoes.getTelefoneVisivel());
         valores.put(ind_status_perfil, objConfiguracoes.getStatusPerfil());
+        valores.put(nr_alcance_km, objConfiguracoes.getAlcanceKm());
 
         db.update(TABELA, valores, null, null);
     }
