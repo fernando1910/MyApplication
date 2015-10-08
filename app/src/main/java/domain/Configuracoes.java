@@ -13,6 +13,7 @@ public class Configuracoes {
     private int fg_notifica_mudanca;
     private int fg_telefone_visivel;
     private int ind_status_perfil;
+    private String nr_alcance_km;
     //endregion
 
     //region propriedades
@@ -64,6 +65,15 @@ public class Configuracoes {
         this.fg_telefone_visivel = fg_telefone_visivel;
     }
 
+    public String getAlcanceKm() {
+        return nr_alcance_km;
+    }
+
+    public void setAlcanceKm(String nr_alcance_km) {
+        this.nr_alcance_km = nr_alcance_km;
+    }
+
+
     //endregion
 
     //region métodos
@@ -83,6 +93,7 @@ public class Configuracoes {
         this.setPermitePush(objConfig.getPermitePush());
         this.setStatusPerfil(objConfig.getStatusPerfil());
         this.setTelefoneVisivel(objConfig.getTelefoneVisivel());
+        this.setAlcanceKm(objConfig.getAlcanceKm());
     }
 
     public void atualizar(Context context){

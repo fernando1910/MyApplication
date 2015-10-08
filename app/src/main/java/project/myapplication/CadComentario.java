@@ -24,7 +24,7 @@ import domain.Util;
 
 
 public class CadComentario extends AppCompatActivity {
-    private final String TAG = "ComentarEvento";
+
     private int codigoEvento, codigoUsuario;
     private EditText etComentario;
     private Evento objEvento;
