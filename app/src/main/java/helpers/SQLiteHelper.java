@@ -34,7 +34,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_telefone text not null, " +
                     "img_perfil blob," +
                     "ds_caminho_foto text," +
-                    "nr_codigo_valida_telefone text)",
+                    "nr_codigo_valida_telefone text, " +
+                    "ds_token text, " +
+                    "fg_token_pendente TINYINT DEFAULT 1)",
 
             "CREATE TABLE tb_contato" +
                     "(cd_contato INTEGER, ds_contato TEXT, img_contato BLOB )",
@@ -55,10 +57,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_endereco TEXT, " +
                     "ds_caminho_foto_capa TEXT," +
                     "img_foto_capa BLOB, " +
-                    "ind_classificacao FLOAT, " +
-                    "fg_ranking_top_festa TINYINT, " +
-                    "fg_ranking_comentarios TINYINT, " +
-                    "fg_ranking_convidados TINYINT  )"
+                    "ind_classificacao FLOAT )"
 
     };
 

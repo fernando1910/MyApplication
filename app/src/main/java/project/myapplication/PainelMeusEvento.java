@@ -1,15 +1,12 @@
 package project.myapplication;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public class PainelMeusEvento extends Fragment implements RecyclerViewOnClickLis
         View view;
         view = inflater.inflate(R.layout.fragment_painel_evento, container, false);
         objEvento = new Evento();
-
+/*
         rvEvento = (RecyclerView) view.findViewById(R.id.rvEvento);
         rvEvento.setHasFixedSize(true);
         rvEvento.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -65,13 +62,13 @@ public class PainelMeusEvento extends Fragment implements RecyclerViewOnClickLis
         adapter =  new EventoAdapter(getActivity(), eventos);
         adapter.setRecyclerViewOnClickListenerHack(PainelMeusEvento.this);
         rvEvento.setAdapter(adapter);
-
+*/
         return view;
     }
 
     @Override
     public void onClickListener(View view, int position) {
-        try {
+       /* try {
             int codigoEvento = adapter.getCodigoEvento(position);
             Intent intent = new Intent(getActivity(), VisulizarEvento.class);
             intent.putExtra("codigoEvento", codigoEvento);
@@ -79,5 +76,7 @@ public class PainelMeusEvento extends Fragment implements RecyclerViewOnClickLis
         }catch (Exception e){
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
+        */
     }
 }

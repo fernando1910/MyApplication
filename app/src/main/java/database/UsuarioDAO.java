@@ -22,6 +22,8 @@ public class UsuarioDAO {
     private static final String img_perfil = "img_perfil";
     private static final String ds_caminho_foto = "ds_caminho_foto";
     private static final String nr_codigo_valida_telefone = "nr_codigo_valida_telefone";
+    private static final String ds_token = "ds_token";
+    private static final String fg_token_pendente ="fg_token_pendente";
 
     private static final String [] colunas = {UsuarioDAO.cd_usuario, UsuarioDAO.ds_nome,UsuarioDAO.ds_telefone, UsuarioDAO.img_perfil, UsuarioDAO.ds_caminho_foto,UsuarioDAO.nr_codigo_valida_telefone};
 
@@ -38,6 +40,8 @@ public class UsuarioDAO {
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
         valores.put(nr_codigo_valida_telefone,objUsuario.getCodigoVerificardor());
+        valores.put(ds_token, objUsuario.getToken());
+        valores.put(fg_token_pendente,objUsuario.getTokenPendente());
         db.insert(TABELA_USUARIO,null,valores);
     }
 
@@ -49,6 +53,8 @@ public class UsuarioDAO {
         valores.put(img_perfil, objUsuario.getImagemPerfil());
         valores.put(ds_caminho_foto, objUsuario.getCaminhoFoto());
         valores.put(nr_codigo_valida_telefone,objUsuario.getCodigoVerificardor());
+        valores.put(ds_token, objUsuario.getToken());
+        valores.put(fg_token_pendente,objUsuario.getTokenPendente());
         db.update(TABELA_USUARIO, valores, null, null);
     }
 
@@ -107,6 +113,8 @@ public class UsuarioDAO {
             objUsuario.setImagemPerfil(c.getBlob(3));
             objUsuario.setCaminhoFoto(c.getString(4));
             objUsuario.setCodigoVerificardor(c.getString(5));
+            objUsuario.setToken(c.getString(6));
+            objUsuario.setTokenPendente(c.getInt(7));
         }
         return objUsuario;
     }

@@ -1,9 +1,11 @@
 package project.myapplication;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -23,17 +24,19 @@ import domain.Contatos;
 import domain.Util;
 
 
-public class CadContato extends AppCompatActivity{
-
+public class CadContato extends AppCompatActivity {
+    private final String TAG = "LOG";
     private ListView lvContatos;
     private Contatos objContatos;
     private Button btConfirmar;
     private int codigoEvento = 0;
-    private boolean cbContatoVisivel = false;
+    private boolean cbContatoVisivel = false, fg_convidou = false;
     private List<Contatos> contatosList;
     private CustomListViewContato arrayAdapter;
     private Util util;
     MenuItem mActionProgressItem;
+    private ProgressDialog mProgressDialog;
+    private int mQuantidadeContatos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +47,15 @@ public class CadContato extends AppCompatActivity{
 
 
             //region Vinculação com XML
-            lvContatos = (ListView)findViewById(R.id.lvContatos);
-            btConfirmar = (Button)findViewById(R.id.btConfirmar);
+            lvContatos = (ListView) findViewById(R.id.lvContatos);
+            btConfirmar = (Button) findViewById(R.id.btConfirmar);
             //endregion
 
             objContatos = new Contatos();
             util = new Util();
 
             Bundle parameters = getIntent().getExtras();
-            if(parameters != null) {
+            if (parameters != null) {
                 codigoEvento = parameters.getInt("codigoEvento");
                 btConfirmar.setVisibility(View.VISIBLE);
                 cbContatoVisivel = true;
@@ -60,11 +63,11 @@ public class CadContato extends AppCompatActivity{
             contatosList = objContatos.retonarContatos(this);
             arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
             lvContatos.setAdapter(arrayAdapter);
+            mQuantidadeContatos = lvContatos.getCount();
 
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             this.finish();
-            Toast.makeText(this,ex.getMessage(),Toast.LENGTH_LONG).show();
+            Log.i(TAG,ex.getMessage());
         }
 
     }
@@ -74,15 +77,14 @@ public class CadContato extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-            this.finish();
+        this.finish();
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             this.finish();
             return true;
         }
@@ -103,7 +105,7 @@ public class CadContato extends AppCompatActivity{
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         mActionProgressItem = menu.findItem(R.id.miActionProgress);
-        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(mActionProgressItem);
+        ProgressBar v = (ProgressBar) MenuItemCompat.getActionView(mActionProgressItem);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -111,7 +113,7 @@ public class CadContato extends AppCompatActivity{
 
     //region Métodos de implementação
 
-    public class sincrozinarContatos extends AsyncTask<Void,Integer,Void>{
+    public class sincrozinarContatos extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -121,15 +123,14 @@ public class CadContato extends AppCompatActivity{
 
         @Override
         protected Void doInBackground(Void... params) {
-            try{
-                objContatos.AtualizarContatos(getContentResolver(),getString(R.string.padrao_contatos),CadContato.this);
+            try {
+                objContatos.atualizarContatos(getContentResolver(), getString(R.string.wsBlueDate), CadContato.this);
                 List<Contatos> contatosList = objContatos.retonarContatos(CadContato.this);
                 arrayAdapter = new CustomListViewContato(CadContato.this, contatosList, cbContatoVisivel);
 
 
-            }catch (Exception ex)
-            {
-                Toast.makeText(CadContato.this,ex.getMessage(),Toast.LENGTH_LONG).show();
+            } catch (Exception ex) {
+                Toast.makeText(CadContato.this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 CadContato.this.finish();
             }
             return null;
@@ -143,47 +144,65 @@ public class CadContato extends AppCompatActivity{
         }
     }
 
-    public void onCLickConvidarContatos(View view){
-        boolean checked ;
-        boolean selecionou = false;
-        JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        for(int i = 0; i < lvContatos.getCount(); i++)
-        {
-            checked = arrayAdapter.isChecked(i);
-            if (checked)
-            {
-                selecionou = true;
-                JSONObject aux = new JSONObject();
-                try {
-                    aux.put("cd_usuario", String.valueOf(arrayAdapter.getValue(i)));
-                    aux.put("cd_evento", String.valueOf(codigoEvento));
-                    jsonArray.put(aux);
+    public void onCLickConvidarContatos(View view) {
+        new convidar().execute();
+    }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
-            }
+
+    public class convidar extends AsyncTask<Void,Integer,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(CadContato.this);
+            mProgressDialog = ProgressDialog.show(CadContato.this, "Carregando...",
+                    "Convidado os seus contatos, por favor aguarde...", false, false);
         }
 
-        if(selecionou) {
+        @Override
+        protected Void doInBackground(Void... params) {
+            synchronized (this){
+                try{
+                    boolean checked;
+                    boolean selecionou = false;
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("cd_evento", String.valueOf(codigoEvento));
+                    JSONArray jsonArray = new JSONArray();
+                    for (int i = 0; i < mQuantidadeContatos ; i++) {
+                        checked = arrayAdapter.isChecked(i);
+                        if (checked) {
+                            selecionou = true;
+                            JSONObject aux = new JSONObject();
+                            aux.put("cd_usuario", String.valueOf(arrayAdapter.getValue(i)));
+                            jsonArray.put(aux);
+                        }
+                    }
+                    if (selecionou) {
+                        jsonObject.put("convidados", jsonArray);
+                        util.enviarServidor(getString(R.string.wsBlueDate), jsonObject.toString(), "convidarUsuario");
+                    }
 
+            }catch (Exception ex){
+                Log.i(TAG, ex.getMessage());
+                mProgressDialog.dismiss();
+                fg_convidou = false;
+            }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid){
             try {
-                jsonObject.put("convidados", jsonArray);
-                util.enviarServidor(getString(R.string.wsBlueDate), jsonObject.toString(), "send-json");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                mProgressDialog.dismiss();
+                if (fg_convidou)
+                    Toast.makeText(CadContato.this, "Sucesso ", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(CadContato.this, "Falha", Toast.LENGTH_SHORT).show();
+            }catch (Exception ex){
+                Log.i(TAG, ex.getMessage());
             }
         }
-        else
-        {
-            Toast.makeText(this,"Não foi selecionado nenhum contato", Toast.LENGTH_LONG).show();
-        }
-
     }
 
 

@@ -1,5 +1,7 @@
 package project.myapplication;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -121,7 +124,8 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         mFragment = new PainelTodosEventos();
                                         break;
                                     case 2:
-                                        CaldroidFragment mCaldroidFragment = new CaldroidFragment();
+                                        CaldroidFragment mFragmentCalendar = new CaldroidFragment();
+
                                         final CaldroidListener mCaldroidListener = new CaldroidListener() {
                                             @Override
                                             public void onSelectDate(Date date, View view) {
@@ -130,9 +134,8 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                                 startActivity(intent);
                                             }
                                         };
-                                        mCaldroidFragment.setCaldroidListener(mCaldroidListener);
-                                        mCaldroidFragment.show(getSupportFragmentManager().beginTransaction(), "tagCalendar");
-
+                                        mFragmentCalendar.setCaldroidListener(mCaldroidListener);
+                                        mFragment = mFragmentCalendar;
 
                                         break;
                                     case 3:
@@ -181,6 +184,21 @@ public class MenuPrincipalNovo extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_menu_principal_novo, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView = (SearchView) item.getActionView();
+        try{
+
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setQueryHint("Pesquisar");
+
+        }
+        catch (Exception e){
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        searchView.setIconifiedByDefault(false);
         return true;
     }
 
@@ -214,7 +232,19 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         System.exit(0);
     }
 
-    private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        hendleSearch(intent);
+    }
+
+    public void hendleSearch( Intent intent) {
+        if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
+            String mQuery = intent.getStringExtra(SearchManager.QUERY);
+        }
+    }
+
+            private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
             Toast.makeText(MenuPrincipalNovo.this, "onCheckedChanged: " + (b ? "true" : "false"), Toast.LENGTH_SHORT).show();

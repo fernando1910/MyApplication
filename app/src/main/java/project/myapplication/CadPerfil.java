@@ -213,10 +213,12 @@ public class CadPerfil extends Activity {
         protected Void doInBackground(Void... params) {
             synchronized (this) {
                 fg_criou = salvarUsuario();
-                Util util = new Util();
-                if (util.checarServico(CadPerfil.this)) {
-                    Intent intent = new Intent(CadPerfil.this, RegistrationIntentService.class);
-                    startService(intent);
+                if (fg_criou) {
+                    Util util = new Util();
+                    if (util.checarServico(CadPerfil.this)) {
+                        Intent intent = new Intent(CadPerfil.this, RegistrationIntentService.class);
+                        startService(intent);
+                    }
                 }
             }
             return null;

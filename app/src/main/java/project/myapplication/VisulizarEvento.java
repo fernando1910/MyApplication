@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +27,7 @@ import domain.Util;
 
 
 public class VisulizarEvento extends AppCompatActivity implements View.OnClickListener {
-
+    final private String TAG = "VisualizarEvento";
     private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado, tvTituloEvento2;
     private Util util;
     private int codigoEvento;
@@ -46,13 +47,14 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
 
             //region Vinculação das variaveis com o layout XML
             ivEvento = (ImageView) findViewById(R.id.ivEvento);
-            tvTituloEvento = (TextView) findViewById(R.id.tvTituloEvento);
+            tvPrivado = (TextView) findViewById(R.id.tvPrivado);
             tvDescricaoEvento = (TextView) findViewById(R.id.tvDescricaoEvento);
             mFloatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu);
             mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+            tvEndereco = (TextView)findViewById(R.id.tvEndereco);
 
             collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-            collapsingToolbarLayout.setTitle("Seu evento");
+
 
             mToolbar = (Toolbar) findViewById(R.id.tb_main);
             setSupportActionBar(mToolbar);
@@ -78,17 +80,9 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             fab2.setOnClickListener(this);
             fab3.setOnClickListener(this);
 
-/*
-
-
-        tvEndereco = (TextView)findViewById(R.id.tvEndereco);
-        tvPrivado = (TextView)findViewById(R.id.tvPrivado);
-*/
             //endregion
 
             util = new Util();
-
-            //      tvEndereco.setCompoundDrawables(null,null,util.retornarIcone(getResources().getDrawable(R.drawable.ic_localizacao), getResources()),null);
 
             Bundle parameters = getIntent().getExtras();
             if (parameters != null) {
@@ -112,16 +106,15 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
                 }
 
                 objEvento = new Evento();
-                objEvento = objEvento.carregarOnline(String.valueOf(codigoEvento), this);
-                tvTituloEvento.setText(objEvento.getTituloEvento());
+                objEvento.carregarLocal(codigoEvento, this);
+                collapsingToolbarLayout.setTitle(objEvento.getTituloEvento());
                 tvDescricaoEvento.setText(objEvento.getDescricao());
-            /*
-            tvEndereco.setText(objEvento.getEndereco());
-            if (objEvento.getEventoPrivado() == 1)
-                tvPrivado.setText("Este evento é privado");
-            else
-                tvPrivado.setText("Este evento é publico");
-            */
+                tvEndereco.setText(objEvento.getEndereco());
+                if (objEvento.getEventoPrivado() == 1)
+                    tvPrivado.setText("Este evento é privado");
+                else
+                    tvPrivado.setText("Este evento é publico");
+
 
             } else {
                 Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
@@ -131,7 +124,11 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-
+                    try {
+                        objEvento.classificarEventoLocal(getApplicationContext(),rating);
+                    } catch (Exception e) {
+                        Log.i(TAG,e.getMessage());
+                    }
                 }
             });
 

@@ -65,7 +65,7 @@ public class Contatos {
 
     //region Métodos
 
-    public void AtualizarContatos(ContentResolver contentResolver, String url, Context context) {
+    public void atualizarContatos(ContentResolver contentResolver, String url, Context context) {
         String phoneNumber;
         Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
         String _ID = ContactsContract.Contacts._ID;
