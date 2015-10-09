@@ -27,5 +27,11 @@
     <style name="Secundario" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:textColor">@color/White</item>
     </style>
+    <style name="Padrao.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Padrao.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Padrao.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

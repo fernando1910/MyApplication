@@ -16,4 +16,5 @@
 
     <!-- Icones padrao Painel -->
     <dimen name="padrao_icone_painel">150sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

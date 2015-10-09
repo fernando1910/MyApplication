@@ -146,7 +146,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class));
                                         break;
                                     case 6:
-                                        mFragment = new PainelConfiguracaoNovo();
+                                        startActivity(new Intent(MenuPrincipalNovo.this, PainelConfiguracao.class));
                                         break;
                                 }
 

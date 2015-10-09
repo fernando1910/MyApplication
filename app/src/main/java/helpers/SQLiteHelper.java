@@ -26,7 +26,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             " fg_notifica_comentario TINYINT DEFAULT 1, " +
             " fg_notifica_mudanca TINYINT DEFAULT 1, " +
             " fg_telefone_visivel TINYINT DEFAULT 0 , " +
-            " ind_status_perfil TINYINT NOT NULL)",
+            " ind_status_perfil TINYINT NOT NULL," +
+            " nr_alcance_km TEXT DEFAULT '5' )",
 
             "CREATE TABLE tb_usuario " +
                     "(cd_usuario integer primary key , " +
