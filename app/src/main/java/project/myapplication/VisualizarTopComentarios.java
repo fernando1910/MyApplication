@@ -1,5 +1,7 @@
 package project.myapplication;
 
+
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,28 +17,37 @@ import java.util.List;
 import adapters.CustomListViewRanking;
 import domain.Evento;
 
-public class VisualizarTopFestas extends Fragment {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class VisualizarTopComentarios extends Fragment {
     private final String TAG = "LOG";
     private ListView mListView;
     private List<Evento> mItems;
     private CustomListViewRanking mAdapter;
+    private ProgressDialog mProgressDialog;
     private ProgressBar mProgressBar;
     private Evento objEvento;
+
+
+    public VisualizarTopComentarios() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view =inflater.inflate(R.layout.fragment_padrao_top_festas, container, false);
-        mListView = (ListView) view.findViewById(R.id.lvTopFestas);
+        View view =inflater.inflate(R.layout.fragment_visualizar_top_comentarios, container, false);
+        mListView = (ListView) view.findViewById(R.id.lvTopComentarios);
         mProgressBar = (ProgressBar) view.findViewById(R.id.pbFooterLoading);
         objEvento = new Evento();
-
         new listarEventos().execute();
         return view;
     }
 
-    public class listarEventos extends AsyncTask<Void,Integer,Void>{
+    public class listarEventos extends AsyncTask<Void,Integer,Void> {
 
         @Override
         protected void onPreExecute() {
@@ -48,7 +59,7 @@ public class VisualizarTopFestas extends Fragment {
             super.onPostExecute(aVoid);
             try {
                 mProgressBar.setVisibility(View.INVISIBLE);
-                //mProgressDialog.dismiss();
+
                 mListView.setAdapter(mAdapter);
             }catch (Exception ex){
                 Log.i(TAG, ex.getMessage());
@@ -69,4 +80,6 @@ public class VisualizarTopFestas extends Fragment {
             return null;
         }
     }
+
+
 }
