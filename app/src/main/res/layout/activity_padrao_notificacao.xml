@@ -18,7 +18,7 @@
             android:id="@+id/ckPermitePush"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/margin_top_config"
             android:text="Permite notificação via push." />
 
         <CheckBox
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ckPermitePush"
-            android:layout_marginTop="37dp"
+            android:layout_marginTop="20dp"
             android:text="Permite criar alarme." />
 
         <CheckBox
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ckPermiteAlarme"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="@dimen/margin_top_config"
             android:text="Permite notificação de comentários nos seus eventos." />
 
         <CheckBox
@@ -42,29 +42,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ckNotificaComentario"
-            android:layout_marginTop="51dp"
+            android:layout_marginTop="@dimen/margin_top_config"
             android:text="Permite notificação sobre mudanças em geral nos seus eventos." />
 
         <CheckBox
             android:id="@+id/ckTelefoneVisivel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="@dimen/margin_top_config"
             android:text="Permite que o número do seu telefone fique visível para outros usuários." />
 
-        <CheckBox
-            android:id="@+id/ckCircularLocalizacao"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="Circular localização ao pesquisar evento." />
+            android:layout_marginTop="@dimen/margin_top_config"
+            android:text="Distância para a procura de eventos" />
 
         <Spinner
             android:id="@+id/spKm"
-            android:entries="@array/sessao_radius"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_config"
+            android:entries="@array/sessao_radius" />
     </LinearLayout>
+
 
 </ScrollView>

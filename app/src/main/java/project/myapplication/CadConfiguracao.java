@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import domain.Configuracoes;
 
@@ -18,34 +19,42 @@ public class CadConfiguracao extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_padrao_notificacao);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_padrao_notificacao);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ckPermitePush = (CheckBox)findViewById(R.id.ckPermitePush);
-        ckPermiteAlarme = (CheckBox)findViewById(R.id.ckPermiteAlarme);
-        ckNotificaComentario = (CheckBox)findViewById(R.id.ckNotificaComentario);
-        ckNotificaMudanca = (CheckBox)findViewById(R.id.ckNotificaMudanca);
-        ckTelefoneVisivel = (CheckBox)findViewById(R.id.ckTelefoneVisivel);
+            ckPermitePush = (CheckBox) findViewById(R.id.ckPermitePush);
+            ckPermiteAlarme = (CheckBox) findViewById(R.id.ckPermiteAlarme);
+            ckNotificaComentario = (CheckBox) findViewById(R.id.ckNotificaComentario);
+            ckNotificaMudanca = (CheckBox) findViewById(R.id.ckNotificaMudanca);
+            ckTelefoneVisivel = (CheckBox) findViewById(R.id.ckTelefoneVisivel);
 
-        objConfig = new Configuracoes();
-        objConfig.carregar(this);
-        //Carrega as notificações
-       if(objConfig.getPermitePush()== 1)
-            ckPermitePush.setChecked(true);
+            objConfig = new Configuracoes();
+            objConfig.carregar(this);
+            //region Carrega as notificações
+            if (objConfig.getPermitePush() == 1)
+                ckPermitePush.setChecked(true);
 
-        if(objConfig.getPermiteAlarme()==1)
-            ckPermiteAlarme.setChecked(true);
+            if (objConfig.getPermiteAlarme() == 1)
+                ckPermiteAlarme.setChecked(true);
 
-        if(objConfig.getNotificaComentario()==1)
-            ckNotificaComentario.setChecked(true);
+            if (objConfig.getNotificaComentario() == 1)
+                ckNotificaComentario.setChecked(true);
 
-        if(objConfig.getNotificaMudanca()==1)
-            ckNotificaMudanca.setChecked(true);
+            if (objConfig.getNotificaMudanca() == 1)
+                ckNotificaMudanca.setChecked(true);
 
-        if(objConfig.getTelefoneVisivel()==1)
-            ckTelefoneVisivel.setChecked(true);
-        //Verificar se a Check ta ticada ou não e alterar
+            if (objConfig.getNotificaMudanca() == 1)
+                ckTelefoneVisivel.setChecked(true);
+
+
+            // endregion
+
+        }catch (Exception e){
+            Toast.makeText(CadConfiguracao.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     @Override
