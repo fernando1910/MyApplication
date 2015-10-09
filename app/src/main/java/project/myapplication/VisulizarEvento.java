@@ -76,9 +76,11 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
             FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
             FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+            FloatingActionButton fab4 = (FloatingActionButton) findViewById(R.id.fab4);
             fab1.setOnClickListener(this);
             fab2.setOnClickListener(this);
             fab3.setOnClickListener(this);
+            fab4.setOnClickListener(this);
 
             //endregion
 
@@ -199,6 +201,13 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
         startActivity(intent);
     }
 
+    public void editarEvento()
+    {
+        Intent intent = new Intent(this,CadEvento.class);
+        intent.putExtra("codigoEvento", codigoEvento);
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -211,6 +220,10 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.fab3:
                 convidar();
+                break;
+
+            case R.id.fab4:
+                editarEvento();
                 break;
 
         }

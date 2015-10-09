@@ -42,6 +42,8 @@ import domain.Util;
 
 public class CadEvento extends ActionBarActivity {
     //region Variaveis
+    private int codigoEvento;
+    private int tipoOperacao = 0; // 1 inclusão, 2 alteração
     private DateFormat formatDate = DateFormat.getDateInstance();
     private DateFormat formatHour = DateFormat.getTimeInstance(DateFormat.SHORT);
     private Calendar calendar = Calendar.getInstance();
@@ -50,13 +52,14 @@ public class CadEvento extends ActionBarActivity {
     private EditText etTitulo, etDescricao;
     private RadioGroup rgStatusEvento;
     private Util util;
-    private RadioButton rbPublic, rbPrivate;
+    private RadioButton rbPrivate;
     private double nr_latitude, nr_longitude;
     private Configuracoes objConf;
     private Uri imgEvento;
     private Bitmap imgRetorno;
     private boolean fg_criou = true;
     private ProgressDialog progressDialog;
+    private Evento objEvento;
 
     //endregion
     @Override
@@ -74,7 +77,6 @@ public class CadEvento extends ActionBarActivity {
         tvEndereco = (TextView) findViewById(R.id.tvEndereco);
         rgStatusEvento = (RadioGroup) findViewById(R.id.rgStatusEvento);
         ibTimePicker = (ImageButton) findViewById(R.id.ibTimePicker);
-        rbPublic = (RadioButton) findViewById(R.id.rbPublic);
         rbPrivate = (RadioButton) findViewById(R.id.rbPrivate);
         ibEndereco = (ImageButton) findViewById(R.id.ibEndereco);
         ibFotoCapa = (ImageButton) findViewById(R.id.ibFotoCapa);
@@ -85,6 +87,7 @@ public class CadEvento extends ActionBarActivity {
 
         util = new Util();
         objConf = new Configuracoes();
+        objEvento = new Evento();
 
 
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1), getResources()));
@@ -105,6 +108,31 @@ public class CadEvento extends ActionBarActivity {
         ibFotoCapa.getLayoutParams().width = width;
         ibFotoCapa.getLayoutParams().height = (int) Math.ceil(height / 2.5);
 
+        Bundle parameters = getIntent().getExtras();
+        if(parameters != null) {
+            codigoEvento = parameters.getInt("codigoEvento");
+            objEvento.carregarLocal(codigoEvento,this);
+            carregarControles(objEvento);
+            tipoOperacao = 2;
+        }
+        else
+        {
+            tipoOperacao = 1;
+        }
+    }
+
+    public void carregarControles(Evento objEvento){
+        if (objEvento != null)
+        {
+            etTitulo.setText(objEvento.getTituloEvento());
+            etDescricao.setText(objEvento.getTituloEvento());
+
+        }
+        else
+        {
+            Toast.makeText(CadEvento.this, "Faha ao carregar evento", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     //region Validações de Imagens
@@ -297,7 +325,7 @@ public class CadEvento extends ActionBarActivity {
         startActivity(intent);
     }
 
-    public class compartilharEvento extends AsyncTask<Void, Integer, Void> {
+    public class salvarEvento extends AsyncTask<Void, Integer, Void> {
         @Override
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(CadEvento.this);
@@ -337,20 +365,17 @@ public class CadEvento extends ActionBarActivity {
     }
 
     public void onClickCriarEvento(View v) {
-        if (ValidarCampos()) {
-            new compartilharEvento().execute();
 
+        if (ValidarCampos()) {
+            new salvarEvento().execute();
         }
     }
 
     public boolean salvarEvento() {
-        Evento objEvento = new Evento();
         try {
             if (ValidarCampos()) {
                 Usuario objUsuario = new Usuario();
-
                 objUsuario = objUsuario.selecionarUsuario(this);
-
                 objEvento.setTituloEvento(etTitulo.getText().toString());
                 objEvento.setDescricao(etDescricao.getText().toString());
                 objEvento.setEndereco(tvEndereco.getText().toString());
@@ -359,7 +384,6 @@ public class CadEvento extends ActionBarActivity {
                 else
                     objEvento.setEventoPrivado(0);
                 objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
-
                 objEvento.setDataEvento(calendar.getTime());
                 objEvento.setDataInclusao(new Date());
                 objEvento.setLatitude(nr_latitude);
@@ -377,10 +401,9 @@ public class CadEvento extends ActionBarActivity {
                 }
 
             }
-            //objEvento.gerarEventoJSON(objEvento, getString(R.string.padrao_evento));
 
 
-            fg_criou = objEvento.salvarEventoOnline(this);
+            fg_criou = objEvento.salvarEventoOnline(this, tipoOperacao);
             return fg_criou;
         } catch (Exception e) {
             fg_criou = false;
