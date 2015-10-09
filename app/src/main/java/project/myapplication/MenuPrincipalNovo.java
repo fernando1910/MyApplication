@@ -35,6 +35,7 @@ import com.roomorama.caldroid.CaldroidListener;
 
 import java.util.Date;
 
+import domain.Configuracoes;
 import domain.Usuario;
 import extras.RoundImage;
 import extras.SlidingTabLayout;
@@ -250,7 +251,10 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
-            Toast.makeText(MenuPrincipalNovo.this, "onCheckedChanged: " + (b ? "true" : "false"), Toast.LENGTH_SHORT).show();
+            Configuracoes objConfig = new Configuracoes();
+            objConfig.carregar(getApplicationContext());
+            objConfig.setPermitePush((b ? 1 : 0));
+            objConfig.atualizar(getApplicationContext());
         }
     };
 
