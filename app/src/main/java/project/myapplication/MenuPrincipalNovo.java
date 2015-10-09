@@ -119,9 +119,11 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                 switch (i) {
                                     case 0:
                                         mFragment = Painel.newInstance();
+                                        setTitle("Inicio");
                                         break;
                                     case 1:
                                         mFragment = new PainelTodosEventos();
+                                        setTitle("Eventos");
                                         break;
                                     case 2:
                                         CaldroidFragment mFragmentCalendar = new CaldroidFragment();
@@ -136,6 +138,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         };
                                         mFragmentCalendar.setCaldroidListener(mCaldroidListener);
                                         mFragment = mFragmentCalendar;
+                                        setTitle("Calendario");
 
                                         break;
                                     case 3:
