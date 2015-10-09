@@ -1,9 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:theme="@style/Secundario"
     tools:context="project.myapplication.VisulizarEvento">
-    <item android:id="@+id/action_comentar" android:title="@string/action_comentar"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/action_convidar" android:title="@string/action_convidar"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_convidar"
+        android:orderInCategory="100"
+        android:title="@string/action_convidar"
+        app:theme="@style/Secundario"
+        app:showAsAction="never" />
 </menu>

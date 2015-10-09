@@ -3,26 +3,22 @@ package project.myapplication;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import adapters.EventoAdapter;
 import domain.Evento;
-import interfaces.RecyclerViewOnClickListenerHack;
 
 
-public class PainelMeusEvento extends Fragment implements RecyclerViewOnClickListenerHack {
+public class PainelMeusEvento extends Fragment  {
 
     private Evento objEvento;
     private ProgressDialog progressDialog;
     private String jsonString;
-    private RecyclerView rvEvento;
     private List<Evento> eventos;
-    private EventoAdapter adapter = null;
+
 
 
     @Override
@@ -66,17 +62,4 @@ public class PainelMeusEvento extends Fragment implements RecyclerViewOnClickLis
         return view;
     }
 
-    @Override
-    public void onClickListener(View view, int position) {
-       /* try {
-            int codigoEvento = adapter.getCodigoEvento(position);
-            Intent intent = new Intent(getActivity(), VisulizarEvento.class);
-            intent.putExtra("codigoEvento", codigoEvento);
-            startActivity(intent);
-        }catch (Exception e){
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-        */
-    }
 }

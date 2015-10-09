@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -18,17 +15,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapters.EventoAdapter;
 import domain.Evento;
-import interfaces.RecyclerViewOnClickListenerHack;
 
 
-public class PainelEventosPadrao extends AppCompatActivity implements RecyclerViewOnClickListenerHack {
+public class PainelEventosPadrao extends AppCompatActivity  {
 
     private ProgressDialog progressDialog;
-    private RecyclerView rvEvento;
+
     private List<Evento> eventos;
-    private EventoAdapter adapter = null;
+
     private String mDataCalendario;
 
     @Override
@@ -38,30 +33,6 @@ public class PainelEventosPadrao extends AppCompatActivity implements RecyclerVi
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             mDataCalendario = getIntent().getStringExtra("mDataCalendario");
-
-            rvEvento = (RecyclerView) findViewById(R.id.rvEvento);
-            rvEvento.setHasFixedSize(true);
-            rvEvento.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) rvEvento.getLayoutManager();
-                    EventoAdapter adapter = (EventoAdapter) rvEvento.getAdapter();
-
-                    if (eventos.size() == linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1) {
-
-                    }
-                }
-            });
-
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            rvEvento.setLayoutManager(linearLayoutManager);
 
 
             //new Carregar().execute();
@@ -112,17 +83,6 @@ public class PainelEventosPadrao extends AppCompatActivity implements RecyclerVi
         this.finish();
     }
 
-    @Override
-    public void onClickListener(View view, int position) {
-        try {
-            int codigoEvento = adapter.getCodigoEvento(position);
-            Intent intent = new Intent(this, VisulizarEvento.class);
-            intent.putExtra("codigoEvento", codigoEvento);
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(PainelEventosPadrao.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public class Carregar extends AsyncTask<Void, Integer, Void> {
         @Override
@@ -152,8 +112,6 @@ public class PainelEventosPadrao extends AppCompatActivity implements RecyclerVi
                             evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
                             evento.setUrlFoto(getString(R.string.caminho_foto_capa_evento) + evento.getCodigoEvento() + ".png");
                             eventos.add(evento);
-                            adapter = new EventoAdapter(PainelEventosPadrao.this, eventos);
-                            adapter.setRecyclerViewOnClickListenerHack(PainelEventosPadrao.this);
 
 
                         }
@@ -176,7 +134,7 @@ public class PainelEventosPadrao extends AppCompatActivity implements RecyclerVi
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
-            rvEvento.setAdapter(adapter);
+
         }
 
     }

@@ -201,7 +201,9 @@
         </activity>
         <activity
             android:name=".PainelConfiguracao"
-            android:label="@string/title_activity_painel_configuracao">
+            android:label="@string/title_activity_painel_configuracao" >
+        </activity>
+        <activity android:name=".VisualizarConvidados" >
         </activity>
     </application>
 
