@@ -1,11 +1,9 @@
 package services;
 
-
 import android.os.Bundle;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import de.greenrobot.event.EventBus;
 import domain.PushMessage;
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -14,7 +12,7 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String title = data.getString("title");
         String message = data.getString("message");
+        PushMessage objPushMessage = new PushMessage(title,message);
+        objPushMessage.enviarNotificao(this);
 
-        EventBus.getDefault().post( new PushMessage(title,message));
-    }
 }
