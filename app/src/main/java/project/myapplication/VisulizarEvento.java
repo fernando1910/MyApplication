@@ -28,7 +28,7 @@ import domain.Util;
 
 public class VisulizarEvento extends AppCompatActivity implements View.OnClickListener {
     final private String TAG = "VisualizarEvento";
-    private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado, tvTituloEvento2;
+    private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado, tvTituloEvento2, tvDataHora;
     private Util util;
     private int codigoEvento;
     private Evento objEvento;
@@ -52,6 +52,7 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             mFloatingActionMenu = (FloatingActionMenu) findViewById(R.id.menu);
             mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
             tvEndereco = (TextView)findViewById(R.id.tvEndereco);
+            tvDataHora = (TextView)findViewById(R.id.tvDataHora);
 
             collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
@@ -118,6 +119,12 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
                     tvPrivado.setText("Este evento é publico");
 
 
+                String mDataHora = util.formatarDataTela(objEvento.getDataEvento()) + " ás " + util.formatarHoraTela(objEvento.getDataEvento());
+                tvDataHora.setText(mDataHora);
+                mRatingBar.setRating(objEvento.getClassificacao());
+
+
+
             } else {
                 Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
 
@@ -137,8 +144,6 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
         }catch (Exception ex){
             Toast.makeText(VisulizarEvento.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override
@@ -157,9 +162,9 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             this.finish();
             return true;
         }
-        if (id == R.id.action_convidar)
+        if (id == R.id.action_convidados)
         {
-            Intent intent = new Intent(this,CadContato.class);
+            Intent intent = new Intent(this,VisualizarConvidados.class);
             intent.putExtra("codigoEvento",codigoEvento);
             startActivity(intent);
 

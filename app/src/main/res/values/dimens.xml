@@ -18,4 +18,6 @@
     <dimen name="padrao_icone_painel">150sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_top_config">20dp</dimen>
+    <dimen name="espacamento_quadro_visualizacao_evento">6dp</dimen>
+    <dimen name="espacamento_quadro_visualizacao_evento_vertical">10dp</dimen>
 </resources>

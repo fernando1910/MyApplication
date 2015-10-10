@@ -18,6 +18,7 @@
             android:layout_height="match_parent"
             app:expandedTitleMarginEnd="30dp"
             app:expandedTitleMarginStart="30dp"
+
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -50,8 +51,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/LightGrey">
+            android:background="@color/lightgray"
+            android:orientation="vertical">
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -65,34 +66,108 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-16dp"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_vertical_margin"
-                android:padding="5dp"
                 android:orientation="vertical"
-                android:background="@color/White">
+                android:padding="5dp"
+                android:weightSum="1">
 
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:text="Descrição"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvDescricaoEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16sp" />
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/tvPrivado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:text="Endereço"
                     android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvEndereco"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:text="Data e hora"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvDataHora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:text="Informações adicionais"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvPrivado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_border_all"
+                    android:paddingLeft="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingRight="@dimen/espacamento_quadro_visualizacao_evento"
+                    android:paddingTop="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:paddingBottom="@dimen/espacamento_quadro_visualizacao_evento_vertical"
+                    android:textSize="18sp" />
+
+
             </LinearLayout>
 
         </LinearLayout>
@@ -135,7 +210,7 @@
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_label="Comentar"
             app:fab_size="mini"
-            app:theme="@style/Secundario"/>
+            app:theme="@style/Secundario" />
 
 
         <com.github.clans.fab.FloatingActionButton

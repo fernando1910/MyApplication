@@ -82,10 +82,19 @@ public class Util {
     public String formatarDataTela(Date data)
     {
         String dataFinal;
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
+
+    public String formatarHoraTela(Date data)
+    {
+        String dataFinal;
+        DateFormat dateFormat = new SimpleDateFormat("H:mm");
+        dataFinal = dateFormat.format(data);
+        return dataFinal;
+    }
+
 
 
     public String formatarStringDataBanco(String data)
