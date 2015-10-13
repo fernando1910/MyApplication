@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import project.myapplication.PainelNovidades;
+import project.myapplication.R;
 import project.myapplication.VisualizarTopComentarios;
 import project.myapplication.VisualizarTopConvidados;
 import project.myapplication.VisualizarTopFestas;
@@ -14,8 +15,12 @@ import project.myapplication.VisualizarTopFestas;
 public class TabsAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
     private String[] titles = {"INICIO", "TOP FESTAS", "TOP CONVIDADOS", "TOP COMENTADOS"};
-
-
+    int[] mIcons = new  int[]{
+        R.drawable.ic_home_black_18dp,
+        R.drawable.star,
+        R.drawable.calendar_today,
+        R.drawable.magnify
+    };
 
     public TabsAdapter(FragmentManager fm, Context context) {
         super(fm);

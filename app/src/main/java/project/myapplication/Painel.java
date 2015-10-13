@@ -1,6 +1,5 @@
 package project.myapplication;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,10 +12,6 @@ import adapters.TabsAdapter;
 import domain.Usuario;
 import extras.SlidingTabLayout;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Painel extends Fragment {
 
     private Usuario objUsuario;
@@ -30,8 +25,7 @@ public class Painel extends Fragment {
     }
 
     public static Painel newInstance() {
-        Painel mFragment = new Painel();
-        return mFragment;
+        return new Painel();
     }
 
     @Override
@@ -39,20 +33,16 @@ public class Painel extends Fragment {
                              Bundle savedInstanceState) {
         View view;
 
-
-        getActivity().setTitle(R.string.title_home);
         view = inflater.inflate(R.layout.fragment_padrao_painel, container, false);
 
-
         mViewPager = (ViewPager) view.findViewById(R.id.vp_tabs);
-        mViewPager.setAdapter( new TabsAdapter(getActivity().getSupportFragmentManager(), getActivity().getApplicationContext()));
+        mViewPager.setAdapter(new TabsAdapter(getActivity().getSupportFragmentManager(), getActivity().getApplicationContext()));
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.stl_tabs);
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
-
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        return view ;
+        return view;
 
     }
 }

@@ -8,9 +8,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,12 +38,10 @@ import java.util.Date;
 import domain.Configuracoes;
 import domain.Usuario;
 import extras.RoundImage;
-import extras.SlidingTabLayout;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
+    private final String TAG = "LOG";
     private Toolbar mToolbar;
-    private ViewPager mViewPager;
-    private SlidingTabLayout mSlidingTabLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -69,15 +67,6 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             } catch (Exception e) {
                 Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
-        /*
-        mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
-        mViewPager.setAdapter( new TabsAdapter(getSupportFragmentManager(), this, 0));
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
-        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.colorPrimaryDark));
-        mSlidingTabLayout.setViewPager(mViewPager);
-        */
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.layoutConteudo, Painel.newInstance(), "tagMain");
@@ -120,11 +109,11 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                 switch (i) {
                                     case 0:
                                         mFragment = Painel.newInstance();
-                                        setTitle("Inicio");
+                                        setTitleActionBar("Início");
                                         break;
                                     case 1:
                                         mFragment = new PainelTodosEventos();
-                                        setTitle("Eventos");
+                                        setTitleActionBar("Convites");
                                         break;
                                     case 2:
                                         CaldroidFragment mFragmentCalendar = new CaldroidFragment();
@@ -139,8 +128,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         };
                                         mFragmentCalendar.setCaldroidListener(mCaldroidListener);
                                         mFragment = mFragmentCalendar;
-                                        setTitle("Calendario");
-
+                                        setTitleActionBar("Calendário");
                                         break;
                                     case 3:
                                         startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class));
@@ -179,7 +167,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
             navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
             navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Toast.makeText(MenuPrincipalNovo.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -192,14 +180,13 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         SearchView searchView;
         MenuItem item = menu.findItem(R.id.action_search);
         searchView = (SearchView) item.getActionView();
-        try{
+        try {
 
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setQueryHint("Pesquisar");
 
-        }
-        catch (Exception e){
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         searchView.setIconifiedByDefault(false);
@@ -242,13 +229,13 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         hendleSearch(intent);
     }
 
-    public void hendleSearch( Intent intent) {
+    public void hendleSearch(Intent intent) {
         if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
             String mQuery = intent.getStringExtra(SearchManager.QUERY);
         }
     }
 
-            private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
+    private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
             Configuracoes objConfig = new Configuracoes();
@@ -258,5 +245,12 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         }
     };
 
+    public void   setTitleActionBar(String mTitle){
+        try {
+            getSupportActionBar().setTitle(mTitle);
+        }catch (Exception ex){
+            Log.i(TAG, ex.getMessage());
+        }
+    }
 
 }

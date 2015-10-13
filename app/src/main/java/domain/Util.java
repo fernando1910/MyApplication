@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,6 +21,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,62 +40,56 @@ import project.myapplication.CadPerfil;
 import project.myapplication.CadTelefone;
 import project.myapplication.MainActivity;
 import project.myapplication.MenuPrincipalNovo;
+import project.myapplication.R;
 import project.myapplication.ValidarTelefone;
 
 public class Util {
 
-    public String RetornaDataHoraMinuto()
-    {
+    public String RetornaDataHoraMinuto() {
         String DataHora;
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
         //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,-1);
-        DataHora=  dateFormat.format(calendar.getTime());
+        calendar.add(Calendar.DATE, -1);
+        DataHora = dateFormat.format(calendar.getTime());
         return DataHora;
     }
 
-    public Date formataData(String date)
-    {
+    public Date formataData(String date) {
         Date dataConvertida = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-        try{
+        try {
             dataConvertida = simpleDateFormat.parse(date);
-        }catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  dataConvertida;
+        return dataConvertida;
     }
 
 
-    public Drawable retornarIcone(Drawable drawable, Resources resources)
-    {
+    public Drawable retornarIcone(Drawable drawable, Resources resources) {
 
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-        drawable = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap,100,100,true));
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        drawable = new BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, 100, 100, true));
         return drawable;
 
     }
 
-    public String formatarDataBanco(Date data)
-    {
+    public String formatarDataBanco(Date data) {
         String dataFinal;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
 
-    public String formatarDataTela(Date data)
-    {
+    public String formatarDataTela(Date data) {
         String dataFinal;
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
 
-    public String formatarHoraTela(Date data)
-    {
+    public String formatarHoraTela(Date data) {
         String dataFinal;
         DateFormat dateFormat = new SimpleDateFormat("H:mm");
         dataFinal = dateFormat.format(data);
@@ -96,29 +97,26 @@ public class Util {
     }
 
 
-
-    public String formatarStringDataBanco(String data)
-    {
+    public String formatarStringDataBanco(String data) {
         String dataFinal = null;
-        data = data.replace("/","-");
+        data = data.replace("/", "-");
         String[] dataTemp = data.split("//-");
 
         int i = 0;
 
-        while (i> dataTemp.length)
-        {
+        while (i > dataTemp.length) {
             dataFinal = dataFinal + dataTemp[i];
             i++;
         }
 
-        return   dataFinal;
+        return dataFinal;
     }
 
-    public String enviarServidor(final String url,final String data, final String comando) throws InterruptedException {
+    public String enviarServidor(final String url, final String data, final String comando) throws InterruptedException {
         final String[] resposta = new String[1];
-        Thread thread = new Thread(){
-            public void run(){
-                resposta[0] =  HttpConnection.getSetDataWeb(url, comando, data);
+        Thread thread = new Thread() {
+            public void run() {
+                resposta[0] = HttpConnection.getSetDataWeb(url, comando, data);
 
             }
         };
@@ -137,7 +135,7 @@ public class Util {
         intent.putExtra("enabled", true);
         context.sendBroadcast(intent);
         String provider = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-        if(!provider.contains("gps")) { //gps desligado
+        if (!provider.contains("gps")) { //gps desligado
             final Intent poke = new Intent();
             poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
@@ -201,21 +199,20 @@ public class Util {
 
 
         } catch (Exception ex) {
-            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
 
         }
         return latLng;
 
     }
 
-    public boolean verificaGPS(Context context)
-    {
+    public boolean verificaGPS(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
     }
 
-    public boolean verificaInternet(Context context){
+    public boolean verificaInternet(Context context) {
         ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo i = conMgr.getActiveNetworkInfo();
         if (i == null)
@@ -230,18 +227,18 @@ public class Util {
 
     public Util() {
     }
-    public String gerarCodigo(){
+
+    public String gerarCodigo() {
         Random gerador = new Random();
-        return  String.valueOf(gerador.nextInt(100000)+100000);
+        return String.valueOf(gerador.nextInt(100000) + 100000);
     }
 
-    public boolean checarServico(Context context){
+    public boolean checarServico(Context context) {
         int resultado = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if(resultado != ConnectionResult.SUCCESS)
-        {
-            if(GooglePlayServicesUtil.isUserRecoverableError(resultado)){
+        if (resultado != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultado)) {
 
-            }else {
+            } else {
                 Log.i("LOG", "Não suportado");
             }
             return false;
@@ -249,12 +246,11 @@ public class Util {
         return true;
     }
 
-    public void validarTela(Context context, int ind_tela)
-    {
+    public void validarTela(Context context, int ind_tela) {
         Configuracoes objConfig = new Configuracoes();
         objConfig.carregar(context);
         int ind_status = objConfig.getStatusPerfil();
-        if(ind_status != ind_tela) {
+        if (ind_status != ind_tela) {
             Intent intent = null;
             switch (ind_status) {
                 case 0:
@@ -282,11 +278,55 @@ public class Util {
         }
     }
 
-    public String retiraEspecial(String mEntrada)
-    {
-        return mEntrada.replace(".","").replace("+","").replace("-","");
+    public String retiraEspecial(String mEntrada) {
+        return mEntrada.replace(".", "").replace("+", "").replace("-", "");
     }
 
+    private void moveFile(String inputPath, String inputFile, String outputPath) throws FileNotFoundException, Exception {
 
+        InputStream in = null;
+        OutputStream out = null;
+        File dir = new File(outputPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        in = new FileInputStream(inputPath + inputFile);
+        out = new FileOutputStream(outputPath + inputFile);
+
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+        in.close();
+        in = null;
+
+        // write the output file
+        out.flush();
+        out.close();
+        out = null;
+
+        // delete the original file
+        new File(inputPath + inputFile).delete();
+    }
+
+    public boolean salvarFoto(byte[] mImagem, String mTipoFoto, Context mContext, String mCodigo) {
+        try {
+            File mFile = new File(
+                    Environment.getExternalStorageDirectory() +  "/" +  // Diretorno
+                    mContext.getString(R.string.app_name) + "/" +  // Nome do APP
+                    mTipoFoto + "/" +  // Pasta
+                    mCodigo + ".jpg" ); // Código
+
+            mFile.createNewFile();
+            FileOutputStream mFileOutputStream = new FileOutputStream(mFile);
+            mFileOutputStream.write(mImagem);
+            mFileOutputStream.close();
+            return true;
+        }catch (Exception ex){
+            return false;
+        }
+    }
 
 }

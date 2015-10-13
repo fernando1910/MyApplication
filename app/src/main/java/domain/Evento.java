@@ -194,6 +194,7 @@ public class Evento {
             if (Integer.parseInt(mResposta[0]) != 0) {
                 this.cd_evento = Integer.parseInt(mResposta[0]);
                 this.salvarEventoLocal(context);
+                util.salvarFoto(getImagemFotoCapa(), "Evento", context, mResposta[0] );
                 return true;
             } else {
                 return false;

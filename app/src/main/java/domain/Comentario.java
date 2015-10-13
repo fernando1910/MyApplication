@@ -85,7 +85,7 @@ public class Comentario {
             for (int i = 0; i < jsonArray.length(); i++) {
                 jsonObject = new JSONObject(jsonArray.getString(i));
                 Comentario mComentario = new Comentario();
-                mComentario.setUsuarioComentario(jsonObject.getString("ds_usuario"));
+                mComentario.setUsuarioComentario(jsonObject.getString("ds_nome") + ": ");
                 mComentario.setComentario(jsonObject.getString("ds_comentario"));
                 mComentarios.add(mComentario);
             }

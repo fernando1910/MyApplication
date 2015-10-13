@@ -6,8 +6,8 @@
     <color name="colorAccent">#9E9E9E</color>
     
     <!-- padrao -->
-    <color name="padrao_botao">#212121</color>
-    <color name="padrao_texto_botao">#fff</color>
+    <color name="padrao_botao">#255E69</color>
+    <color name="padrao_texto_botao">#D8E9EB</color>
 
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>

@@ -28,7 +28,6 @@ public class CadComentario extends AppCompatActivity {
     private int codigoEvento, codigoUsuario;
     private EditText etComentario;
     private Evento objEvento;
-    private String comentario;
     private ProgressDialog mProgressDialog;
     private Util util;
     private ListView lvComentarios;
@@ -56,6 +55,7 @@ public class CadComentario extends AppCompatActivity {
             finish();
         }
         objEvento = new Evento();
+        objComentario = new Comentario();
         util = new Util();
         Usuario objUsuario = new Usuario();
         objUsuario.carregar(this);
@@ -96,7 +96,7 @@ public class CadComentario extends AppCompatActivity {
     {
         if(validarCampos())
         {
-            comentario = etComentario.getText().toString();
+            objComentario.setComentario(etComentario.getText().toString());
             new comentar().execute();
         }
     }
@@ -129,7 +129,10 @@ public class CadComentario extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 synchronized (this) {
-                    String mResposta = objEvento.enviarComentario(codigoEvento, codigoUsuario, comentario, getString(R.string.wsBlueDate));
+                    String mResposta = objEvento.enviarComentario(codigoEvento, codigoUsuario, objComentario.getComentario(), getString(R.string.wsBlueDate));
+                    objComentario.setCodigoComentario(Integer.parseInt(mResposta));
+                    mComentarios.add(objComentario);
+                    mAdapter.notifyDataSetChanged();
                     Log.i(TAG,mResposta);
                 }
             } catch (Exception e) {
