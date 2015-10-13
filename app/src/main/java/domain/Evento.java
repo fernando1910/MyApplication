@@ -194,14 +194,22 @@ public class Evento {
             if (Integer.parseInt(mResposta[0]) != 0) {
                 this.cd_evento = Integer.parseInt(mResposta[0]);
                 this.salvarEventoLocal(context);
-                util.salvarFoto(getImagemFotoCapa(), "Evento", context, mResposta[0] );
+                if (getImagemFotoCapa() != null)
+                    util.salvarFoto(getImagemFotoCapa(), "Evento", context, mResposta[0] );
+
                 return true;
             } else {
                 return false;
             }
         } else {
             mResposta[0] = util.enviarServidor(caminhoServidor, jsonString, "atualizarEvento");
-            return Integer.parseInt(mResposta[0]) > 0;
+            if (Integer.parseInt(mResposta[0]) > 0){
+                this.atualizar(context);
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
     }
@@ -224,6 +232,8 @@ public class Evento {
 
 
         try {
+            if(this.getCodigoEvento() != Integer.MIN_VALUE)
+                jsonObject.put("cd_evento", this.getCodigoEvento());
             jsonObject.put("ds_titulo_evento", this.getTituloEvento());
             jsonObject.put("ds_descricao", this.getDescricao());
             jsonObject.put("cd_usario_inclusao", this.getCodigoUsarioInclusao());
@@ -353,6 +363,11 @@ public class Evento {
 
     public List<Evento> pesquisarEventosOnline(Context context, String query) throws JSONException, InterruptedException {
         return selecionarEventosOnline(context, "pesquisarEvento", query);
+    }
+
+    public String atualizar(Context context){
+        EventoDAO eventoDAO = new EventoDAO(context);
+        return eventoDAO.atualizar(this);
     }
     //endregion
 

@@ -109,28 +109,25 @@ public class CadEvento extends ActionBarActivity {
         ibFotoCapa.getLayoutParams().height = (int) Math.ceil(height / 2.5);
 
         Bundle parameters = getIntent().getExtras();
-        if(parameters != null) {
+        if (parameters != null) {
             codigoEvento = parameters.getInt("codigoEvento");
-            objEvento.carregarLocal(codigoEvento,this);
+            objEvento.carregarLocal(codigoEvento, this);
             carregarControles(objEvento);
             tipoOperacao = 2;
-        }
-        else
-        {
+        } else {
             tipoOperacao = 1;
         }
     }
 
-    public void carregarControles(Evento objEvento){
-        if (objEvento != null)
-        {
+    public void carregarControles(Evento objEvento) {
+        if (objEvento != null) {
             etTitulo.setText(objEvento.getTituloEvento());
             etDescricao.setText(objEvento.getTituloEvento());
-
-        }
-        else
-        {
-            Toast.makeText(CadEvento.this, "Faha ao carregar evento", Toast.LENGTH_SHORT).show();
+            tvEndereco.setText(objEvento.getEndereco());
+            tvData.setText(formatDate.format(objEvento.getDataEvento()));
+            tvHora.setText(formatHour.format(objEvento.getDataEvento()));
+        } else {
+            Toast.makeText(CadEvento.this, "Falha ao carregar evento", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -373,41 +370,40 @@ public class CadEvento extends ActionBarActivity {
 
     public boolean salvarEvento() {
         try {
-            if (ValidarCampos()) {
-                Usuario objUsuario = new Usuario();
-                objUsuario = objUsuario.selecionarUsuario(this);
-                objEvento.setTituloEvento(etTitulo.getText().toString());
-                objEvento.setDescricao(etDescricao.getText().toString());
-                objEvento.setEndereco(tvEndereco.getText().toString());
-                if (rbPrivate.isChecked())
-                    objEvento.setEventoPrivado(1);
-                else
-                    objEvento.setEventoPrivado(0);
-                objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
-                objEvento.setDataEvento(calendar.getTime());
-                objEvento.setDataInclusao(new Date());
-                objEvento.setLatitude(nr_latitude);
-                objEvento.setLongitude(nr_longitude);
-
-                if (imgEvento != null) {
-
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    imgRetorno.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                    byte[] byteArray = byteArrayOutputStream.toByteArray();
-                    objEvento.setImagemFotoCapa(byteArray);
-                    String imagemServidor = Base64.encodeToString(byteArray, 0);
-                    objEvento.setFotoCapa(imagemServidor);
-
-                }
-
-            }
-
-
+            descarregarControles();
             fg_criou = objEvento.salvarEventoOnline(this, tipoOperacao);
             return fg_criou;
         } catch (Exception e) {
             fg_criou = false;
             return false;
+        }
+    }
+
+    public void descarregarControles() {
+
+        Usuario objUsuario = new Usuario();
+        objUsuario = objUsuario.selecionarUsuario(this);
+        objEvento.setTituloEvento(etTitulo.getText().toString());
+        objEvento.setDescricao(etDescricao.getText().toString());
+        objEvento.setEndereco(tvEndereco.getText().toString());
+        if (rbPrivate.isChecked())
+            objEvento.setEventoPrivado(1);
+        else
+            objEvento.setEventoPrivado(0);
+        objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
+        objEvento.setDataEvento(calendar.getTime());
+        objEvento.setDataInclusao(new Date());
+        objEvento.setLatitude(nr_latitude);
+        objEvento.setLongitude(nr_longitude);
+
+        if (imgEvento != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imgRetorno.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            //objEvento.setImagemFotoCapa(byteArray);
+            String imagemServidor = Base64.encodeToString(byteArray, 0);
+            objEvento.setFotoCapa(imagemServidor);
+
         }
     }
 

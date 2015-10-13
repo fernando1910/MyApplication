@@ -82,7 +82,7 @@ public class EventoDAO {
 
     public Evento selecionar(int codigoEvento, Evento objEvento){
         Util util = new Util();
-        Cursor c = db.rawQuery("SELECT * FROM tb_evento WHERE cd_evento = " + codigoEvento ,null);
+        Cursor c = db.rawQuery("SELECT * FROM tb_evento WHERE cd_evento = " + codigoEvento, null);
         c.moveToFirst();
         if (c.getCount() > 0){
             objEvento.setCodigoEvento(codigoEvento);
@@ -143,9 +143,27 @@ public class EventoDAO {
     public String classificarEvento(int cd_evento, float ind_classificacao) throws  Exception{
         ContentValues values = new ContentValues();
         values.put(EventoDAO.ind_classificacao, ind_classificacao);
-        db.update(TABELA,values,"cd_evento = ?", new String[]{String.valueOf(cd_evento)});
+        db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(cd_evento)});
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
         return mSqLiteStatement.toString();
 
+    }
+
+    public String atualizar(Evento objEvento) {
+
+        ContentValues values = new ContentValues();
+        values.put(cd_evento, objEvento.getCodigoEvento());
+        values.put(ds_titulo_evento, objEvento.getTituloEvento());
+        values.put(ds_descricao, objEvento.getDescricao());
+        values.put(nr_latitude, objEvento.getLatitude());
+        values.put(nr_longitude, objEvento.getLongitude());
+        values.put(cd_usuario_inclusao, objEvento.getCodigoUsarioInclusao());
+        values.put(dt_evento, objEvento.getDataEvento().toString());
+        values.put(dt_inclusao, objEvento.getDataInclusao().toString());
+        values.put(fg_evento_privado, objEvento.getEventoPrivado());
+        values.put(ds_endereco, objEvento.getEndereco());
+        db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(cd_evento)});
+        SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
+        return mSqLiteStatement.toString();
     }
 }
