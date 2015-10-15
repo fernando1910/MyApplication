@@ -9,14 +9,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_marginBottom"
-        android:layout_marginLeft="@dimen/layout_marginLeft"
-        android:layout_marginRight="@dimen/layout_marginRight"
-        android:layout_marginTop="@dimen/layout_marginTop"
+        android:layout_marginBottom="@dimen/layout_marginPadrao"
+        android:layout_marginLeft="@dimen/layout_marginLeftp"
+        android:layout_marginRight="@dimen/layout_marginRightp"
+        android:layout_marginTop="@dimen/layout_marginPadrao"
         android:background="@color/White"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingBottom="@dimen/layout_paddingPadrao"
+        android:paddingLeft="@dimen/layout_paddingPadrao"
+        android:paddingRight="@dimen/layout_paddingPadrao"
+        android:paddingTop="@dimen/layout_paddingPadrao">
 
         <ImageButton
 
@@ -26,12 +28,12 @@
             android:src="@drawable/ic_novos_convites" />
 
         <TextView
-            android:textSize="20sp"
-            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="10dp"
             android:text="Confira seus convites"
+            android:textSize="20sp"
 
             />
 
@@ -40,22 +42,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_marginBottom"
-        android:layout_marginLeft="@dimen/layout_marginLeft"
-        android:layout_marginRight="@dimen/layout_marginRight"
-        android:layout_marginTop="@dimen/layout_marginTop"
+        android:layout_marginBottom="@dimen/layout_marginPadrao"
+        android:layout_marginLeft="@dimen/layout_marginLeftp"
+        android:layout_marginRight="@dimen/layout_marginRightp"
+        android:layout_marginTop="@dimen/layout_marginPadrao"
         android:background="@color/White"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
-            android:textSize="20sp"
-            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="10dp"
             android:text="Alterações importantes"
+            android:textSize="20sp"
 
             />
 
@@ -72,10 +74,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_marginBottom"
-        android:layout_marginLeft="@dimen/layout_marginLeft"
-        android:layout_marginRight="@dimen/layout_marginRight"
-        android:layout_marginTop="@dimen/layout_marginTop"
+        android:layout_marginBottom="@dimen/layout_marginPadrao"
+        android:layout_marginLeft="@dimen/layout_marginLeftp"
+        android:layout_marginRight="@dimen/layout_marginRightp"
+        android:layout_marginTop="@dimen/layout_marginPadrao"
         android:background="@color/White"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -89,12 +91,12 @@
             android:src="@drawable/ic_comentarios" />
 
         <TextView
-            android:textSize="20sp"
-            android:padding="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="10dp"
             android:text="Novos comentarios"
+            android:textSize="20sp"
 
             />
 
