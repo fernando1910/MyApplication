@@ -1,7 +1,0 @@
-<resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="layout_marginPadrao">15dp</dimen>
-    <dimen name="layout_marginLeftp">7dp</dimen>
-    <dimen name="layout_marginRightp">7dp</dimen>
-    <dimen name="layout_paddingPadrao">30dp</dimen>
-</resources>

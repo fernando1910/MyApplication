@@ -10,7 +10,7 @@ import project.myapplication.PainelMeusEvento;
 
 public class TabsAdapterEvento extends FragmentStatePagerAdapter {
     private Context mContext;
-    private String[] mTitles = {"EU VOU", "MEUS EVENTOS"};
+    private String[] mTitles = {"Convites", "Meus Eventos"};
 
     public TabsAdapterEvento(FragmentManager fm, Context context) {
         super(fm);
