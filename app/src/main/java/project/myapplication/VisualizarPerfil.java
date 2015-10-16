@@ -58,23 +58,25 @@ public class VisualizarPerfil extends AppCompatActivity {
 
             ibSalvarNome.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_salvar_perfil), getResources()));
 
-            if (objUsuario.getImagemPerfil() != null) {
-                try {
-                    File mFile = new File(objUsuario.getCaminhoFoto());
+            Bitmap bitmap = null;
+            if (!objUsuario.getCaminhoFoto().equals("")) {
+                File mFile = new File(objUsuario.getCaminhoFoto());
+                if (mFile.exists()) {
                     BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                    Bitmap bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(),bmOptions);
-                    //Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
-                    roundedImage = new RoundImage(bitmap);
-                    ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
-                    ibPerfil.setImageDrawable(roundedImage);
-
-                } catch (Exception e) {
-                    Toast.makeText(this, "Falha ao carregar imagem de perfil", Toast.LENGTH_SHORT).show();
+                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(),bmOptions);
                 }
-            }else
-            {
-                carregarImagemPadrao();
+                else if (objUsuario.getImagemPerfil() != null)
+                    bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
             }
+
+            if (bitmap == null)
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+
+            roundedImage = new RoundImage(bitmap);
+            ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
+            ibPerfil.setImageDrawable(roundedImage);
+
+
 
             ibPerfil.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -193,11 +195,6 @@ public class VisualizarPerfil extends AppCompatActivity {
 
     }
 
-    public void carregarImagemPadrao(){
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.image);
-        roundedImage = new RoundImage(bm);
-        ibPerfil.setImageDrawable(roundedImage);
-    }
 
     private class atualizarNome extends AsyncTask<Void,Integer,Void>{
         @Override

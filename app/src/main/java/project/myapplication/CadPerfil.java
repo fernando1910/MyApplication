@@ -88,43 +88,50 @@ public class CadPerfil extends Activity {
     }
 
     private void SelectImagem() {
+        try {
+            final CharSequence[] options = {"Tirar foto", "Escolher da Galeria", "Cancelar"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(CadPerfil.this);
+            builder.setTitle("Adcionar Foto");
 
-        final CharSequence[] options = {"Tirar foto", "Escolher da Galeria", "Cancelar"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(CadPerfil.this);
-        builder.setTitle("Adcionar Foto");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
 
-        builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
 
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
+                    if (options[item].equals("Tirar foto")) {
 
-                if (options[item].equals("Tirar foto")) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
+                                + getString(R.string.app_name));
 
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
-                            + getString(R.string.app_name));
+                        diretorio = new File(diretorio.getPath() + "/Perfil");
+                        File mFile = new File(diretorio, "0.png");
+                        if (mFile.exists())
+                            mFile.delete();
 
-                    diretorio = new File(diretorio.getPath() + "/Perfil");
-                    imgPerfil = Uri.fromFile(new File(diretorio,"0.png"));
+                        imgPerfil = Uri.fromFile(mFile);
 
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgPerfil);
+                        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgPerfil);
 
-                    try {
-                        intent.putExtra("return-data", true);
-                        startActivityForResult(intent, 1);
-                    } catch (ActivityNotFoundException e) {
-                        Log.i(TAG, e.getMessage());
+                        try {
+                            intent.putExtra("return-data", true);
+                            startActivityForResult(intent, 1);
+                        } catch (ActivityNotFoundException e) {
+                            Log.i(TAG, e.getMessage());
+                        }
+                    } else if (options[item].equals("Escolher da Galeria")) {
+                        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 2);
+                    } else if (options[item].equals("Cancelar")) {
+                        dialog.dismiss();
                     }
-                } else if (options[item].equals("Escolher da Galeria")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
-                } else if (options[item].equals("Cancelar")) {
-                    dialog.dismiss();
                 }
-            }
-        });
+            });
 
-        builder.show();
+            builder.show();
+        }catch (Exception ex){
+            Log.i(TAG,ex.getMessage());
+        }
     }
 
     @Override

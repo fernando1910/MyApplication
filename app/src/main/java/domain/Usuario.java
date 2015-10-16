@@ -158,7 +158,7 @@ public class Usuario {
             this.ds_token = objUsuario.getToken();
             this.img_perfil = objUsuario.getImagemPerfil();
             this.ds_caminho_foto = Environment.getExternalStorageDirectory() + "/"
-                    + context.getString(R.string.app_name) + "/Perfil/" + String.valueOf(this.cd_usuario) + ".jpg";
+                    + context.getString(R.string.app_name) + "/Perfil/" + String.valueOf(this.cd_usuario) + ".png";
         }
 
     }

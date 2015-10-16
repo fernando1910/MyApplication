@@ -274,7 +274,7 @@ public class Util {
                     Environment.getExternalStorageDirectory() +  "/" +  // Diretorno
                     mContext.getString(R.string.app_name) + "/" +  // Nome do APP
                     mTipoFoto + "/" +  // Pasta
-                    mCodigo + ".jpg" ); // Código
+                    mCodigo + ".png" ); // Código
 
             if (mFile.exists()){
                 Log.i("", String.valueOf(mFile.delete()));

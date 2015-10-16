@@ -35,6 +35,7 @@ import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
+import java.io.File;
 import java.util.Date;
 
 import domain.Configuracoes;
@@ -56,10 +57,22 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             Usuario objUsuario = new Usuario();
             objUsuario.carregar(this);
             Bitmap bitmap = null;
-            if (objUsuario.getImagemPerfil() != null)
-                bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
-            else
-                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+
+            if (!objUsuario.getCaminhoFoto().equals("")) {
+                File mFile = new File(objUsuario.getCaminhoFoto());
+                if (mFile.exists()) {
+                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(),bmOptions);
+                }
+                else {
+                    if (objUsuario.getImagemPerfil() != null)
+                        bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+                    else {
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+                    }
+                }
+            }
+
 
             RoundImage roundImage = new RoundImage(bitmap);
 
