@@ -105,9 +105,7 @@ public class CadPerfil extends Activity {
                             + getString(R.string.app_name));
 
                     diretorio = new File(diretorio.getPath() + "/Perfil");
-                    Util util = new Util();
-                    imgPerfil = Uri.fromFile(new File(diretorio,
-                            "img_perfil_" + String.valueOf(util.RetornaDataHoraMinuto() + ".jpg")));
+                    imgPerfil = Uri.fromFile(new File(diretorio,"0.png"));
 
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgPerfil);
 
@@ -152,21 +150,14 @@ public class CadPerfil extends Activity {
 
     public void cortarFoto(Uri selectedImage) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        // indicate image type and Uri
         cropIntent.setDataAndType(selectedImage, "image/*");
-        // set crop properties
         cropIntent.putExtra("crop", "true");
-        // indicate aspect of desired crop
         cropIntent.putExtra("aspectX", 1);
         cropIntent.putExtra("aspectY", 1);
-        // indicate output X and Y
         cropIntent.putExtra("outputX", 256);
         cropIntent.putExtra("outputY", 256);
-        // retrieve data on return
         cropIntent.putExtra("return-data", true);
-        // start the activity - we handle returning in onActivityResult
         startActivityForResult(cropIntent, 3);
-
     }
 
     public boolean ValidarCampos() {
@@ -186,8 +177,8 @@ public class CadPerfil extends Activity {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 objUsuario.setImagemPerfil(byteArrayOutputStream.toByteArray());
-                objUsuario.setFotoPerfil(Base64.encodeToString(objUsuario.getImagemPerfil(), 0));
-                objUsuario.setCaminhoFoto(imgPerfil.getPath());
+                objUsuario.setFotoPerfilServidor(Base64.encodeToString(objUsuario.getImagemPerfil(), 0));
+
             }
             objUsuario.setNome(etNome.getText().toString());
 

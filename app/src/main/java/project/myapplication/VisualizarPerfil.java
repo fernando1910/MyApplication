@@ -1,6 +1,7 @@
 package project.myapplication;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,9 @@ public class VisualizarPerfil extends AppCompatActivity {
     private Usuario objUsuario;
     private boolean fg_atualiza_nome;
     private ByteArrayOutputStream byteArrayOutputStream;
+    private ProgressDialog mProgressDialog;
+    private Util util;
+    private Bitmap mImamge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,28 +50,30 @@ public class VisualizarPerfil extends AppCompatActivity {
             ibSalvarNome = (ImageButton) findViewById(R.id.ibSalvarNome);
             etNome = (EditText) findViewById(R.id.etNome);
 
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.image);
-            roundedImage = new RoundImage(bm);
-            ibPerfil.setImageDrawable(roundedImage);
-
+            util = new Util();
             objUsuario = new Usuario();
             objUsuario.carregar(this);
 
             etNome.setText(objUsuario.getNome());
-            Util objUtil = new Util();
-            ibSalvarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_salvar_perfil), getResources()));
+
+            ibSalvarNome.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_salvar_perfil), getResources()));
 
             if (objUsuario.getImagemPerfil() != null) {
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
+                    File mFile = new File(objUsuario.getCaminhoFoto());
+                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                    Bitmap bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(),bmOptions);
+                    //Bitmap bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
                     roundedImage = new RoundImage(bitmap);
                     ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
                     ibPerfil.setImageDrawable(roundedImage);
 
                 } catch (Exception e) {
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Falha ao carregar imagem de perfil", Toast.LENGTH_SHORT).show();
                 }
-
+            }else
+            {
+                carregarImagemPadrao();
             }
 
             ibPerfil.setOnClickListener(new View.OnClickListener() {
@@ -128,9 +134,7 @@ public class VisualizarPerfil extends AppCompatActivity {
                             + getString(R.string.app_name));
 
                     diretorio = new File(diretorio.getPath() + "/Perfil");
-                    Util util = new Util();
-                    imgPerfil = Uri.fromFile(new File(diretorio,
-                            "img_perfil_" + String.valueOf(util.RetornaDataHoraMinuto() + ".jpg")));
+                    imgPerfil = Uri.fromFile(new File(diretorio,"0.png"));
 
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgPerfil);
 
@@ -168,9 +172,9 @@ public class VisualizarPerfil extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap thumbnail = extras.getParcelable("data");
                 roundedImage = new RoundImage(thumbnail);
-                Bitmap pic = roundedImage.getBitmap();
+                mImamge = roundedImage.getBitmap();
                 byteArrayOutputStream = new ByteArrayOutputStream();
-                pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                mImamge.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 new atualizarFoto().execute();
             }
         }
@@ -187,6 +191,12 @@ public class VisualizarPerfil extends AppCompatActivity {
         cropIntent.putExtra("return-data", true);
         startActivityForResult(cropIntent, 3);
 
+    }
+
+    public void carregarImagemPadrao(){
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+        roundedImage = new RoundImage(bm);
+        ibPerfil.setImageDrawable(roundedImage);
     }
 
     private class atualizarNome extends AsyncTask<Void,Integer,Void>{
@@ -212,13 +222,26 @@ public class VisualizarPerfil extends AppCompatActivity {
     private class atualizarFoto extends AsyncTask<Void,Integer,Void>{
 
         @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(VisualizarPerfil.this);
+            mProgressDialog = ProgressDialog.show(VisualizarPerfil.this,"Carregando", "Aguarde", false, false);
+        }
+
+        @Override
         protected Void doInBackground(Void... params) {
-            objUsuario.atualizarFoto(VisualizarPerfil.this, byteArrayOutputStream.toByteArray());
+            try {
+                String mCodigoUsuario = String.valueOf(objUsuario.getCodigoUsuario());
+                util.salvarFoto(byteArrayOutputStream.toByteArray(),"Perfil", VisualizarPerfil.this,mCodigoUsuario);
+                objUsuario.atualizarFoto(VisualizarPerfil.this, byteArrayOutputStream.toByteArray());
+            }catch (Exception ex){
+                mProgressDialog.dismiss();
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            mProgressDialog.dismiss();
             ibPerfil.setImageDrawable(roundedImage);
         }
     }

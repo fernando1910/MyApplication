@@ -22,15 +22,10 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -44,16 +39,6 @@ import project.myapplication.R;
 import project.myapplication.ValidarTelefone;
 
 public class Util {
-
-    public String RetornaDataHoraMinuto() {
-        String DataHora;
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
-        //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        DataHora = dateFormat.format(calendar.getTime());
-        return DataHora;
-    }
 
     public Date formataData(String date) {
         Date dataConvertida = new Date();
@@ -282,48 +267,24 @@ public class Util {
         return mEntrada.replace(".", "").replace("+", "").replace("-", "");
     }
 
-    private void moveFile(String inputPath, String inputFile, String outputPath) throws FileNotFoundException, Exception {
-
-        InputStream in = null;
-        OutputStream out = null;
-        File dir = new File(outputPath);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        in = new FileInputStream(inputPath + inputFile);
-        out = new FileOutputStream(outputPath + inputFile);
-
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
-        }
-        in.close();
-        in = null;
-
-        // write the output file
-        out.flush();
-        out.close();
-        out = null;
-
-        // delete the original file
-        new File(inputPath + inputFile).delete();
-    }
-
     public boolean salvarFoto(byte[] mImagem, String mTipoFoto, Context mContext, String mCodigo) {
         try {
+            boolean mRetorno;
             File mFile = new File(
                     Environment.getExternalStorageDirectory() +  "/" +  // Diretorno
                     mContext.getString(R.string.app_name) + "/" +  // Nome do APP
                     mTipoFoto + "/" +  // Pasta
                     mCodigo + ".jpg" ); // Código
 
-            mFile.createNewFile();
+            if (mFile.exists()){
+                Log.i("", String.valueOf(mFile.delete()));
+            }
+
+            mRetorno = mFile.createNewFile();
             FileOutputStream mFileOutputStream = new FileOutputStream(mFile);
             mFileOutputStream.write(mImagem);
             mFileOutputStream.close();
-            return true;
+            return mRetorno;
         }catch (Exception ex){
             return false;
         }

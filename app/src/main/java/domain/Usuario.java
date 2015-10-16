@@ -1,6 +1,7 @@
 package domain;
 
 import android.content.Context;
+import android.os.Environment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -93,11 +94,11 @@ public class Usuario {
         this.ds_token = ds_token;
     }
 
-    public String getFotoPerfil() {
+    public String getFotoPerfilServidor() {
         return ds_foto_perfil;
     }
 
-    public void setFotoPerfil(String ds_foto_perfil) {
+    public void setFotoPerfilServidor(String ds_foto_perfil) {
         this.ds_foto_perfil = ds_foto_perfil;
     }
 
@@ -156,6 +157,8 @@ public class Usuario {
             this.ds_telefone = objUsuario.getTelefone();
             this.ds_token = objUsuario.getToken();
             this.img_perfil = objUsuario.getImagemPerfil();
+            this.ds_caminho_foto = Environment.getExternalStorageDirectory() + "/"
+                    + context.getString(R.string.app_name) + "/Perfil/" + String.valueOf(this.cd_usuario) + ".jpg";
         }
 
     }
@@ -176,7 +179,7 @@ public class Usuario {
             jsonObject.put("nr_ddi", this.getDDI());
             jsonObject.put("img_perfil", this.getImagemPerfil());
             jsonObject.put("nr_codigo_valida_telefone", this.getCodigoVerificardor());
-            jsonObject.put("ds_foto_perfil", this.getFotoPerfil());
+            jsonObject.put("ds_foto_perfil", this.getFotoPerfilServidor());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -195,8 +198,12 @@ public class Usuario {
             resposta[0] = util.enviarServidor(caminhoServidor, jsonString, "inserirUsuario");
             if (Integer.parseInt(resposta[0]) != 0) {
                 this.cd_usuario = Integer.parseInt(resposta[0]);
+                if (util.salvarFoto(this.img_perfil,"Perfil", context, resposta[0]));
+                {
+                    this.ds_foto_perfil = null;
+                    this.img_perfil = null;
+                }
                 this.atualizar(context);
-
             }
             else{
                 mRetorno = false;
@@ -205,7 +212,6 @@ public class Usuario {
         else{
             mRetorno = false;
         }
-
         return mRetorno;
 
     }

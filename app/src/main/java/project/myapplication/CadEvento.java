@@ -151,8 +151,7 @@ public class CadEvento extends ActionBarActivity {
 
                     diretorio = new File(diretorio.getPath() + "/Evento");
 
-                    imgEvento = Uri.fromFile(new File(diretorio,
-                            "img_evento_" + String.valueOf(util.RetornaDataHoraMinuto() + ".jpg")));
+                    imgEvento = Uri.fromFile(new File(diretorio,"0.png"));
 
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgEvento);
 
