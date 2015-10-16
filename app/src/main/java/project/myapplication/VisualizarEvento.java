@@ -26,7 +26,7 @@ import domain.Evento;
 import domain.Util;
 
 
-public class VisulizarEvento extends AppCompatActivity implements View.OnClickListener {
+public class VisualizarEvento extends AppCompatActivity implements View.OnClickListener {
     final private String TAG = "VisualizarEvento";
     private TextView tvTituloEvento, tvDescricaoEvento, tvEndereco, tvPrivado, tvTituloEvento2, tvDataHora;
     private Util util;
@@ -64,7 +64,7 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setHomeButtonEnabled(false);
             } catch (Exception e) {
-                Toast.makeText(VisulizarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(VisualizarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             mFloatingActionMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -142,7 +142,7 @@ public class VisulizarEvento extends AppCompatActivity implements View.OnClickLi
             });
 
         }catch (Exception ex){
-            Toast.makeText(VisulizarEvento.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(VisualizarEvento.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

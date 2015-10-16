@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,11 +28,12 @@ import extras.RoundImage;
 
 public class VisualizarPerfil extends AppCompatActivity {
     private EditText etNome;
-    private ImageButton ibPerfil, ibEditarNome, ibSalvarNome;
+    private ImageButton ibPerfil, ibSalvarNome;
     private RoundImage roundedImage;
     private Uri imgPerfil;
     private Usuario objUsuario;
-
+    private boolean fg_atualiza_nome;
+    private ByteArrayOutputStream byteArrayOutputStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,8 @@ public class VisualizarPerfil extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
-            ibEditarNome = (ImageButton) findViewById(R.id.ibEditarNome);
             ibSalvarNome = (ImageButton) findViewById(R.id.ibSalvarNome);
             etNome = (EditText) findViewById(R.id.etNome);
-            etNome.setEnabled(false);
 
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.image);
             roundedImage = new RoundImage(bm);
@@ -55,7 +55,6 @@ public class VisualizarPerfil extends AppCompatActivity {
 
             etNome.setText(objUsuario.getNome());
             Util objUtil = new Util();
-            ibEditarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_edit), getResources()));
             ibSalvarNome.setImageDrawable(objUtil.retornarIcone(getResources().getDrawable(R.drawable.ic_salvar_perfil), getResources()));
 
             if (objUsuario.getImagemPerfil() != null) {
@@ -107,15 +106,9 @@ public class VisualizarPerfil extends AppCompatActivity {
         this.finish();
     }
 
-    public void onClickEditarNome(View v) {
-        etNome.setEnabled(true);
-
-    }
-
     public void onClickSalvarNome(View v) {
-        etNome.setEnabled(false);
-        objUsuario.atualizarNome(this, String.valueOf(etNome.getText()));
-
+        objUsuario.setNome(String.valueOf(etNome.getText()));
+        new atualizarNome().execute();
     }
 
     public void alterarFoto(){
@@ -176,11 +169,9 @@ public class VisualizarPerfil extends AppCompatActivity {
                 Bitmap thumbnail = extras.getParcelable("data");
                 roundedImage = new RoundImage(thumbnail);
                 Bitmap pic = roundedImage.getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byteArrayOutputStream = new ByteArrayOutputStream();
                 pic.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-
-                objUsuario.atualizarFoto(this, byteArrayOutputStream.toByteArray());
-                ibPerfil.setImageDrawable(roundedImage);
+                new atualizarFoto().execute();
             }
         }
     }
@@ -196,6 +187,40 @@ public class VisualizarPerfil extends AppCompatActivity {
         cropIntent.putExtra("return-data", true);
         startActivityForResult(cropIntent, 3);
 
+    }
+
+    private class atualizarNome extends AsyncTask<Void,Integer,Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                fg_atualiza_nome = objUsuario.atualizarNome(VisualizarPerfil.this);
+            }catch (Exception e){
+                fg_atualiza_nome = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (fg_atualiza_nome)
+                Toast.makeText(VisualizarPerfil.this, "Atualizado", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(VisualizarPerfil.this, "Erro", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class atualizarFoto extends AsyncTask<Void,Integer,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            objUsuario.atualizarFoto(VisualizarPerfil.this, byteArrayOutputStream.toByteArray());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            ibPerfil.setImageDrawable(roundedImage);
+        }
     }
 
 }

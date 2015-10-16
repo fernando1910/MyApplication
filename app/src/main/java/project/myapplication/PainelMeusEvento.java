@@ -37,7 +37,7 @@ public class PainelMeusEvento extends Fragment  {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     int codigoEvento = mAdapter.getCodigoEvento(position);
-                    Intent intent = new Intent(getContext(),VisulizarEvento.class);
+                    Intent intent = new Intent(getContext(),VisualizarEvento.class);
                     intent.putExtra("codigoEvento", codigoEvento);
                     startActivity(intent);
 

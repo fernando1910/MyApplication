@@ -117,9 +117,20 @@ public class Usuario {
         usuario_dao.atualizar(this);
     }
 
-    public void atualizarNome(Context context, String ds_nome) {
-        UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        usuario_dao.atualizarNome(ds_nome);
+    public boolean atualizarNome(Context context) throws  Exception {
+        Util util = new Util();
+        String jsonString = gerarUsuarioJSON();
+        String [] mResposnta = new String[1];
+
+        mResposnta[0] = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonString , "atualizarNome");
+        if (Integer.parseInt(mResposnta[0]) > 0) {
+            UsuarioDAO usuario_dao = new UsuarioDAO(context);
+            usuario_dao.atualizarNome(this.ds_nome);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public void atualizarFoto(Context context, byte[] img_perfil) {

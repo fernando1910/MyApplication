@@ -3,9 +3,11 @@ package project.myapplication;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +40,7 @@ import java.util.Date;
 import domain.Configuracoes;
 import domain.Usuario;
 import extras.RoundImage;
+import services.RegistrationIntentService;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private final String TAG = "LOG";
@@ -144,12 +147,9 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                     ft.commit();
                                 }
 
-
                             } catch (Exception e) {
                                 Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-
-
                         }
                     })
                     .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
@@ -167,6 +167,11 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
             navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
             navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
+
+            if (objUsuario.getTokenPendente() == 1)
+                tokenRefresh();
+
+
         } catch (Exception ex) {
             Toast.makeText(MenuPrincipalNovo.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -245,12 +250,20 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         }
     };
 
-    public void   setTitleActionBar(String mTitle){
+    public void  setTitleActionBar(String mTitle){
         try {
             getSupportActionBar().setTitle(mTitle);
         }catch (Exception ex){
             Log.i(TAG, ex.getMessage());
         }
+    }
+
+    public void tokenRefresh()
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putBoolean("status",false).apply();
+        Intent it = new Intent(this, RegistrationIntentService.class);
+        startService(it);
     }
 
 }

@@ -38,18 +38,6 @@
             android:weightSum="1">
 
         <ImageButton
-            android:id="@+id/ibEditarNome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:text="Button"
-            android:onClick="onClickEditarNome"
-            android:background="@null"
-        />
-
-        <ImageButton
             android:id="@+id/ibSalvarNome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:theme="@style/Secundario"
-    tools:context="project.myapplication.VisulizarEvento">
+    tools:context="project.myapplication.VisualizarEvento">
 
     <item
         android:id="@+id/action_convidados"

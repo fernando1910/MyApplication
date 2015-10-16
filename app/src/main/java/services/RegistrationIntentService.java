@@ -53,6 +53,8 @@ public class RegistrationIntentService extends IntentService {
             String path = getResources().getString(R.string.wsBlueDate);
             Util util = new Util();
             Usuario objUsuario = new Usuario();
+            boolean flagErro;
+
             objUsuario.carregar(this);
             objUsuario.setToken(token);
             objUsuario.atualizar(this);
@@ -64,17 +66,22 @@ public class RegistrationIntentService extends IntentService {
                 jsonObject.put("cd_usuario", objUsuario.getCodigoUsuario());
                 mResposta[0] = util.enviarServidor(path, jsonObject.toString(), "atualizarToken");
 
-                if (Integer.parseInt(mResposta[0]) > 0) {
-                    objUsuario.setTokenPendente(0);
-                    objUsuario.atualizar(this);
-                }
-                else{
-                    Log.i(TAG,"Erro parte servidor");
-                }
+                if (Integer.parseInt(mResposta[0]) > 0)
+                    flagErro = false;
+                else
+                    flagErro = true;
 
             } catch (Exception e) {
                 Log.i(TAG, e.getMessage());
+                flagErro = true;
             }
+            if (flagErro)
+                objUsuario.setTokenPendente(1);
+            else
+                objUsuario.setTokenPendente(0);
+
+            objUsuario.atualizar(this);
+
         }
     }
 }
