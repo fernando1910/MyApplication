@@ -168,6 +168,14 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             return true;
 
         }
+
+        if (id == R.id.action_cancelar){
+            try {
+                objEvento.cancelar(this, codigoEvento);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 

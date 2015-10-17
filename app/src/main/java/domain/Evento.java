@@ -37,6 +37,7 @@ public class Evento {
     private String ds_url_foto;
     private byte[] img_foto_capa;
     private float ind_classificacao;
+    private int fg_cancelado;
 
     //endregion
 
@@ -178,6 +179,14 @@ public class Evento {
         this.ind_classificacao = vlr_classificacao;
     }
 
+    public int getCancelado (){
+        return fg_cancelado;
+    }
+
+    public void setCancelado( int fg_cancelado){
+        this.fg_cancelado = fg_cancelado;
+    }
+
     //endregion
 
     //region Metodos comunicação com servidor Online
@@ -314,7 +323,7 @@ public class Evento {
         return selecionarEventosOnline(context, "selecionarTopFestas", null);
     }
 
-    public boolean classificarEventoOnline(Context context, int codigoEvento, float classificacaoEvento, int codigoUsuario) throws Exception {
+    public boolean classificarEvento(Context context, int codigoEvento, float classificacaoEvento, int codigoUsuario) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
 
@@ -322,16 +331,16 @@ public class Evento {
         jsonObject.put("ind_classificacao", String.valueOf(classificacaoEvento));
         jsonObject.put("codigoUsuario", String.valueOf(codigoUsuario));
         String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "classificarEvento");
-        this.classificarEventoLocal(context, classificacaoEvento);
+        if (Integer.parseInt(mResposta) > 1){
+            EventoDAO eventoDAO = new EventoDAO(context);
+            this.carregarLocal(codigoEvento, context);
+            this.ind_classificacao = classificacaoEvento;
+            eventoDAO.atualizar(this);
+        }
 
         return true;
     }
 
-    public boolean classificarEventoLocal(Context context, float classificacaoEvento) throws Exception {
-        EventoDAO eventoDAO = new EventoDAO(context);
-        String mRetorno = eventoDAO.classificarEvento(cd_evento, classificacaoEvento);
-        return true;
-    }
 
     public List<Evento> selecionarEventosOnline(Context context, String comando, String parametro) throws InterruptedException, JSONException {
         List<Evento> mEventos = new ArrayList<>();
@@ -368,6 +377,26 @@ public class Evento {
     public String atualizar(Context context){
         EventoDAO eventoDAO = new EventoDAO(context);
         return eventoDAO.atualizar(this);
+    }
+
+    public boolean cancelar(Context context, int codigoEvento) throws Exception{
+        JSONObject jsonObject = new JSONObject();
+        Util util = new Util();
+        String mURL = context.getString(R.string.wsBlueDate);
+        jsonObject.put("cd_evento", String.valueOf(codigoEvento));
+        String [] mResposta = new String [1];
+        mResposta[0] = util.enviarServidor(mURL,jsonObject.toString(), "cancalarEvento");
+
+        if (Integer.parseInt(mResposta[0]) > 0){
+            this.carregarLocal(codigoEvento, context);
+            this.fg_cancelado = 1;
+            this.atualizar(context);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     //endregion
 

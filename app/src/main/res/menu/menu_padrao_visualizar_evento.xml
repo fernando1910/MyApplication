@@ -10,4 +10,12 @@
         android:title="@string/action_convidar"
         app:theme="@style/TemaActionBar"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_cancelar"
+        android:orderInCategory="100"
+        android:title="Cancelar"
+        app:theme="@style/TemaActionBar"
+        app:showAsAction="never" />
+
 </menu>

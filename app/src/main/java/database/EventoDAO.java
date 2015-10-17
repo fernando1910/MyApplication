@@ -34,6 +34,7 @@ public class EventoDAO {
     private static String ds_endereco ="ds_endereco";
     private static String ds_caminho_foto_capa ="ds_caminho_foto_capa";
     private static String ind_classificacao = "ind_classificacao";
+    private static String fg_cancelado = "fg_cancelado";
 
     public static final String colunas[] = {
             EventoDAO.cd_evento,
@@ -48,7 +49,8 @@ public class EventoDAO {
             EventoDAO.fg_evento_privado,
             EventoDAO.ds_endereco,
             EventoDAO.ds_caminho_foto_capa,
-            EventoDAO.ind_classificacao
+            EventoDAO.ind_classificacao,
+            EventoDAO.fg_cancelado
     };
 
     //endregion
@@ -74,10 +76,7 @@ public class EventoDAO {
         values.put("ds_caminho_foto_capa", objEvento.getCaminhoFotoCapa());
         db.insert(TABELA, null, values);
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT changes()");
-        if (mSqLiteStatement.simpleQueryForString() == "1")
-            return true;
-        else
-            return false;
+        return mSqLiteStatement.simpleQueryForString() == "1";
     }
 
     public Evento selecionar(int codigoEvento, Evento objEvento){
@@ -98,15 +97,16 @@ public class EventoDAO {
             objEvento.setCaminhoFotoCapa(c.getString(11));
             objEvento.setImagemFotoCapa(c.getBlob(12));
             objEvento.setClassificacao(c.getFloat(13));
+            objEvento.setCancelado(c.getInt(14));
             //objEvento.setDataEvento(c.);
         }
-
+        c.close();
         return objEvento;
     }
 
     public void deletarTudo()
     {
-        db.delete(TABELA,null,null);
+        db.delete(TABELA, null, null);
     }
 
     public List<Evento> selecionarTodosEventos()
@@ -133,20 +133,12 @@ public class EventoDAO {
                 objEvento.setCaminhoFotoCapa(mCursor.getString(11));
                 objEvento.setImagemFotoCapa(mCursor.getBlob(12));
                 objEvento.setClassificacao(mCursor.getFloat(13));
-
+                objEvento.setCancelado(mCursor.getInt(14));
                 mEventos.add(objEvento);
             }while (mCursor.moveToNext());
         }
+        mCursor.close();
         return mEventos;
-    }
-
-    public String classificarEvento(int cd_evento, float ind_classificacao) throws  Exception{
-        ContentValues values = new ContentValues();
-        values.put(EventoDAO.ind_classificacao, ind_classificacao);
-        db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(cd_evento)});
-        SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
-        return mSqLiteStatement.toString();
-
     }
 
     public String atualizar(Evento objEvento) {
@@ -161,7 +153,10 @@ public class EventoDAO {
         values.put(dt_evento, objEvento.getDataEvento().toString());
         values.put(dt_inclusao, objEvento.getDataInclusao().toString());
         values.put(fg_evento_privado, objEvento.getEventoPrivado());
+        values.put(ds_caminho_foto_capa, objEvento.getCaminhoFotoCapa());
         values.put(ds_endereco, objEvento.getEndereco());
+        values.put(ind_classificacao, objEvento.getClassificacao());
+        values.put(fg_cancelado, objEvento.getCancelado());
         db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(cd_evento)});
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
         return mSqLiteStatement.toString();

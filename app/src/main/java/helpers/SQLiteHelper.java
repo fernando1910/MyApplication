@@ -58,7 +58,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_endereco TEXT, " +
                     "ds_caminho_foto_capa TEXT," +
                     "img_foto_capa BLOB, " +
-                    "ind_classificacao FLOAT )"
+                    "ind_classificacao FLOAT," +
+                    "fg_cancelado TINYINT DEFAULT 0  )"
 
     };
 
