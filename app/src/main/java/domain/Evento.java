@@ -329,7 +329,7 @@ public class Evento {
 
         jsonObject.put("cd_evento", String.valueOf(codigoEvento));
         jsonObject.put("ind_classificacao", String.valueOf(classificacaoEvento));
-        jsonObject.put("codigoUsuario", String.valueOf(codigoUsuario));
+        jsonObject.put("cd_usuario", String.valueOf(codigoUsuario));
         String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "classificarEvento");
         if (Integer.parseInt(mResposta) > 1){
             EventoDAO eventoDAO = new EventoDAO(context);

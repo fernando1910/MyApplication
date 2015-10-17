@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import domain.Evento;
+import domain.Usuario;
 import domain.Util;
 
 
@@ -32,6 +33,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     private Util util;
     private int codigoEvento;
     private Evento objEvento;
+    private Usuario objUsuario;
     private ImageView ivEvento;
     private CollapsingToolbarLayout collapsingToolbarLayout ;
     private Toolbar mToolbar;
@@ -86,6 +88,8 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             //endregion
 
             util = new Util();
+            objUsuario = new Usuario();
+            objUsuario.carregar(this);
 
             Bundle parameters = getIntent().getExtras();
             if (parameters != null) {
@@ -134,7 +138,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     try {
-                        objEvento.classificarEventoLocal(getApplicationContext(),rating);
+                        objEvento.classificarEvento(getApplicationContext(),codigoEvento, rating, objUsuario.getCodigoUsuario());
                     } catch (Exception e) {
                         Log.i(TAG,e.getMessage());
                     }
