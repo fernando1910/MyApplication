@@ -149,7 +149,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_padrao_visulizar_evento, menu);
+        getMenuInflater().inflate(R.menu.menu_padrao_visualizar_evento, menu);
         return true;
     }
 
@@ -164,9 +164,8 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         }
         if (id == R.id.action_convidados)
         {
-            Intent intent = new Intent(this,VisualizarConvidados.class);
-            intent.putExtra("codigoEvento",codigoEvento);
-            startActivity(intent);
+            startActivity(new Intent(this, VisualizarConvidados.class));
+            return true;
 
         }
         return super.onOptionsItemSelected(item);

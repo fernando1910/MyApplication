@@ -1,7 +1,6 @@
 package project.myapplication;
 
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ public class VisualizarTopComentarios extends Fragment {
     private ListView mListView;
     private List<Evento> mItems;
     private CustomListViewRanking mAdapter;
-    private ProgressDialog mProgressDialog;
     private ProgressBar mProgressBar;
     private Evento objEvento;
 

@@ -67,19 +67,17 @@ public class CustomListViewEvento extends BaseAdapter {
             Thread thread = new Thread(){
                 public void run()
                 {
-                    try {
-                        ivEvento.setImageDrawable(Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    synchronized (this) {
+                        try {
+                            ivEvento.setImageDrawable(Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             };
             thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
         }
         return view;
     }

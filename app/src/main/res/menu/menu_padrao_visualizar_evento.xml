@@ -1,13 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:theme="@style/Secundario"
+
     tools:context="project.myapplication.VisualizarEvento">
 
     <item
         android:id="@+id/action_convidados"
         android:orderInCategory="100"
         android:title="@string/action_convidar"
-        app:theme="@style/Secundario"
+        app:theme="@style/TemaActionBar"
         app:showAsAction="never" />
 </menu>
