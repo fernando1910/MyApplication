@@ -18,4 +18,11 @@
         app:theme="@style/TemaActionBar"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_editar"
+        android:orderInCategory="100"
+        android:title="Editar"
+        app:theme="@style/TemaActionBar"
+        app:showAsAction="never" />
+
 </menu>

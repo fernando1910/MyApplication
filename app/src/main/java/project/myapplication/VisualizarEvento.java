@@ -79,11 +79,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
             FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
             FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
-            FloatingActionButton fab4 = (FloatingActionButton) findViewById(R.id.fab4);
             fab1.setOnClickListener(this);
             fab2.setOnClickListener(this);
             fab3.setOnClickListener(this);
-            fab4.setOnClickListener(this);
 
             //endregion
 
@@ -152,7 +150,6 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_padrao_visualizar_evento, menu);
         return true;
     }
@@ -166,6 +163,12 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             this.finish();
             return true;
         }
+
+        if (id == R.id.action_editar){
+            editarEvento();
+            return true;
+        }
+
         if (id == R.id.action_convidados)
         {
             startActivity(new Intent(this, VisualizarConvidados.class));
@@ -238,10 +241,6 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.fab3:
                 convidar();
-                break;
-
-            case R.id.fab4:
-                editarEvento();
                 break;
 
         }
