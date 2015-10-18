@@ -176,7 +176,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         if (id == R.id.action_cancelar){
             try {
                 objEvento.cancelar(this, codigoEvento);
+                Toast.makeText(this, "Evento cancelado!", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
+                Toast.makeText(this, "Não foi possível cancelar o evento!", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }

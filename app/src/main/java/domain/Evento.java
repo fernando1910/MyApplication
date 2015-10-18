@@ -385,7 +385,7 @@ public class Evento {
         String mURL = context.getString(R.string.wsBlueDate);
         jsonObject.put("cd_evento", String.valueOf(codigoEvento));
         String [] mResposta = new String [1];
-        mResposta[0] = util.enviarServidor(mURL,jsonObject.toString(), "cancalarEvento");
+        mResposta[0] = util.enviarServidor(mURL,jsonObject.toString(), "cancelarEvento");
 
         if (Integer.parseInt(mResposta[0]) > 0){
             this.carregarLocal(codigoEvento, context);
