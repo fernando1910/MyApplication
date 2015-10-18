@@ -41,7 +41,7 @@ public class CustomListViewContato extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return  items.get(position);
     }
 
     @Override
@@ -64,10 +64,13 @@ public class CustomListViewContato extends BaseAdapter {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (cbContato.isChecked())
-                                item.setSelecionado(true);
-                            else
-                                item.setSelecionado(false);
+                            if (cbContato.isClickable()) {
+                                if (item.getSelecionado())
+                                    item.setSelecionado(false);
+                                else
+                                    item.setSelecionado(true);
+                            }
+
                         }
                     }
             );
