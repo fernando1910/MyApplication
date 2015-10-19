@@ -205,6 +205,17 @@
         app:theme="@style/Secundario">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_comment_text_white_18dp"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_label="Comentar"
+            app:fab_size="mini"
+            app:theme="@style/Secundario" />
+
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -221,16 +232,6 @@
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_label="Convidar"
             app:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_account_multiple_plus_white_18dp"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_label="Editar"
-            app:fab_size="mini" />
-
 
     </com.github.clans.fab.FloatingActionMenu>
 
