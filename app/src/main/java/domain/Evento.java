@@ -273,38 +273,23 @@ public class Evento {
         eventoDAO.salvar(this);
     }
 
-    public void carregarOnline(String codigoEvento, Context context) {
-
+    public void carregarOnline(int codigoEvento, Context context) throws Exception{
         Util util = new Util();
-        JSONObject jsonObject;
+        JSONObject jsonObjectEnviar = new JSONObject();
 
-        String jsonString;
-        try {
-            JSONObject jsonObjectEnviar = new JSONObject();
-            try {
+        jsonObjectEnviar.put("cd_evento", String.valueOf(codigoEvento));
+        String jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObjectEnviar.toString(), "selecionarEvento");
+        JSONArray jsonArray = new JSONArray(jsonString);
+        JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
 
-                jsonObjectEnviar.put("cd_evento", codigoEvento);
-            } catch (JSONException e1) {
-                e1.printStackTrace();
-            }
-
-            jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObjectEnviar.toString(), "selecionarEvento");
-            JSONArray jsonArray = new JSONArray(jsonString);
-            jsonObject = new JSONObject(jsonArray.getString(0));
-
-            this.setCodigoEvento(Integer.parseInt(codigoEvento));
-            this.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
-            this.setDescricao(jsonObject.getString("ds_descricao"));
-            this.setEndereco(jsonObject.getString("ds_endereco"));
-            this.setDataEvento(util.formataData(jsonObject.getString("dt_evento")));
-            this.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
-            this.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
-            this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
-
-
-        } catch (InterruptedException | JSONException e) {
-            e.printStackTrace();
-        }
+        this.setCodigoEvento(codigoEvento);
+        this.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
+        this.setDescricao(jsonObject.getString("ds_descricao"));
+        this.setEndereco(jsonObject.getString("ds_endereco"));
+        this.setDataEvento(util.formataData(jsonObject.getString("dt_evento")));
+        this.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
+        this.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
+        this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
 
     }
 

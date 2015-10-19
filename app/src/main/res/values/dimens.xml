@@ -12,6 +12,9 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
 
+    <!-- Altura foto capa -->
+    <dimen name="imagem_capa_evento">250dp</dimen>
+
     <!-- Padrao para texto -->
     <dimen name="padrao_texto_titulo">24sp</dimen>
 

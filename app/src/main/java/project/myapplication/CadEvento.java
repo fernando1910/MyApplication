@@ -180,8 +180,8 @@ public class CadEvento extends ActionBarActivity {
         cropIntent.putExtra("crop", "true");
         cropIntent.putExtra("aspectX", 1.5);
         cropIntent.putExtra("aspectY", 1);
-        cropIntent.putExtra("outputX", 1080);
-        cropIntent.putExtra("outputY", 710);
+        cropIntent.putExtra("outputX", 800);
+        cropIntent.putExtra("outputY", 500);
         cropIntent.putExtra("return-data", true);
         startActivityForResult(cropIntent, 4);
     }

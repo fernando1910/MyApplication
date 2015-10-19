@@ -57,4 +57,9 @@ public class CustomListViewRanking extends BaseAdapter {
 
         return view;
     }
+
+    public int getCodigoEvento(int postion){
+        Evento objEvento = mItems.get(postion);
+        return objEvento.getCodigoEvento();
+    }
 }

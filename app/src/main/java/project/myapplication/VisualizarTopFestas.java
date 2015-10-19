@@ -1,5 +1,6 @@
 package project.myapplication;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -50,6 +52,15 @@ public class VisualizarTopFestas extends Fragment {
                 mProgressBar.setVisibility(View.INVISIBLE);
                 //mProgressDialog.dismiss();
                 mListView.setAdapter(mAdapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                        intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                        startActivity(intent);
+
+                    }
+                });
             }catch (Exception ex){
                 Log.i(TAG, ex.getMessage());
             }

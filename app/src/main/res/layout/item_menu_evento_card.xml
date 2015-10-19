@@ -25,7 +25,7 @@
         android:layout_alignParentTop="true"
         android:id="@+id/ivEvento"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/imagem_capa_evento"
         android:scaleType="fitXY"
         android:src="@null" />
 
