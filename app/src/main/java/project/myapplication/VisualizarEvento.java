@@ -185,7 +185,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         if (id == R.id.action_cancelar){
             try {
-                objEvento.cancelar(this, codigoEvento);
+                new cancelarEvento().execute();
                 Toast.makeText(this, "Evento cancelado!", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 Toast.makeText(this, "Não foi possível cancelar o evento!", Toast.LENGTH_LONG).show();
@@ -283,6 +283,37 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onProgressUpdate(Integer... values) {
             mProgressDialog.setProgress(values[0]);
+        }
+    }
+
+    private class cancelarEvento extends AsyncTask<Void, Integer,Void>{
+        boolean fg_cancelado;
+        
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(VisualizarEvento.this);
+            mProgressDialog = ProgressDialog.show(VisualizarEvento.this, "Carregando...",
+                    "Estamos validando seu perfil, por favor aguarde...", false, false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                fg_cancelado = objEvento.cancelar(VisualizarEvento.this, codigoEvento);
+            } catch (Exception e) {
+                mProgressDialog.dismiss();
+                Log.i(TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mProgressDialog.dismiss();
+            if (fg_cancelado)
+                Toast.makeText(VisualizarEvento.this, "Evento cancelado", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(VisualizarEvento.this, "Falha ao cancelar evento", Toast.LENGTH_SHORT).show();
         }
     }
 }
