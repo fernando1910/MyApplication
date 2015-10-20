@@ -198,10 +198,12 @@ public class Usuario {
             resposta[0] = util.enviarServidor(caminhoServidor, jsonString, "inserirUsuario");
             if (Integer.parseInt(resposta[0]) != 0) {
                 this.cd_usuario = Integer.parseInt(resposta[0]);
-                if (util.salvarFoto(this.img_perfil,"Perfil", context, resposta[0]));
-                {
-                    this.ds_foto_perfil = null;
-                    this.img_perfil = null;
+                if (this.img_perfil != null) {
+                    if (util.salvarFoto(this.img_perfil, "Perfil", context, resposta[0])) ;
+                    {
+                        this.ds_foto_perfil = null;
+                        this.img_perfil = null;
+                    }
                 }
                 this.atualizar(context);
             }

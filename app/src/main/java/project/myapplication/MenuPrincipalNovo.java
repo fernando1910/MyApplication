@@ -40,31 +40,43 @@ import java.util.Date;
 
 import domain.Configuracoes;
 import domain.Usuario;
+import domain.Util;
 import extras.RoundImage;
 import services.RegistrationIntentService;
 
 public class MenuPrincipalNovo extends AppCompatActivity {
     private final String TAG = "LOG";
     private Toolbar mToolbar;
+    private Configuracoes objConfig;
 
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-            setContentView(R.layout.activity_menu_principal_novo);
-            setProgressBarIndeterminateVisibility(Boolean.TRUE);
 
-            Usuario objUsuario = new Usuario();
-            objUsuario.carregar(this);
-            Bitmap bitmap = null;
+        super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setContentView(R.layout.activity_menu_principal_novo);
+
+        objConfig = new Configuracoes();
+        objConfig.carregar(this);
+        boolean fg_notificacoes = false;
+        if (objConfig.getStatusPerfil() != 5) {
+            Util util = new Util();
+            util.validarTela(this,5);
+        }
+        if (objConfig.getPermitePush() == 1)
+            fg_notificacoes = true;
+
+        Usuario objUsuario = new Usuario();
+        objUsuario.carregar(this);
+        Bitmap bitmap = null;
+
+        try {
 
             if (!objUsuario.getCaminhoFoto().equals("")) {
                 File mFile = new File(objUsuario.getCaminhoFoto());
                 if (mFile.exists()) {
                     BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(),bmOptions);
-                }
-                else {
+                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(), bmOptions);
+                } else {
                     if (objUsuario.getImagemPerfil() != null)
                         bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
                     else {
@@ -72,122 +84,122 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                     }
                 }
             }
-
-
-            RoundImage roundImage = new RoundImage(bitmap);
-
-            try {
-                mToolbar = (Toolbar) findViewById(R.id.tb_main);
-                mToolbar.setTitle("Inicial");
-                setSupportActionBar(mToolbar);
-            } catch (Exception e) {
-                Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.layoutConteudo, Painel.newInstance(), "tagMain");
-            ft.commit();
-
-
-            AccountHeader.Result headerNavigationLeft = new AccountHeader()
-                    .withActivity(this)
-                    .withCompactStyle(false)
-                    .withSavedInstance(savedInstanceState)
-                    .withThreeSmallProfileImages(false)
-                    .withHeaderBackground(R.drawable.batman)
-                    .addProfiles(
-                            new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
-                    )
-                    .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                        @Override
-                        public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
-                            startActivity(new Intent(MenuPrincipalNovo.this, VisualizarPerfil.class));
-                            return false;
-                        }
-                    })
-                    .build();
-
-            Drawer.Result navigationDrawerLeft = new Drawer()
-                    .withActivity(this)
-                    .withToolbar(mToolbar)
-                    .withDisplayBelowToolbar(true)
-                    .withActionBarDrawerToggleAnimated(true)
-                    .withDrawerGravity(Gravity.LEFT)
-                    .withSavedInstance(savedInstanceState)
-                    .withSelectedItem(0)
-                    .withAccountHeader(headerNavigationLeft)
-                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l, IDrawerItem iDrawerItem) {
-
-                            try {
-                                Fragment mFragment = null;
-                                switch (i) {
-                                    case 0:
-                                        mFragment = Painel.newInstance();
-                                        setTitleActionBar("Início");
-                                        break;
-                                    case 1:
-                                        mFragment = new PainelTodosEventos();
-                                        setTitleActionBar("Convites");
-                                        break;
-                                    case 2:
-                                        CaldroidFragment mFragmentCalendar = new CaldroidFragment();
-
-                                        final CaldroidListener mCaldroidListener = new CaldroidListener() {
-                                            @Override
-                                            public void onSelectDate(Date date, View view) {
-                                                Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
-                                                intent.putExtra("mDataCalendario", date.toString());
-                                                startActivity(intent);
-                                            }
-                                        };
-                                        mFragmentCalendar.setCaldroidListener(mCaldroidListener);
-                                        mFragment = mFragmentCalendar;
-                                        setTitleActionBar("Calendário");
-                                        break;
-                                    case 3:
-                                        startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class));
-                                        break;
-                                    case 6:
-                                        startActivity(new Intent(MenuPrincipalNovo.this, PainelConfiguracao.class));
-                                        break;
-                                }
-
-                                if (mFragment != null) {
-                                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                                    ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
-                                    ft.commit();
-                                }
-
-                            } catch (Exception e) {
-                                Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    })
-                    .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
-                        @Override
-                        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-                            return false;
-                        }
-                    })
-                    .build();
-
-            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
-            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
-            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
-            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
-            navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
-            navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(true).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
-            navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
-
-            if (objUsuario.getTokenPendente() == 1)
-                tokenRefresh();
-
-
         } catch (Exception ex) {
-            Toast.makeText(MenuPrincipalNovo.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.i(TAG, ex.getMessage());
         }
+
+
+        RoundImage roundImage = new RoundImage(bitmap);
+
+        try {
+            mToolbar = (Toolbar) findViewById(R.id.tb_main);
+            mToolbar.setTitle("Inicial");
+            setSupportActionBar(mToolbar);
+        } catch (Exception e) {
+            Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.layoutConteudo, Painel.newInstance(), "tagMain");
+        ft.commit();
+
+
+        AccountHeader.Result headerNavigationLeft = new AccountHeader()
+                .withActivity(this)
+                .withCompactStyle(false)
+                .withSavedInstance(savedInstanceState)
+                .withThreeSmallProfileImages(false)
+                .withHeaderBackground(R.drawable.batman)
+
+                .addProfiles(
+                            new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                        startActivity(new Intent(MenuPrincipalNovo.this, VisualizarPerfil.class));
+                        return false;
+                    }
+                })
+                .build();
+
+        Drawer.Result navigationDrawerLeft = new Drawer()
+                .withActivity(this)
+                .withToolbar(mToolbar)
+                .withDisplayBelowToolbar(true)
+                .withActionBarDrawerToggleAnimated(true)
+                .withDrawerGravity(Gravity.LEFT)
+                .withSavedInstance(savedInstanceState)
+                .withSelectedItem(0)
+                .withAccountHeader(headerNavigationLeft)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l, IDrawerItem iDrawerItem) {
+
+                        try {
+                            Fragment mFragment = null;
+                            switch (i) {
+                                case 0:
+                                    mFragment = Painel.newInstance();
+                                    setTitleActionBar("Início");
+                                    break;
+                                case 1:
+                                    mFragment = new PainelTodosEventos();
+                                    setTitleActionBar("Convites");
+                                    break;
+                                case 2:
+                                    CaldroidFragment mFragmentCalendar = new CaldroidFragment();
+
+                                    final CaldroidListener mCaldroidListener = new CaldroidListener() {
+                                        @Override
+                                        public void onSelectDate(Date date, View view) {
+                                            Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
+                                            intent.putExtra("mDataCalendario", date.toString());
+                                            startActivity(intent);
+                                        }
+                                    };
+                                    mFragmentCalendar.setCaldroidListener(mCaldroidListener);
+                                    mFragment = mFragmentCalendar;
+                                    setTitleActionBar("Calendário");
+                                    break;
+                                case 3:
+                                    startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class));
+                                    break;
+                                case 6:
+                                    startActivity(new Intent(MenuPrincipalNovo.this, PainelConfiguracao.class));
+                                    break;
+                            }
+
+                            if (mFragment != null) {
+                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
+                                ft.commit();
+                            }
+
+                        } catch (Exception e) {
+                            Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                        return false;
+                    }
+                })
+                .build();
+
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
+        navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
+        navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(fg_notificacoes).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
+        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
+
+        if (objUsuario.getTokenPendente() == 1)
+            tokenRefresh();
+
     }
 
     @Override
@@ -256,25 +268,22 @@ public class MenuPrincipalNovo extends AppCompatActivity {
     private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
-            Configuracoes objConfig = new Configuracoes();
-            objConfig.carregar(getApplicationContext());
             objConfig.setPermitePush((b ? 1 : 0));
             objConfig.atualizar(getApplicationContext());
         }
     };
 
-    public void  setTitleActionBar(String mTitle){
+    public void setTitleActionBar(String mTitle) {
         try {
             getSupportActionBar().setTitle(mTitle);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.i(TAG, ex.getMessage());
         }
     }
 
-    public void tokenRefresh()
-    {
+    public void tokenRefresh() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.edit().putBoolean("status",false).apply();
+        preferences.edit().putBoolean("status", false).apply();
         Intent it = new Intent(this, RegistrationIntentService.class);
         startService(it);
     }

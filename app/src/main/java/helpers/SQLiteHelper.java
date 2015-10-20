@@ -16,18 +16,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS tb_configuracoes",
             "DROP TABLE IF EXISTS tb_usuario",
             "DROP TABLE IF EXISTS tb_contato ",
-            "DROP TABLE IF EXISTS tb_evento"
+            "DROP TABLE IF EXISTS tb_evento" ,
+            "DROP TABLE IF EXISTS tb_evento_convidado"
 
     };
     private static final String[] SCRIPT_DATABASE_CREATE = new String[]{"" +
             " CREATE TABLE tb_configuracoes " +
-            " (fg_permite_push TINYINT DEFAULT 0 , " +
-            " fg_permite_alarme TINYINT DEFAULT 0, " +
+            " (fg_permite_push TINYINT DEFAULT 1 , " +
+            " fg_permite_alarme TINYINT DEFAULT 1, " +
             " fg_notifica_comentario TINYINT DEFAULT 1, " +
             " fg_notifica_mudanca TINYINT DEFAULT 1, " +
             " fg_telefone_visivel TINYINT DEFAULT 0 , " +
             " ind_status_perfil TINYINT NOT NULL," +
-            " nr_alcance_km TEXT DEFAULT '5' )",
+            " nr_alcance_km  TINYINT  DEFAULT 5 , " +
+            " fg_buscar_fotos_online TINYINT DEFAULT 1 ) ",
 
             "CREATE TABLE tb_usuario " +
                     "(cd_usuario integer primary key , " +
@@ -42,7 +44,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "CREATE TABLE tb_contato" +
                     "(cd_contato INTEGER, ds_contato TEXT, img_contato BLOB )",
 
-            "INSERT INTO tb_configuracoes (ind_status_perfil) values (0)",
+            "INSERT INTO tb_configuracoes" +
+                    "(" +
+                        "fg_permite_push, " +
+                        "fg_permite_alarme, " +
+                        "fg_notifica_comentario, " +
+                        "ind_status_perfil" +
+                    ") " +
+                    "values (1,1,1,0)",
 
             "CREATE TABLE tb_evento " +
                     "( cd_evento INTEGER," +
@@ -59,7 +68,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "ds_caminho_foto_capa TEXT," +
                     "img_foto_capa BLOB, " +
                     "ind_classificacao FLOAT," +
-                    "fg_cancelado TINYINT DEFAULT 0  )"
+                    "fg_cancelado TINYINT DEFAULT 0  )",
+
+            "CREATE TABLE IF NOT EXISTS tb_evento_convidado " +
+                    "(" +
+                    "   cd_evento INTEGER, " +
+                    "   cd_usuario INTEGER, " +
+                    "   fg_participa TINYINT, " +
+                    "   dt_inclusao DATETIME, " +
+                    "   cd_usuario_inclusao," +
+                    "   dt_alteracao DATETIME " +
+                    ")"
 
     };
 

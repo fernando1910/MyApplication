@@ -5,17 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import domain.Configuracoes;
 
 public class CadConfiguracao extends AppCompatActivity {
-    private CheckBox ckPermitePush;
-    private CheckBox ckPermiteAlarme;
-    private CheckBox ckNotificaComentario;
-    private CheckBox ckNotificaMudanca;
-    private CheckBox ckTelefoneVisivel;
+    private CheckBox ckPermitePush, ckPermiteAlarme, ckNotificaComentario, ckNotificaMudanca, ckTelefoneVisivel, ckBuscarFotosOnline;
     private Configuracoes objConfig;
+    private Spinner spKm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +27,9 @@ public class CadConfiguracao extends AppCompatActivity {
             ckNotificaComentario = (CheckBox) findViewById(R.id.ckNotificaComentario);
             ckNotificaMudanca = (CheckBox) findViewById(R.id.ckNotificaMudanca);
             ckTelefoneVisivel = (CheckBox) findViewById(R.id.ckTelefoneVisivel);
+            ckBuscarFotosOnline = (CheckBox) findViewById(R.id.ckBuscarFotosOnline);
+
+            spKm = (Spinner) findViewById(R.id.spKm);
 
             objConfig = new Configuracoes();
             objConfig.carregar(this);

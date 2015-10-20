@@ -13,7 +13,8 @@ public class Configuracoes {
     private int fg_notifica_mudanca;
     private int fg_telefone_visivel;
     private int ind_status_perfil;
-    private String nr_alcance_km;
+    private int fg_buscar_fotos_online;
+    private int nr_alcance_km;
     //endregion
 
     //region propriedades
@@ -65,13 +66,22 @@ public class Configuracoes {
         this.fg_telefone_visivel = fg_telefone_visivel;
     }
 
-    public String getAlcanceKm() {
+    public int getAlcanceKm() {
         return nr_alcance_km;
     }
 
-    public void setAlcanceKm(String nr_alcance_km) {
+    public void setAlcanceKm(int nr_alcance_km) {
         this.nr_alcance_km = nr_alcance_km;
     }
+
+    public void setBuscarFotosOnline(int fg_buscar_fotos_online){
+        this.fg_buscar_fotos_online = fg_buscar_fotos_online;
+    }
+
+    public int getBuscarFotosOnline(){
+        return fg_buscar_fotos_online;
+    }
+
 
 
     //endregion
@@ -79,26 +89,19 @@ public class Configuracoes {
     //region métodos
     public void atualizarStatus(Context context , int ind_status_perfil){
         ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
-        configuracoesDAO.Carregar();
+        configuracoesDAO.carregar(this);
         this.setStatusPerfil(ind_status_perfil);
-        configuracoesDAO.Atualizar(this);
+        configuracoesDAO.atualizar(this);
     }
 
     public void carregar(Context context){
         ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
-        Configuracoes objConfig = configuracoesDAO.Carregar();
-        this.setNotificaComentario(objConfig.getNotificaComentario());
-        this.setNotificaMudanca(objConfig.getNotificaMudanca());
-        this.setPermiteAlarme(objConfig.getPermiteAlarme());
-        this.setPermitePush(objConfig.getPermitePush());
-        this.setStatusPerfil(objConfig.getStatusPerfil());
-        this.setTelefoneVisivel(objConfig.getTelefoneVisivel());
-        this.setAlcanceKm(objConfig.getAlcanceKm());
+        configuracoesDAO.carregar(this);
     }
 
     public void atualizar(Context context){
         ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
-        configuracoesDAO.Atualizar(this);
+        configuracoesDAO.atualizar(this);
     }
 
     //endregion

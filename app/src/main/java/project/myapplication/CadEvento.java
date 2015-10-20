@@ -33,7 +33,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import database.ConfiguracoesDAO;
 import domain.Configuracoes;
 import domain.Evento;
 import domain.Usuario;
@@ -87,6 +86,7 @@ public class CadEvento extends ActionBarActivity {
 
         util = new Util();
         objConf = new Configuracoes();
+        objConf.carregar(this);
         objEvento = new Evento();
 
 
@@ -347,8 +347,6 @@ public class CadEvento extends ActionBarActivity {
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             if (fg_criou) {
-                ConfiguracoesDAO config_dao = new ConfiguracoesDAO(CadEvento.this);
-                objConf = config_dao.Carregar();
                 if (objConf.getPermiteAlarme() == 1) {
                     criarEventoCalendarioAndroid();
                 }

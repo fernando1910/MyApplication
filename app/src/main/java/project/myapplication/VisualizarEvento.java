@@ -40,6 +40,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private RatingBar mRatingBar;
     private ProgressDialog mProgressDialog;
+    FloatingActionButton fab4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +81,11 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
             FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
             FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+            fab4 = (FloatingActionButton) findViewById(R.id.fab4);
             fab1.setOnClickListener(this);
             fab2.setOnClickListener(this);
             fab3.setOnClickListener(this);
-
+            fab4.setOnClickListener(this);
             //endregion
 
             util = new Util();
@@ -144,15 +146,24 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         mCollapsingToolbarLayout.setTitle(objEvento.getTituloEvento());
         tvDescricaoEvento.setText(objEvento.getDescricao());
         tvEndereco.setText(objEvento.getEndereco());
-        if (objEvento.getEventoPrivado() == 1)
+        if (objEvento.getEventoPrivado() == 1) {
             tvPrivado.setText("Este evento é privado");
-        else
+            if (objEvento.getCodigoUsarioInclusao() != objUsuario.getCodigoUsuario()){
+                fab4.setVisibility(View.GONE);
+            }
+        }
+        else {
             tvPrivado.setText("Este evento é publico");
+
+        }
 
 
         String mDataHora = util.formatarDataTela(objEvento.getDataEvento()) + " ás " + util.formatarHoraTela(objEvento.getDataEvento());
         tvDataHora.setText(mDataHora);
         mRatingBar.setRating(objEvento.getClassificacao());
+
+
+
     }
 
     @Override
@@ -248,6 +259,10 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.fab3:
                 convidar();
+                break;
+
+            case R.id.fab4:
+
                 break;
 
         }

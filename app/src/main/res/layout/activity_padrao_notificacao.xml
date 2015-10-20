@@ -52,6 +52,15 @@
             android:layout_marginTop="@dimen/margin_top_config"
             android:text="Permite que o número do seu telefone fique visível para outros usuários." />
 
+        <CheckBox
+            android:id="@+id/ckBuscarFotosOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_config"
+            android:text="Carregar fotos online." />
+
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
