@@ -61,7 +61,7 @@ public class EventoDAO {
         db = dbH.getWritableDatabase();
     }
 
-    public boolean salvar(Evento objEvento){
+    public String salvar(Evento objEvento){
         ContentValues values = new ContentValues();
         values.put("cd_evento", objEvento.getCodigoEvento());
         values.put("ds_titulo_evento", objEvento.getTituloEvento());
@@ -76,7 +76,7 @@ public class EventoDAO {
         values.put("ds_caminho_foto_capa", objEvento.getCaminhoFotoCapa());
         db.insert(TABELA, null, values);
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT changes()");
-        return mSqLiteStatement.simpleQueryForString() == "1";
+        return mSqLiteStatement.simpleQueryForString();
     }
 
     public Evento selecionar(int codigoEvento, Evento objEvento){
@@ -157,7 +157,7 @@ public class EventoDAO {
         values.put(ds_endereco, objEvento.getEndereco());
         values.put(ind_classificacao, objEvento.getClassificacao());
         values.put(fg_cancelado, objEvento.getCancelado());
-        db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(cd_evento)});
+        db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(objEvento.getCodigoEvento())});
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
         return mSqLiteStatement.toString();
     }

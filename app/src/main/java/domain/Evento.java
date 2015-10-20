@@ -179,11 +179,11 @@ public class Evento {
         this.ind_classificacao = vlr_classificacao;
     }
 
-    public int getCancelado (){
+    public int getCancelado() {
         return fg_cancelado;
     }
 
-    public void setCancelado( int fg_cancelado){
+    public void setCancelado(int fg_cancelado) {
         this.fg_cancelado = fg_cancelado;
     }
 
@@ -191,35 +191,37 @@ public class Evento {
 
     //region Metodos comunicação com servidor Online
 
-    public boolean salvarEventoOnline(Context context, int tipoOperacao) throws Exception {
+    public void salvarEventoOnline(Context context, int tipoOperacao) throws Exception {
 
         Util util = new Util();
         final String caminhoServidor = context.getResources().getString(R.string.wsBlueDate);
         final String jsonString = gerarEventoJSON();
-        final String[] mResposta = new String[1];
+        String mResposta;
 
         if (tipoOperacao == 1) {
-            mResposta[0] = util.enviarServidor(caminhoServidor, jsonString, "inserirEvento");
-            if (Integer.parseInt(mResposta[0]) != 0) {
-                this.cd_evento = Integer.parseInt(mResposta[0]);
-                this.salvarEventoLocal(context);
-                if (getImagemFotoCapa() != null)
-                    util.salvarFoto(getImagemFotoCapa(), "Evento", context, mResposta[0] );
+            mResposta = util.enviarServidor(caminhoServidor, jsonString, "inserirEvento");
+            if (Integer.parseInt(mResposta) != 0) {
+                this.cd_evento = Integer.parseInt(mResposta);
+                mResposta = this.salvarEventoLocal(context);
+                if (Integer.parseInt(mResposta) < 1)
+                    throw new Exception("Não salvou local");
 
-                return true;
+                if (getImagemFotoCapa() != null)
+                    util.salvarFoto(getImagemFotoCapa(), "Evento", context, mResposta);
             } else {
-                return false;
+                throw new Exception("Não salvou online");
             }
         } else {
-            mResposta[0] = util.enviarServidor(caminhoServidor, jsonString, "atualizarEvento");
-            if (Integer.parseInt(mResposta[0]) > 0){
-                this.atualizar(context);
-                return true;
-            }
-            else {
-                return false;
+            mResposta = util.enviarServidor(caminhoServidor, jsonString, "atualizarEvento");
+            if (Integer.parseInt(mResposta) > 0) {
+                mResposta = this.atualizar(context);
+                if (Integer.parseInt(mResposta) < 1)
+                    throw new Exception("Não salvou local");
+            } else {
+                throw new Exception("Não salvou online");
             }
         }
+
 
     }
 
@@ -241,7 +243,7 @@ public class Evento {
 
 
         try {
-            if(this.getCodigoEvento() != Integer.MIN_VALUE)
+            if (this.getCodigoEvento() != Integer.MIN_VALUE)
                 jsonObject.put("cd_evento", this.getCodigoEvento());
             jsonObject.put("ds_titulo_evento", this.getTituloEvento());
             jsonObject.put("ds_descricao", this.getDescricao());
@@ -268,12 +270,12 @@ public class Evento {
         return jsonObject.toString();
     }
 
-    public void salvarEventoLocal(Context context) {
+    public String salvarEventoLocal(Context context) {
         EventoDAO eventoDAO = new EventoDAO(context);
-        eventoDAO.salvar(this);
+        return eventoDAO.salvar(this);
     }
 
-    public void carregarOnline(int codigoEvento, Context context) throws Exception{
+    public void carregarOnline(int codigoEvento, Context context) throws Exception {
         Util util = new Util();
         JSONObject jsonObjectEnviar = new JSONObject();
 
@@ -316,7 +318,7 @@ public class Evento {
         jsonObject.put("ind_classificacao", String.valueOf(classificacaoEvento));
         jsonObject.put("cd_usuario", String.valueOf(codigoUsuario));
         String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "classificarEvento");
-        if (Integer.parseInt(mResposta) > 1){
+        if (Integer.parseInt(mResposta) > 1) {
             EventoDAO eventoDAO = new EventoDAO(context);
             this.carregarLocal(codigoEvento, context);
             this.ind_classificacao = classificacaoEvento;
@@ -359,27 +361,25 @@ public class Evento {
         return selecionarEventosOnline(context, "pesquisarEvento", query);
     }
 
-    public String atualizar(Context context){
+    public String atualizar(Context context) {
         EventoDAO eventoDAO = new EventoDAO(context);
         return eventoDAO.atualizar(this);
     }
 
-    public boolean cancelar(Context context, int codigoEvento) throws Exception{
+    public boolean cancelar(Context context, int codigoEvento) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();
         String mURL = context.getString(R.string.wsBlueDate);
         jsonObject.put("cd_evento", String.valueOf(codigoEvento));
-        String [] mResposta = new String [1];
-        mResposta[0] = util.enviarServidor(mURL,jsonObject.toString(), "cancelarEvento");
+        String[] mResposta = new String[1];
+        mResposta[0] = util.enviarServidor(mURL, jsonObject.toString(), "cancelarEvento");
 
-        if (Integer.parseInt(mResposta[0]) > 0){
+        if (Integer.parseInt(mResposta[0]) > 0) {
             this.carregarLocal(codigoEvento, context);
             this.fg_cancelado = 1;
             this.atualizar(context);
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }

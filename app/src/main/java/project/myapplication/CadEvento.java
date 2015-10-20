@@ -112,17 +112,17 @@ public class CadEvento extends ActionBarActivity {
         if (parameters != null) {
             codigoEvento = parameters.getInt("codigoEvento");
             objEvento.carregarLocal(codigoEvento, this);
-            carregarControles(objEvento);
+            carregarControles();
             tipoOperacao = 2;
         } else {
             tipoOperacao = 1;
         }
     }
 
-    public void carregarControles(Evento objEvento) {
+    public void carregarControles() {
         if (objEvento != null) {
             etTitulo.setText(objEvento.getTituloEvento());
-            etDescricao.setText(objEvento.getTituloEvento());
+            etDescricao.setText(objEvento.getDescricao());
             tvEndereco.setText(objEvento.getEndereco());
             tvData.setText(formatDate.format(objEvento.getDataEvento()));
             tvHora.setText(formatHour.format(objEvento.getDataEvento()));
@@ -322,6 +322,7 @@ public class CadEvento extends ActionBarActivity {
     }
 
     public class salvarEvento extends AsyncTask<Void, Integer, Void> {
+        String erro;
         @Override
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(CadEvento.this);
@@ -334,10 +335,13 @@ public class CadEvento extends ActionBarActivity {
         protected Void doInBackground(Void... params) {
             try {
                 synchronized (this) {
-                    fg_criou = salvarEvento();
+                    salvarEvento();
+                    fg_criou = true;
+
                 }
             } catch (Exception e) {
                 fg_criou = false;
+                erro = e.getMessage();
             }
 
             return null;
@@ -351,8 +355,12 @@ public class CadEvento extends ActionBarActivity {
                     criarEventoCalendarioAndroid();
                 }
                 CadEvento.this.finish();
+                Intent intent = new Intent(CadEvento.this,VisualizarEvento.class);
+                intent.putExtra("codigoEvento",codigoEvento);
+                startActivity(intent);
             } else {
-                Toast.makeText(CadEvento.this, "Lamentamos, algo deu errado, por favor tente novamente.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CadEvento.this, erro, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CadEvento.this, "Lamentamos, algo deu errado, por favor tente novamente.", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -365,14 +373,14 @@ public class CadEvento extends ActionBarActivity {
         }
     }
 
-    public boolean salvarEvento() {
+    public void salvarEvento() {
         try {
             descarregarControles();
-            fg_criou = objEvento.salvarEventoOnline(this, tipoOperacao);
-            return fg_criou;
+            objEvento.salvarEventoOnline(this, tipoOperacao);
+
         } catch (Exception e) {
             fg_criou = false;
-            return false;
+
         }
     }
 

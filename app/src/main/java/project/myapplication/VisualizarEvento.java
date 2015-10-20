@@ -183,6 +183,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         }
 
         if (id == R.id.action_editar){
+            this.finish();
             editarEvento();
             return true;
         }
