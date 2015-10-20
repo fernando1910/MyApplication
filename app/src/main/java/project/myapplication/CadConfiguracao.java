@@ -49,10 +49,13 @@ public class CadConfiguracao extends AppCompatActivity {
             if (objConfig.getNotificaMudanca() == 1)
                 ckTelefoneVisivel.setChecked(true);
 
+            if (objConfig.getBuscarFotosOnline() == 1)
+                ckBuscarFotosOnline.setChecked(true);
+
 
             // endregion
 
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(CadConfiguracao.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -69,8 +72,7 @@ public class CadConfiguracao extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             SalvarConfiguracoes();
             this.finish();
             return true;
@@ -91,34 +93,37 @@ public class CadConfiguracao extends AppCompatActivity {
         this.finish();
     }
 
-    public void SalvarConfiguracoes()
-    {
+    public void SalvarConfiguracoes() {
 
-        if(ckPermitePush.isChecked())
+        if (ckPermitePush.isChecked())
             objConfig.setPermitePush(1);
         else
             objConfig.setPermitePush(0);
 
-        if(ckPermiteAlarme.isChecked())
+        if (ckPermiteAlarme.isChecked())
             objConfig.setPermiteAlarme(1);
         else
             objConfig.setPermiteAlarme(0);
 
-        if(ckNotificaComentario.isChecked())
+        if (ckNotificaComentario.isChecked())
             objConfig.setNotificaComentario(1);
         else
             objConfig.setNotificaComentario(0);
 
-        if(ckNotificaMudanca.isChecked())
+        if (ckNotificaMudanca.isChecked())
             objConfig.setNotificaMudanca(1);
         else
             objConfig.setNotificaMudanca(0);
 
-
-        if(ckTelefoneVisivel.isChecked())
+        if (ckTelefoneVisivel.isChecked())
             objConfig.setTelefoneVisivel(1);
         else
             objConfig.setTelefoneVisivel(0);
+
+        if (ckBuscarFotosOnline.isChecked())
+            objConfig.setBuscarFotosOnline(1);
+        else
+            objConfig.setBuscarFotosOnline(0);
 
         objConfig.atualizar(this);
 
