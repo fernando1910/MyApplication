@@ -6,40 +6,72 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import adapters.CustomListViewEvento;
 import domain.Evento;
+import domain.Usuario;
+import domain.Util;
 
 
-public class PainelEventosPadrao extends AppCompatActivity  {
-
+public class PainelEventosPadrao extends AppCompatActivity {
+    private int codigoUsuario;
+    private Util util;
+    private final String TAG = "ERRO";
     private ProgressDialog progressDialog;
-
-    private List<Evento> eventos;
-
-    private String mDataCalendario;
+    private List<Evento> mListaEventos;
+    private String mTipoAcao;
+    private TextView tvMensagem;
+    private Evento objEvento;
+    private Date dt_evento;
+    private ListView lvEventos;
+    private CustomListViewEvento mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_meus_eventos);
         try {
+            util = new Util();
+            objEvento = new Evento();
+            Usuario objUsuario = new Usuario();
+            objUsuario.carregar(this);
+            codigoUsuario = objUsuario.getCodigoUsuario();
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            mDataCalendario = getIntent().getStringExtra("mDataCalendario");
+
+            tvMensagem = (TextView) findViewById(R.id.tvMensagem);
+            lvEventos = (ListView) findViewById(R.id.lvEventos);
+
+            Bundle parameters = getIntent().getExtras();
+            String fg_comentario, fg_convites;
+
+            if (parameters != null) {
+                fg_comentario = parameters.getString("fg_comentario");
+                if (fg_comentario != null) {
+                    mTipoAcao = "buscarNovosComentario";
+                }
+
+                fg_convites = parameters.getString("fg_comentario");
+                if (fg_convites != null)
+                    mTipoAcao = "buscarConvites";
+
+                dt_evento = util.formataData(parameters.getString("dt_evento"));
+                if (dt_evento != null)
+                    mTipoAcao = "buscarEventoData";
+            }
 
 
             //new Carregar().execute();
         } catch (Exception ex) {
-            Toast.makeText(PainelEventosPadrao.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            util.gravarLogErro(this, codigoUsuario, "PainelEventosPadrao", ex.getMessage());
+            finish();
         }
-
 
     }
 
@@ -84,7 +116,8 @@ public class PainelEventosPadrao extends AppCompatActivity  {
     }
 
 
-    public class Carregar extends AsyncTask<Void, Integer, Void> {
+    public class carregar extends AsyncTask<Void, Integer, Void> {
+
         @Override
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(PainelEventosPadrao.this);
@@ -94,34 +127,25 @@ public class PainelEventosPadrao extends AppCompatActivity  {
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                synchronized (this) {
-                    Evento objEvento = new Evento();
-                    String jsonString = null;
+            synchronized (this) {
+                try {
+                    switch (mTipoAcao) {
+                        case "buscarEventoData":
+                            mListaEventos = objEvento.selecionarEventosPorData(PainelEventosPadrao.this.getApplicationContext(), dt_evento);
+                            break;
 
-                    eventos = new ArrayList<>();
-
-                    try {
-                        JSONArray jsonArray = new JSONArray(jsonString);
-                        JSONObject jsonObject;
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            jsonObject = new JSONObject(jsonArray.getString(i));
-                            Evento evento = new Evento();
-                            evento.setTituloEvento((jsonObject.getString("ds_titulo_evento")));
-                            evento.setCodigoEvento((jsonObject.getInt("cd_evento")));
-                            evento.setUrlFoto(getString(R.string.caminho_foto_capa_evento) + evento.getCodigoEvento() + ".png");
-                            eventos.add(evento);
-
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        default:
+                            PainelEventosPadrao.this.finish();
+                            break;
                     }
+
+                    if (mListaEventos != null){
+                        mAdapter = new CustomListViewEvento(PainelEventosPadrao.this, mListaEventos);
+                    }
+
+                } catch (Exception ex) {
+                    Toast.makeText(PainelEventosPadrao.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
             return null;
         }
@@ -134,6 +158,13 @@ public class PainelEventosPadrao extends AppCompatActivity  {
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.dismiss();
+            lvEventos.setAdapter(mAdapter);
+            lvEventos.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(PainelEventosPadrao.this, "Aguardando implementação", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
 

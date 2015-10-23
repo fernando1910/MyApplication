@@ -21,6 +21,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
@@ -131,9 +133,9 @@ public class Util {
     }
 
     public LatLng retornaLocalizacao(Context context, LocationListener locationListener) {
-        boolean isGPSEnabled = false;
-        boolean isNetworkEnabled = false;
-        boolean podePegarLocalizacao = false;
+        boolean isGPSEnabled ;
+        boolean isNetworkEnabled;
+
         Location location = null;
         final long MIN_TIME_BW_UPDATES = 1000 * 60;
         final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
@@ -144,9 +146,9 @@ public class Util {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if (!isGPSEnabled && !isNetworkEnabled) {
-
+                Log.i("ERRO", "DESLIGADO");
             } else {
-                podePegarLocalizacao = true;
+
 
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
@@ -200,14 +202,7 @@ public class Util {
     public boolean verificaInternet(Context context) {
         ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo i = conMgr.getActiveNetworkInfo();
-        if (i == null)
-            return false;
-        if (!i.isConnected())
-            return false;
-        if (!i.isAvailable())
-            return false;
-        else
-            return true;
+        return i != null && i.isConnected() && i.isAvailable();
     }
 
     public Util() {
@@ -220,15 +215,7 @@ public class Util {
 
     public boolean checarServico(Context context) {
         int resultado = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if (resultado != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultado)) {
-
-            } else {
-                Log.i("LOG", "Não suportado");
-            }
-            return false;
-        }
-        return true;
+        return resultado == ConnectionResult.SUCCESS;
     }
 
     public void validarTela(Context context, int ind_tela) {
@@ -271,12 +258,12 @@ public class Util {
         try {
             boolean mRetorno;
             File mFile = new File(
-                    Environment.getExternalStorageDirectory() +  "/" +  // Diretorno
-                    mContext.getString(R.string.app_name) + "/" +  // Nome do APP
-                    mTipoFoto + "/" +  // Pasta
-                    mCodigo + ".png" ); // Código
+                    Environment.getExternalStorageDirectory() + "/" +  // Diretorno
+                            mContext.getString(R.string.app_name) + "/" +  // Nome do APP
+                            mTipoFoto + "/" +  // Pasta
+                            mCodigo + ".png"); // Código
 
-            if (mFile.exists()){
+            if (mFile.exists()) {
                 Log.i("", String.valueOf(mFile.delete()));
             }
 
@@ -285,8 +272,21 @@ public class Util {
             mFileOutputStream.write(mImagem);
             mFileOutputStream.close();
             return mRetorno;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return false;
+        }
+    }
+
+    public void gravarLogErro(Context context, int cd_usuario, String ds_tela, String ds_erro) {
+        String mURL = context.getString(R.string.wsBlueDate);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("cd_usuario", cd_usuario);
+            jsonObject.put("ds_tela", ds_tela);
+            jsonObject.put("ds_erro", ds_erro);
+            this.enviarServidor(mURL, jsonObject.toString(), "gravarLogErro");
+        } catch (Exception e) {
+            Log.i("ERRO", e.getMessage());
         }
     }
 

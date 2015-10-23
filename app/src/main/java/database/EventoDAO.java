@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import domain.Evento;
@@ -160,5 +161,37 @@ public class EventoDAO {
         db.update(TABELA, values, "cd_evento = ?", new String[]{String.valueOf(objEvento.getCodigoEvento())});
         SQLiteStatement mSqLiteStatement = db.compileStatement("SELECT CHANGES()");
         return mSqLiteStatement.toString();
+    }
+
+    public List<Evento>selecionarEventoPorData(Date dt_evento){
+        List<Evento> mEventos = new ArrayList<>();
+        Cursor mCursor = db.query(TABELA,EventoDAO.colunas,"dt_evento", new String[]{dt_evento.toString()},null,null,EventoDAO.dt_evento);
+        mCursor.moveToFirst();
+        if (mCursor.getCount() > 0){
+            do {
+                Evento objEvento = new Evento();
+                objEvento.setCodigoEvento(mCursor.getInt(0));
+                objEvento.setTituloEvento(mCursor.getString(1));
+                objEvento.setDescricao(mCursor.getString(2));
+                objEvento.setLatitude(mCursor.getDouble(3));
+                objEvento.setLongitude(mCursor.getDouble(4));
+                objEvento.setCodigoUsarioInclusao(mCursor.getInt(5));
+                //objEvento.setDataEvento(util.formataData(mCursor.getString(6)));
+                //objEvento.setDataInclusao(util.formataData(mCursor.getString(7)));
+//                /objEvento.setDataAlteracao(util.formataData(mCursor.getString(8)));
+                objEvento.setEventoPrivado(mCursor.getInt(9));
+                objEvento.setEndereco(mCursor.getString(10));
+                objEvento.setCaminhoFotoCapa(mCursor.getString(11));
+                objEvento.setImagemFotoCapa(mCursor.getBlob(12));
+                objEvento.setClassificacao(mCursor.getFloat(13));
+                objEvento.setCancelado(mCursor.getInt(14));
+                mEventos.add(objEvento);
+
+            }while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+
+        return mEventos;
     }
 }

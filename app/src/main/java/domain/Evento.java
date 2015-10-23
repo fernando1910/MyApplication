@@ -301,9 +301,15 @@ public class Evento {
 
     }
 
+
     public List<Evento> selecionarTodosEventosLocal(Context context) {
         EventoDAO eventoDAO = new EventoDAO(context);
         return eventoDAO.selecionarTodosEventos();
+    }
+
+    public List<Evento> selecionarEventosPorData(Context context, Date dt_evento) {
+        EventoDAO eventoDAO = new EventoDAO(context);
+        return eventoDAO.selecionarEventoPorData(dt_evento);
     }
 
     public List<Evento> selecionarTopFestas(Context context) throws InterruptedException, JSONException, NullPointerException {

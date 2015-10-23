@@ -154,7 +154,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         @Override
                                         public void onSelectDate(Date date, View view) {
                                             Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
-                                            intent.putExtra("mDataCalendario", date.toString());
+                                            intent.putExtra("dt_evento", date.toString());
                                             startActivity(intent);
                                         }
                                     };
