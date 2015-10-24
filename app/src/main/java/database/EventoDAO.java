@@ -63,6 +63,7 @@ public class EventoDAO {
     }
 
     public String salvar(Evento objEvento){
+        Util util = new Util();
         ContentValues values = new ContentValues();
         values.put("cd_evento", objEvento.getCodigoEvento());
         values.put("ds_titulo_evento", objEvento.getTituloEvento());
@@ -70,8 +71,8 @@ public class EventoDAO {
         values.put("nr_latitude", objEvento.getLatitude());
         values.put("nr_longitude", objEvento.getLongitude());
         values.put("cd_usuario_inclusao", objEvento.getCodigoUsarioInclusao());
-        values.put("dt_evento", objEvento.getDataEvento().toString());
-        values.put("dt_inclusao", objEvento.getDataInclusao().toString());
+        //values.put("dt_evento", util.formatarSalvarBanco(objEvento.getDataEvento()));
+        //values.put("dt_inclusao", util.formatarSalvarBanco(objEvento.getDataInclusao()));
         values.put("fg_evento_privado", objEvento.getEventoPrivado());
         values.put("ds_endereco", objEvento.getEndereco());
         values.put("ds_caminho_foto_capa", objEvento.getCaminhoFotoCapa());

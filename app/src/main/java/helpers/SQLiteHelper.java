@@ -60,9 +60,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "nr_latitude DOUBLE," +
                     "nr_longitude DOUBLE ," +
                     "cd_usuario_inclusao INTEGER," +
-                    "dt_evento DATETIME," +
-                    "dt_inclusao DATETIME," +
-                    "dt_alteracao DATETIME ," +
+                    "dt_evento TEXT," +
+                    "dt_inclusao TEXT," +
+                    "dt_alteracao TEXT ," +
                     "fg_evento_privado INTEGER," +
                     "ds_endereco TEXT, " +
                     "ds_caminho_foto_capa TEXT," +
@@ -75,9 +75,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                     "   cd_evento INTEGER, " +
                     "   cd_usuario INTEGER, " +
                     "   fg_participa TINYINT, " +
-                    "   dt_inclusao DATETIME, " +
+                    "   dt_inclusao TEXT, " +
                     "   cd_usuario_inclusao," +
-                    "   dt_alteracao DATETIME " +
+                    "   dt_alteracao TEXT " +
                     ")"
 
     };
