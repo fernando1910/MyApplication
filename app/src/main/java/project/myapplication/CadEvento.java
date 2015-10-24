@@ -360,7 +360,7 @@ public class CadEvento extends ActionBarActivity {
                 startActivity(intent);
             } else {
                 Toast.makeText(CadEvento.this, erro, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(CadEvento.this, "Lamentamos, algo deu errado, por favor tente novamente.", Toast.LENGTH_SHORT).show();
+
             }
 
         }
@@ -422,12 +422,13 @@ public class CadEvento extends ActionBarActivity {
         } else if (rgStatusEvento.getCheckedRadioButtonId() == 0) {
             Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
             return false;
+        } else if (util.CheckDates(tvData.getText().toString(), calendar.getTime().toString()) == true) {
+            Toast.makeText(this, "A data do evento precisa ser maior que o dia de hoje", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             return true;
         }
-
     }
-
     //endregion
 
 }
