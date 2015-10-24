@@ -377,7 +377,7 @@ public class CadEvento extends ActionBarActivity {
     public void salvarEvento() {
         try {
             descarregarControles();
-            objEvento.salvarEventoOnline(this, tipoOperacao);
+            codigoEvento =  objEvento.salvarEventoOnline(this, tipoOperacao);
 
         } catch (Exception e) {
             fg_criou = false;

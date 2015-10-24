@@ -33,7 +33,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     final private String TAG = "ERRO";
     private TextView tvDescricaoEvento, tvPrivado, tvEndereco,tvDataHora;
     private Util util;
-    private int codigoEvento;
+    private int codigoEvento = Integer.MIN_VALUE;
     private Evento objEvento;
     private Usuario objUsuario;
     private ImageView ivEvento;
@@ -95,6 +95,11 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             Bundle parameters = getIntent().getExtras();
             if (parameters != null) {
                 codigoEvento = parameters.getInt("codigoEvento");
+                if (codigoEvento == Integer.MIN_VALUE){
+                    Toast.makeText(VisualizarEvento.this, "Houve um problema", Toast.LENGTH_SHORT).show();
+                    VisualizarEvento.this.finish();
+                    startActivity(new Intent(VisualizarEvento.this, MenuPrincipalNovo.class));
+                }
                 final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
                 Thread thread = new Thread() {
                     public void run() {
@@ -107,11 +112,6 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                     }
                 };
                 thread.start();
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 objEvento = new Evento();
                 objEvento.carregarLocal(codigoEvento, this);

@@ -191,7 +191,7 @@ public class Evento {
 
     //region Metodos comunicação com servidor Online
 
-    public void salvarEventoOnline(Context context, int tipoOperacao) throws Exception {
+    public int salvarEventoOnline(Context context, int tipoOperacao) throws Exception {
 
         Util util = new Util();
         final String caminhoServidor = context.getResources().getString(R.string.wsBlueDate);
@@ -221,7 +221,7 @@ public class Evento {
                 throw new Exception("Não salvou online");
             }
         }
-
+        return this.cd_evento;
 
     }
 

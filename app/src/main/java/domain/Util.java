@@ -53,6 +53,24 @@ public class Util {
         return dataConvertida;
     }
 
+    public String formatarSalvarBanco(Date data) {
+        String dataFinal;
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+        dataFinal = dateFormat.format(data);
+        return dataFinal;
+    }
+
+    public Date formataSelecionaBanco(String date) {
+        Date dataConvertida = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+        try {
+            dataConvertida = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dataConvertida;
+    }
+
 
     public Drawable retornarIcone(Drawable drawable, Resources resources) {
 

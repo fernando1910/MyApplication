@@ -71,8 +71,8 @@ public class EventoDAO {
         values.put("nr_latitude", objEvento.getLatitude());
         values.put("nr_longitude", objEvento.getLongitude());
         values.put("cd_usuario_inclusao", objEvento.getCodigoUsarioInclusao());
-        //values.put("dt_evento", util.formatarSalvarBanco(objEvento.getDataEvento()));
-        //values.put("dt_inclusao", util.formatarSalvarBanco(objEvento.getDataInclusao()));
+        values.put("dt_evento", util.formatarSalvarBanco(objEvento.getDataEvento()));
+        values.put("dt_inclusao", util.formatarSalvarBanco(objEvento.getDataInclusao()));
         values.put("fg_evento_privado", objEvento.getEventoPrivado());
         values.put("ds_endereco", objEvento.getEndereco());
         values.put("ds_caminho_foto_capa", objEvento.getCaminhoFotoCapa());
@@ -127,8 +127,8 @@ public class EventoDAO {
                 objEvento.setLatitude(mCursor.getDouble(3));
                 objEvento.setLongitude(mCursor.getDouble(4));
                 objEvento.setCodigoUsarioInclusao(mCursor.getInt(5));
-                objEvento.setDataEvento(util.formataData(mCursor.getString(6)));
-                objEvento.setDataInclusao(util.formataData(mCursor.getString(7)));
+                objEvento.setDataEvento(util.formataSelecionaBanco(mCursor.getString(6)));
+                objEvento.setDataInclusao(util.formataSelecionaBanco(mCursor.getString(7)));
 //                /objEvento.setDataAlteracao(util.formataData(mCursor.getString(8)));
                 objEvento.setEventoPrivado(mCursor.getInt(9));
                 objEvento.setEndereco(mCursor.getString(10));
