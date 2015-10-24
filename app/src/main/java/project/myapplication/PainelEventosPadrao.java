@@ -71,6 +71,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
         } catch (Exception ex) {
             util.gravarLogErro(this, codigoUsuario, "PainelEventosPadrao", ex.getMessage());
             finish();
+            startActivity(new Intent(this, MenuPrincipalNovo.class));
         }
 
     }
@@ -92,6 +93,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             this.finish();
+            startActivity(new Intent(PainelEventosPadrao.this, MenuPrincipalNovo.class));
             return true;
         }
 
@@ -113,6 +115,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+        startActivity(new Intent(PainelEventosPadrao.this, MenuPrincipalNovo.class));
     }
 
 
@@ -136,6 +139,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
                         default:
                             PainelEventosPadrao.this.finish();
+                            startActivity(new Intent(PainelEventosPadrao.this, MenuPrincipalNovo.class));
                             break;
                     }
 
@@ -167,6 +171,5 @@ public class PainelEventosPadrao extends AppCompatActivity {
             });
 
         }
-
     }
 }
