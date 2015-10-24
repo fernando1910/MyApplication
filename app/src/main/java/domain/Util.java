@@ -290,24 +290,4 @@ public class Util {
         }
     }
 
-    public boolean CheckDates(String startDate, String endDate) {
-        SimpleDateFormat dfDate = new SimpleDateFormat("dd-MMM-yyyy");
-
-        boolean b = false;
-
-        try {
-            if (dfDate.parse(startDate).before(dfDate.parse(endDate))) {
-                b = false;  // If start date is before end date.
-            } else if (dfDate.parse(startDate).equals(dfDate.parse(endDate))) {
-                b = true;  // If two dates are equal.
-            } else {
-                b = true; // If start date is after the end date.
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return b;
-    }
-
 }

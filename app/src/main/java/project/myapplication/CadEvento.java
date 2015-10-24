@@ -151,7 +151,7 @@ public class CadEvento extends ActionBarActivity {
 
                     diretorio = new File(diretorio.getPath() + "/Evento");
 
-                    imgEvento = Uri.fromFile(new File(diretorio,"0.png"));
+                    imgEvento = Uri.fromFile(new File(diretorio, "0.png"));
 
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgEvento);
 
@@ -323,6 +323,7 @@ public class CadEvento extends ActionBarActivity {
 
     public class salvarEvento extends AsyncTask<Void, Integer, Void> {
         String erro;
+
         @Override
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(CadEvento.this);
@@ -355,8 +356,8 @@ public class CadEvento extends ActionBarActivity {
                     criarEventoCalendarioAndroid();
                 }
                 CadEvento.this.finish();
-                Intent intent = new Intent(CadEvento.this,VisualizarEvento.class);
-                intent.putExtra("codigoEvento",codigoEvento);
+                Intent intent = new Intent(CadEvento.this, VisualizarEvento.class);
+                intent.putExtra("codigoEvento", codigoEvento);
                 startActivity(intent);
             } else {
                 Toast.makeText(CadEvento.this, erro, Toast.LENGTH_SHORT).show();
@@ -413,21 +414,26 @@ public class CadEvento extends ActionBarActivity {
     }
 
     public boolean ValidarCampos() {
+        boolean fg = true;
+        int valida = new Date().compareTo(calendar.getTime());
+
         if (etTitulo.getText().length() == 0) {
             Toast.makeText(this, "Necessário informar um Titulo", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (tvEndereco.getText().length() == 0) {
-            Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (rgStatusEvento.getCheckedRadioButtonId() == 0) {
-            Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (util.CheckDates(tvData.getText().toString(), calendar.getTime().toString()) == true) {
-            Toast.makeText(this, "A data do evento precisa ser maior que o dia de hoje", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-            return true;
+            fg = false;
         }
+        if (tvEndereco.getText().length() == 0) {
+            Toast.makeText(this, "Necessário informar o Endereço", Toast.LENGTH_SHORT).show();
+            fg = false;
+        }
+        if (rgStatusEvento.getCheckedRadioButtonId() == 0) {
+            Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
+            fg = false;
+        }
+        if(valida > -1){
+            Toast.makeText(this, "A data do evento precisa ser maior que o dia de hoje", Toast.LENGTH_SHORT).show();
+            fg = false;
+        }
+        return fg;
     }
     //endregion
 
