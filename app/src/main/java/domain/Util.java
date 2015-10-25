@@ -71,6 +71,17 @@ public class Util {
         return dataConvertida;
     }
 
+    public Date converterData(String date) {
+        Date dataConvertida = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+        try {
+            dataConvertida = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dataConvertida;
+    }
+
 
     public Drawable retornarIcone(Drawable drawable, Resources resources) {
 

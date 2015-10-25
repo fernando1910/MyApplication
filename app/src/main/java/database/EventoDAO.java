@@ -115,12 +115,12 @@ public class EventoDAO {
     {
         List<Evento> mEventos = new ArrayList<>();
         Util util = new Util();
-        Cursor mCursor = db.rawQuery("SELECT * FROM tb_evento",null);
+        Cursor mCursor = db.rawQuery("SELECT * FROM tb_evento WHERE fg_cancelado = 0",null);
         mCursor.moveToFirst();
         if (mCursor.getCount() > 0) {
             do {
                 Evento objEvento = new Evento();
-
+                int valida = new Date().compareTo(util.converterData(mCursor.getString(6)));
                 objEvento.setCodigoEvento(mCursor.getInt(0));
                 objEvento.setTituloEvento(mCursor.getString(1));
                 objEvento.setDescricao(mCursor.getString(2));
@@ -136,7 +136,8 @@ public class EventoDAO {
                 objEvento.setImagemFotoCapa(mCursor.getBlob(12));
                 objEvento.setClassificacao(mCursor.getFloat(13));
                 objEvento.setCancelado(mCursor.getInt(14));
-                mEventos.add(objEvento);
+                if(valida != 1)
+                    mEventos.add(objEvento);
             }while (mCursor.moveToNext());
         }
         mCursor.close();
