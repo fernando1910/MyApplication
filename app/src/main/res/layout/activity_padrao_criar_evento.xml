@@ -1,170 +1,167 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="project.myapplication.CadEvento"
-    android:orientation="vertical">
-
-<ScrollView
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    tools:context="project.myapplication.CadEvento">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-        >
-
-<LinearLayout
-    android:id="@+id/llPrincipal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical">
-    <ImageButton
-        android:src="@drawable/ic_placeholder_evento"
-        android:layout_gravity="center"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:id="@+id/ibFotoCapa"
-        android:layout_width="300dp"
-        android:layout_height="200dp" />
-    
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Titulo"
-        android:singleLine="true"
-        android:id="@+id/etTitulo"
-        android:layout_marginTop="15dp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descrição"
-        android:lines="4"
-        android:autoText="false"
-        android:id="@+id/etDescricao" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:weightSum="1"
-        android:orientation="horizontal">
-
-
-        <ImageButton
-            android:id="@+id/ibEndereco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="chamarMapa"
-            android:adjustViewBounds="false"
-            android:layout_marginLeft="10dp"
-            android:background="@android:color/transparent" />
-        <TextView
-            android:id="@+id/tvEndereco"
-            android:hint="Procure o endereço"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            />
-    </LinearLayout>
-
-
-
-
-        <RadioGroup
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rgStatusEvento">
-
-            <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Publico"
-                android:id="@+id/rbPublic"
-            />
-
-            <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-                android:id="@+id/rbPrivate"
-            android:text="Privado"/>
-
-        </RadioGroup>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:weightSum="1">
-
-
-        <TextView
-            android:id="@+id/tvData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="dd/MM/yyyy"
-            />
-
-        <ImageButton
-            android:id="@+id/btDataPicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickMostrarDataPicker"
-            android:adjustViewBounds="false"
-            android:layout_marginLeft="10dp"
-            android:background="@android:color/transparent" />
-
-        <TextView
-            android:id="@+id/tvHora"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="HH:mm"
-            android:layout_marginLeft="10dp"
-            />
-
-        <ImageButton
-            android:id="@+id/ibTimePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickShowTimerPicker"
-            android:adjustViewBounds="false"
-            android:layout_marginLeft="10dp"
-            android:background="@android:color/transparent" />
-    </LinearLayout>
-
-
-</LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="bottom|center"
-        android:layout_gravity="bottom"
-
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:text="Confirmar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickCriarEvento"
-            android:background="#255E69"
-            android:textColor="#D8E9EB"
-            />
+            android:orientation="vertical"
 
-    </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+            >
+
+            <LinearLayout
+                android:id="@+id/llPrincipal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <ImageButton
+                    android:id="@+id/ibFotoCapa"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_placeholder_evento" />
+
+                <EditText
+                    android:id="@+id/etTitulo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:hint="Titulo"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/etDescricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoText="false"
+                    android:hint="Descrição"
+                    android:lines="4" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+
+                    <ImageButton
+                        android:id="@+id/ibEndereco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:adjustViewBounds="false"
+                        android:background="@android:color/transparent"
+                        android:onClick="chamarMapa" />
+
+                    <TextView
+                        android:id="@+id/tvEndereco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Procure o endereço"
+                        android:padding="5dp" />
+                </LinearLayout>
+
+
+                <RadioGroup
+                    android:id="@+id/rgStatusEvento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbPublic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Publico" />
+
+                    <RadioButton
+                        android:id="@+id/rbPrivate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Privado" />
+
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:weightSum="1">
+
+
+                    <TextView
+                        android:id="@+id/tvData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="dd/MM/yyyy" />
+
+                    <ImageButton
+                        android:id="@+id/btDataPicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:adjustViewBounds="false"
+                        android:background="@android:color/transparent"
+                        android:onClick="onClickMostrarDataPicker" />
+
+                    <TextView
+                        android:id="@+id/tvHora"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="HH:mm" />
+
+                    <ImageButton
+                        android:id="@+id/ibTimePicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:adjustViewBounds="false"
+                        android:background="@android:color/transparent"
+                        android:onClick="onClickShowTimerPicker" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+
+                android:gravity="bottom|center">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#255E69"
+                    android:onClick="onClickCriarEvento"
+                    android:text="Confirmar"
+                    android:textColor="#D8E9EB" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>
