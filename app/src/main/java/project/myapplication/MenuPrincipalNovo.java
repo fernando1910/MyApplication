@@ -23,15 +23,18 @@ import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -52,7 +55,6 @@ public class MenuPrincipalNovo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_menu_principal_novo);
 
         objConfig = new Configuracoes();
@@ -104,7 +106,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         ft.commit();
 
 
-        AccountHeader.Result headerNavigationLeft = new AccountHeader()
+        AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withCompactStyle(false)
                 .withSavedInstance(savedInstanceState)
@@ -112,7 +114,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.batman)
 
                 .addProfiles(
-                            new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
+                        new ProfileDrawerItem().withName(objUsuario.getNome()).withIcon(roundImage)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -123,22 +125,16 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 })
                 .build();
 
-        Drawer.Result navigationDrawerLeft = new Drawer()
+        Drawer result  = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(mToolbar)
-                .withDisplayBelowToolbar(true)
-                .withActionBarDrawerToggleAnimated(true)
-                .withDrawerGravity(Gravity.LEFT)
-                .withSavedInstance(savedInstanceState)
-                .withSelectedItem(0)
-                .withAccountHeader(headerNavigationLeft)
+                .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l, IDrawerItem iDrawerItem) {
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
                         try {
                             Fragment mFragment = null;
-                            switch (i) {
+                            switch (position) {
                                 case 0:
                                     mFragment = Painel.newInstance();
                                     setTitleActionBar("Início");
@@ -179,23 +175,23 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                         } catch (Exception e) {
                             Toast.makeText(MenuPrincipalNovo.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }
-                })
-                .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+
                         return false;
                     }
+
                 })
+
                 .build();
 
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
-        navigationDrawerLeft.addItem(new SectionDrawerItem().withName("Configurações"));
-        navigationDrawerLeft.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(fg_notificacoes).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
-        navigationDrawerLeft.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
+
+
+        result.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
+        result.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
+        result.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
+        result.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
+        result.addItem(new SectionDrawerItem().withName("Configurações"));
+        result.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(fg_notificacoes).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
+        result.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
 
         if (objUsuario.getTokenPendente() == 1)
             tokenRefresh();
@@ -265,6 +261,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         }
     }
 
+
     private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(IDrawerItem iDrawerItem, CompoundButton compoundButton, boolean b) {
@@ -272,6 +269,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             objConfig.atualizar(getApplicationContext());
         }
     };
+
 
     public void setTitleActionBar(String mTitle) {
         try {
