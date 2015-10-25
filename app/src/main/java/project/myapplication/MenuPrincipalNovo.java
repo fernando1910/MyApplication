@@ -62,7 +62,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         boolean fg_notificacoes = false;
         if (objConfig.getStatusPerfil() != 5) {
             Util util = new Util();
-            util.validarTela(this,5);
+            util.validarTela(this, 5);
         }
         if (objConfig.getPermitePush() == 1)
             fg_notificacoes = true;
@@ -125,25 +125,39 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 })
                 .build();
 
-        Drawer result  = new DrawerBuilder()
+        Drawer result = new DrawerBuilder(this)
                 .withActivity(this)
+                .withToolbar(mToolbar)
+                .withActionBarDrawerToggleAnimated(true)
+                .withDrawerGravity(Gravity.LEFT)
+                .withSavedInstance(savedInstanceState)
+                .withSelectedItem(0)
                 .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Inicial").withIcon(R.drawable.home),
+                        new PrimaryDrawerItem().withName("Eventos").withIcon(R.drawable.star),
+                        new PrimaryDrawerItem().withName("Calendario").withIcon(R.drawable.calendar_today),
+                        new PrimaryDrawerItem().withName("Pesquisar").withIcon(R.drawable.magnify),
+                        new SectionDrawerItem().withName("Configurações"),
+                        new SwitchDrawerItem().withName("Notificação").withChecked(fg_notificacoes).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell),
+                        new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings))
+                )
+
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-
                         try {
                             Fragment mFragment = null;
                             switch (position) {
-                                case 0:
+                                case 1:
                                     mFragment = Painel.newInstance();
                                     setTitleActionBar("Início");
                                     break;
-                                case 1:
+                                case 2:
                                     mFragment = new PainelTodosEventos();
                                     setTitleActionBar("Convites");
                                     break;
-                                case 2:
+                                case 3:
                                     CaldroidFragment mFragmentCalendar = new CaldroidFragment();
 
                                     final CaldroidListener mCaldroidListener = new CaldroidListener() {
@@ -158,16 +172,17 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                     mFragment = mFragmentCalendar;
                                     setTitleActionBar("Calendário");
                                     break;
-                                case 3:
+                                case 4:
                                     startActivity(new Intent(MenuPrincipalNovo.this, PesquisarEvento.class));
                                     break;
-                                case 6:
+                                case 7:
                                     startActivity(new Intent(MenuPrincipalNovo.this, PainelConfiguracao.class));
                                     break;
                             }
 
                             if (mFragment != null) {
                                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                ft.isEmpty();
                                 ft.replace(R.id.layoutConteudo, mFragment, "tagMain");
                                 ft.commit();
                             }
@@ -182,16 +197,6 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 })
 
                 .build();
-
-
-
-        result.addItem(new PrimaryDrawerItem().withName("Inicial").withIcon(getResources().getDrawable(R.drawable.home)));
-        result.addItem(new PrimaryDrawerItem().withName("Eventos").withIcon(getResources().getDrawable(R.drawable.star)));
-        result.addItem(new PrimaryDrawerItem().withName("Calendario").withIcon(getResources().getDrawable(R.drawable.calendar_today)));
-        result.addItem(new PrimaryDrawerItem().withName("Pesquisar").withIcon(getResources().getDrawable(R.drawable.magnify)));
-        result.addItem(new SectionDrawerItem().withName("Configurações"));
-        result.addItem(new SwitchDrawerItem().withName("Notificação").withChecked(fg_notificacoes).withOnCheckedChangeListener(mOnCheckedChangeListener).withIcon(R.drawable.bell));
-        result.addItem(new PrimaryDrawerItem().withName("Mais opções").withIcon(getResources().getDrawable(R.drawable.settings)));
 
         if (objUsuario.getTokenPendente() == 1)
             tokenRefresh();
