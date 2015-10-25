@@ -61,8 +61,8 @@ public class Util {
     }
 
     public Date formataSelecionaBanco(String date) {
-        Date dataConvertida = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+        Date dataConvertida = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm");
         try {
             dataConvertida = simpleDateFormat.parse(date);
         } catch (ParseException e) {
@@ -122,15 +122,10 @@ public class Util {
         Thread thread = new Thread() {
             public void run() {
                 resposta[0] = HttpConnection.getSetDataWeb(url, comando, data);
-
             }
         };
         thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        thread.join();
         return resposta[0];
     }
 

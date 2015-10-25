@@ -92,8 +92,8 @@ public class EventoDAO {
             objEvento.setLatitude(c.getDouble(3));
             objEvento.setLongitude(c.getDouble(4));
             objEvento.setCodigoUsarioInclusao(c.getInt(5));
-            objEvento.setDataEvento(util.formataData(c.getString(6)));
-            objEvento.setDataInclusao(util.formataData(c.getString(7)));
+            objEvento.setDataEvento(util.formataSelecionaBanco(c.getString(6)));
+            objEvento.setDataInclusao(util.formataSelecionaBanco(c.getString(7)));
             objEvento.setEventoPrivado(c.getInt(9));
             objEvento.setEndereco(c.getString(10));
             objEvento.setCaminhoFotoCapa(c.getString(11));
