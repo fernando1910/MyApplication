@@ -12,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -58,27 +60,16 @@ public class CustomListViewEvento extends BaseAdapter {
         TextView tvEndereco = (TextView) view.findViewById(R.id.tvEndereco);
 
         tvEvento.setText(mEvento.getTituloEvento());
+
         if (mEvento.getImagemFotoCapa() != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(mEvento.getImagemFotoCapa(),0,mEvento.getImagemFotoCapa().length);
             ivEvento.setImageBitmap(bitmap);
         }
         else {
             final String url = mContext.getString(R.string.caminho_foto_capa_evento) + mEvento.getCodigoEvento() +".png";
-            Thread thread = new Thread(){
-                public void run()
-                {
-                    synchronized (this) {
-                        try {
-                            ivEvento.setImageDrawable(Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            };
-            thread.start();
-
+            Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
         }
+
         return view;
     }
 
