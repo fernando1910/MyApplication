@@ -7,6 +7,7 @@
     tools:context="project.myapplication.PainelNovidades">
 
     <LinearLayout
+        android:id="@+id/llConvites"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/layout_marginLeft"
@@ -39,6 +40,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llAlteracoes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/layout_marginLeft"
@@ -72,7 +74,7 @@
 
 
     <LinearLayout
-        android:id="@+id/llComentario"
+        android:id="@+id/llComentarios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/layout_marginLeft"
