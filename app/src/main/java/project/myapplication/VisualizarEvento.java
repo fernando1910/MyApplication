@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -101,17 +102,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                     startActivity(new Intent(VisualizarEvento.this, MenuPrincipalNovo.class));
                 }
                 final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
-                Thread thread = new Thread() {
-                    public void run() {
-                        try {
-                            ivEvento.setImageDrawable(Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                        }
-                    }
-                };
-                thread.start();
+                Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
 
                 objEvento = new Evento();
                 objEvento.carregarLocal(codigoEvento, this);
