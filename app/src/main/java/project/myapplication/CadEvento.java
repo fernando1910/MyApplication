@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -39,7 +40,7 @@ import domain.Usuario;
 import domain.Util;
 
 
-public class CadEvento extends ActionBarActivity {
+public class CadEvento extends AppCompatActivity {
     //region Variaveis
     private int codigoEvento;
     private int tipoOperacao = 0; // 1 inclusão, 2 alteração
@@ -253,6 +254,7 @@ public class CadEvento extends ActionBarActivity {
 
         if (id == android.R.id.home) {
             this.finish();
+            startActivity(new Intent(this, MenuPrincipalNovo.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -262,6 +264,7 @@ public class CadEvento extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+        startActivity(new Intent(this,MenuPrincipalNovo.class));
 
     }
 
