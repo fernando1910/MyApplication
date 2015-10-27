@@ -22,6 +22,7 @@
         android:id="@+id/action_editar"
         android:orderInCategory="100"
         android:title="Editar"
+        android:visible="false"
         app:theme="@style/TemaActionBar"
         app:showAsAction="never" />
 

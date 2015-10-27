@@ -42,13 +42,13 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     private RatingBar mRatingBar;
     private ProgressDialog mProgressDialog;
     FloatingActionButton fab4;
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_padrao_visulizar_evento);
-
 
             //region Vinculação das variaveis com o layout XML
             ivEvento = (ImageView) findViewById(R.id.ivEvento);
@@ -58,6 +58,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
             tvEndereco = (TextView) findViewById(R.id.tvEndereco);
             tvDataHora = (TextView) findViewById(R.id.tvDataHora);
+            menu = (Menu) findViewById(R.id.action_editar);
 
             mCollapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
@@ -106,6 +107,12 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
                 objEvento = new Evento();
                 objEvento.carregarLocal(codigoEvento, this);
+                Usuario objUsuario = new Usuario();
+                objUsuario.carregar(this);
+                if(objUsuario.getCodigoUsuario() == objEvento.getCodigoUsarioInclusao())
+                {
+                    fab4.setVisibility(View.GONE);
+                }
                 if (objEvento.getCodigoEvento() != 0)
                     carregarControles();
                 else
@@ -173,7 +180,8 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             return true;
         }
 
-        if (id == R.id.action_editar){
+        if (id == R.id.action_editar)
+        {
             this.finish();
             editarEvento();
             return true;
@@ -196,6 +204,16 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+
+        MenuItem item = menu.findItem(R.id.action_editar);
+        if(objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
+            item.setVisible(true);
+
+        return true;
     }
 
     @Override
