@@ -389,6 +389,17 @@ public class Evento {
             return false;
         }
     }
+
+    public List<Evento> buscarConvites(Context context, String data, int codigoUsario) throws  Exception{
+        Util util = new Util();
+        List<Evento> mEventos = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("codigoUsuario", codigoUsario);
+        jsonObject.put("data", data);
+
+
+        return selecionarEventosOnline(context,"buscarConvites", jsonObject.toString());
+    }
     //endregion
 
 }

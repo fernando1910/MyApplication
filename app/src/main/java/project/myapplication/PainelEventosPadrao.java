@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +28,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
     private int codigoUsuario;
     private Util util;
     private final String TAG = "ERRO";
-    private ProgressDialog progressDialog;
+    private ProgressBar mProgressBar;
     private List<Evento> mListaEventos;
     private String mTipoAcao;
     private TextView tvMensagem;
@@ -34,6 +36,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
     private Date dt_evento;
     private ListView lvEventos;
     private CustomListViewEvento mAdapter;
+    private Button btNovo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +52,32 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
             tvMensagem = (TextView) findViewById(R.id.tvMensagem);
             lvEventos = (ListView) findViewById(R.id.lvEventos);
+            mProgressBar = (ProgressBar) findViewById(R.id.pbFooterLoading);
+            btNovo =(Button) findViewById(R.id.btNovo);
+
 
             Bundle parameters = getIntent().getExtras();
-            String fg_comentario, fg_convites;
+            boolean fg_comentario, fg_convite;
 
             if (parameters != null) {
-                fg_comentario = parameters.getString("fg_comentario");
-                if (fg_comentario != null) {
+                fg_comentario = parameters.getBoolean("fg_comentario");
+                if (fg_comentario) {
                     mTipoAcao = "buscarNovosComentario";
                 }
 
-                fg_convites = parameters.getString("fg_comentario");
-                if (fg_convites != null)
+                fg_convite = parameters.getBoolean("fg_convite");
+                if (fg_convite) {
                     mTipoAcao = "buscarConvites";
+                    getSupportActionBar().setTitle("Novos Convites");
+                }
 
-                dt_evento = util.formataData(parameters.getString("dt_evento"));
-                if (dt_evento != null)
-                    mTipoAcao = "buscarEventoData";
+                btNovo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PainelEventosPadrao.this.finish();
+                        startActivity(new Intent(PainelEventosPadrao.this, CadEvento.class));
+                    }
+                });
             }
 
 
@@ -122,12 +134,12 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
 
     public class carregar extends AsyncTask<Void, Integer, Void> {
-
+        boolean fg_novo_evento;
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(PainelEventosPadrao.this);
-            progressDialog = ProgressDialog.show(PainelEventosPadrao.this, "Carregando...",
-                    "Carregando seus eventos, por favor aguarde...", false, false);
+            mProgressBar.setVisibility(View.VISIBLE);
+            tvMensagem.setVisibility(View.GONE);
+            btNovo.setVisibility(View.GONE);
         }
 
         @Override
@@ -139,14 +151,20 @@ public class PainelEventosPadrao extends AppCompatActivity {
                             mListaEventos = objEvento.selecionarEventosPorData(PainelEventosPadrao.this.getApplicationContext(), dt_evento);
                             break;
 
+                        case "buscarConvites":
+                            mListaEventos = objEvento.buscarConvites(PainelEventosPadrao.this.getApplicationContext(), util.formatarDataBanco(new Date()),codigoUsuario);
+                            break;
                         default:
                             PainelEventosPadrao.this.finish();
                             startActivity(new Intent(PainelEventosPadrao.this, MenuPrincipalNovo.class));
                             break;
                     }
 
-                    if (mListaEventos != null){
+                    if (mListaEventos.size() > 0){
                         mAdapter = new CustomListViewEvento(PainelEventosPadrao.this, mListaEventos);
+                    }
+                    else{
+                        fg_novo_evento = true;
                     }
 
                 } catch (Exception ex) {
@@ -158,21 +176,28 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            progressDialog.setProgress(values[0]);
+
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            progressDialog.dismiss();
-            lvEventos.setAdapter(mAdapter);
-            lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent it =  new Intent(PainelEventosPadrao.this,VisualizarEvento.class);
-                    it.putExtra("codigoEvento",mAdapter.getCodigoEvento(position));
-                    startActivity(it);
-                }
-            });
+            mProgressBar.setVisibility(View.GONE);
+            if (fg_novo_evento){
+                tvMensagem.setText("Sem novos convites, crie um evento");
+                tvMensagem.setVisibility(View.VISIBLE);
+                btNovo.setVisibility(View.VISIBLE);
+            }else {
+                lvEventos.setAdapter(mAdapter);
+                lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent it =  new Intent(PainelEventosPadrao.this,VisualizarEvento.class);
+                        it.putExtra("codigoEvento",mAdapter.getCodigoEvento(position));
+                        startActivity(it);
+                    }
+                });
+            }
+
         }
     }
 }

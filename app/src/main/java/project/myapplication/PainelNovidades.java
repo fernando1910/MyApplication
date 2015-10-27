@@ -32,13 +32,13 @@ public class PainelNovidades extends Fragment implements View.OnClickListener {
         Intent intent = new Intent(getContext(),PainelEventosPadrao.class);
         switch (v.getId()){
             case R.id.llComentarios:
-                intent.putExtra("fg_comentario", 1);
+                intent.putExtra("fg_comentario", true);
                 break;
             case R.id.llAlteracoes:
-                intent.putExtra("fg_comentario", 1);
+                intent.putExtra("fg_alteracoes", true);
                 break;
             case R.id.llConvites:
-                intent.putExtra("fg_convite", 1);
+                intent.putExtra("fg_convite", true);
                 break;
         }
 
