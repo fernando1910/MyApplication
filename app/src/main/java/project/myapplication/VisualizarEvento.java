@@ -97,26 +97,27 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             Bundle parameters = getIntent().getExtras();
             if (parameters != null) {
                 codigoEvento = parameters.getInt("codigoEvento");
-                if (codigoEvento == Integer.MIN_VALUE){
+                if (codigoEvento == Integer.MIN_VALUE || codigoEvento == 0 ){
                     Toast.makeText(VisualizarEvento.this, "Houve um problema", Toast.LENGTH_SHORT).show();
                     VisualizarEvento.this.finish();
                     startActivity(new Intent(VisualizarEvento.this, MenuPrincipalNovo.class));
                 }
-                final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
-                Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
+                else {
+                    final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
+                    Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
 
-                objEvento = new Evento();
-                objEvento.carregarLocal(codigoEvento, this);
-                Usuario objUsuario = new Usuario();
-                objUsuario.carregar(this);
-                if(objUsuario.getCodigoUsuario() == objEvento.getCodigoUsarioInclusao())
-                {
-                    fab4.setVisibility(View.GONE);
+                    objEvento = new Evento();
+                    objEvento.carregarLocal(codigoEvento, this);
+                    Usuario objUsuario = new Usuario();
+                    objUsuario.carregar(this);
+                    if (objUsuario.getCodigoUsuario() == objEvento.getCodigoUsarioInclusao()) {
+                        fab4.setVisibility(View.GONE);
+                    }
+                    if (objEvento.getCodigoEvento() != 0)
+                        carregarControles();
+                    else
+                        new carregarEventoOnline().execute();
                 }
-                if (objEvento.getCodigoEvento() != 0)
-                    carregarControles();
-                else
-                    new carregarEventoOnline().execute();
 
             } else {
                 Toast.makeText(getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_LONG).show();
@@ -283,7 +284,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(VisualizarEvento.this);
             mProgressDialog = ProgressDialog.show(VisualizarEvento.this, "Carregando...",
-                    "Estamos validando seu perfil, por favor aguarde...", false, false);
+                    "Estamos carregando as últimas informações do evento, por favor aguarde...", false, false);
         }
 
         @Override
@@ -318,7 +319,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(VisualizarEvento.this);
             mProgressDialog = ProgressDialog.show(VisualizarEvento.this, "Carregando...",
-                    "Estamos validando seu perfil, por favor aguarde...", false, false);
+                    "Estamos cancelando o evento, por favor aguarde...", false, false);
         }
 
         @Override

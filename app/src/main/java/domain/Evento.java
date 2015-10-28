@@ -288,7 +288,7 @@ public class Evento {
         this.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
         this.setDescricao(jsonObject.getString("ds_descricao"));
         this.setEndereco(jsonObject.getString("ds_endereco"));
-        this.setDataEvento(util.formataData(jsonObject.getString("dt_evento")));
+        this.setDataEvento(util.formataSelecionaBanco(jsonObject.getString("dt_evento")));
         this.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
         this.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
         this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));

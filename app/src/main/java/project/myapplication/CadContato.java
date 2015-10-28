@@ -21,6 +21,7 @@ import java.util.List;
 
 import adapters.CustomListViewContato;
 import domain.Contatos;
+import domain.Usuario;
 import domain.Util;
 
 
@@ -37,6 +38,7 @@ public class CadContato extends AppCompatActivity {
     MenuItem mActionProgressItem;
     private ProgressDialog mProgressDialog;
     private int mQuantidadeContatos;
+    private Usuario objUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class CadContato extends AppCompatActivity {
             //endregion
 
             objContatos = new Contatos();
+            objUsuario = new Usuario();
+            objUsuario.carregar(this);
             util = new Util();
 
             Bundle parameters = getIntent().getExtras();
@@ -67,7 +71,7 @@ public class CadContato extends AppCompatActivity {
 
         } catch (Exception ex) {
             this.finish();
-            Log.i(TAG,ex.getMessage());
+            Log.i(TAG, ex.getMessage());
         }
 
     }
@@ -149,8 +153,9 @@ public class CadContato extends AppCompatActivity {
     }
 
 
-
-    public class convidar extends AsyncTask<Void,Integer,Void>{
+    public class convidar extends AsyncTask<Void, Integer, Void> {
+        String mResposta;
+        int mQuantidadeConvidados = Integer.MIN_VALUE;
 
         @Override
         protected void onPreExecute() {
@@ -161,14 +166,16 @@ public class CadContato extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            synchronized (this){
-                try{
+            synchronized (this) {
+                try {
                     boolean checked;
                     boolean selecionou = false;
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("cd_evento", String.valueOf(codigoEvento));
+                    jsonObject.put("ds_nome", objUsuario.getNome());
+                    jsonObject.put("cd_usuario_inclusao", objUsuario.getCodigoUsuario());
                     JSONArray jsonArray = new JSONArray();
-                    for (int i = 0; i < mQuantidadeContatos ; i++) {
+                    for (int i = 0; i < mQuantidadeContatos; i++) {
                         checked = arrayAdapter.isChecked(i);
                         if (checked) {
                             selecionou = true;
@@ -179,27 +186,29 @@ public class CadContato extends AppCompatActivity {
                     }
                     if (selecionou) {
                         jsonObject.put("convidados", jsonArray);
-                        util.enviarServidor(getString(R.string.wsBlueDate), jsonObject.toString(), "convidarUsuario");
+                        mResposta = util.enviarServidor(getString(R.string.wsBlueDate), jsonObject.toString(), "convidarUsuario");
+                        mQuantidadeConvidados = Integer.parseInt(mResposta);
+                        fg_convidou = true;
                     }
 
-            }catch (Exception ex){
-                Log.i(TAG, ex.getMessage());
-                mProgressDialog.dismiss();
-                fg_convidou = false;
-            }
+                } catch (Exception ex) {
+                    Log.i(TAG, ex.getMessage());
+                    mProgressDialog.dismiss();
+                    fg_convidou = false;
+                }
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid){
+        protected void onPostExecute(Void aVoid) {
             try {
                 mProgressDialog.dismiss();
                 if (fg_convidou)
-                    Toast.makeText(CadContato.this, "Sucesso ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadContato.this, "Você convidou " + mQuantidadeConvidados + " pessoas." , Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(CadContato.this, "Falha", Toast.LENGTH_SHORT).show();
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 Log.i(TAG, ex.getMessage());
             }
         }
