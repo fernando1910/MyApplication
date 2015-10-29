@@ -33,7 +33,7 @@ import domain.Util;
 
 public class VisualizarEvento extends AppCompatActivity implements View.OnClickListener {
     final private String TAG = "ERRO";
-    private TextView tvDescricaoEvento, tvPrivado, tvEndereco,tvDataHora;
+    private TextView tvDescricaoEvento, tvPrivado, tvEndereco, tvDataHora;
     private Util util;
     private int codigoEvento = Integer.MIN_VALUE;
     private Evento objEvento;
@@ -61,7 +61,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             tvDataHora = (TextView) findViewById(R.id.tvDataHora);
             menu = (Menu) findViewById(R.id.action_editar);
 
-            mCollapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+            mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
 
             Toolbar mToolbar = (Toolbar) findViewById(R.id.tb_main);
@@ -98,12 +98,11 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             Bundle parameters = getIntent().getExtras();
             if (parameters != null) {
                 codigoEvento = parameters.getInt("codigoEvento");
-                if (codigoEvento == Integer.MIN_VALUE || codigoEvento == 0 ){
+                if (codigoEvento == Integer.MIN_VALUE || codigoEvento == 0) {
                     Toast.makeText(VisualizarEvento.this, "Houve um problema", Toast.LENGTH_SHORT).show();
                     VisualizarEvento.this.finish();
                     startActivity(new Intent(VisualizarEvento.this, MenuPrincipalNovo.class));
-                }
-                else {
+                } else {
                     final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
                     Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
 
@@ -136,23 +135,22 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 }
             });
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Toast.makeText(VisualizarEvento.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    public void carregarControles(){
+    public void carregarControles() {
         mCollapsingToolbarLayout.setTitle(objEvento.getTituloEvento());
         tvDescricaoEvento.setText(objEvento.getDescricao());
         tvEndereco.setText(objEvento.getEndereco());
         if (objEvento.getEventoPrivado() == 1) {
             tvPrivado.setText("Este evento é privado");
-            if (objEvento.getCodigoUsarioInclusao() != objUsuario.getCodigoUsuario()){
+            if (objEvento.getCodigoUsarioInclusao() != objUsuario.getCodigoUsuario()) {
                 fab4.setVisibility(View.GONE);
             }
-        }
-        else {
+        } else {
             tvPrivado.setText("Este evento é publico");
 
         }
@@ -163,7 +161,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         mRatingBar.setRating(objEvento.getClassificacao());
 
         // evento antes da data de hoje
-        if (new Date().compareTo(objEvento.getDataEvento()) == 1){
+        if (new Date().compareTo(objEvento.getDataEvento()) == 1) {
             fab3.setVisibility(View.GONE);
             fab4.setVisibility(View.GONE);
         }
@@ -180,27 +178,24 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home)
-        {
+        if (id == android.R.id.home) {
             this.finish();
             return true;
         }
 
-        if (id == R.id.action_editar)
-        {
+        if (id == R.id.action_editar) {
             this.finish();
             editarEvento();
             return true;
         }
 
-        if (id == R.id.action_convidados)
-        {
+        if (id == R.id.action_convidados) {
             startActivity(new Intent(this, VisualizarConvidados.class));
             return true;
 
         }
 
-        if (id == R.id.action_cancelar){
+        if (id == R.id.action_cancelar) {
             try {
                 new cancelarEvento().execute();
                 Toast.makeText(this, "Evento cancelado!", Toast.LENGTH_LONG).show();
@@ -213,10 +208,10 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
 
         MenuItem item = menu.findItem(R.id.action_editar);
-        if(objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
+        if (objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
             item.setVisible(true);
 
         return true;
@@ -229,43 +224,39 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void visualizarMapa()
-    {
+    public void visualizarMapa() {
         String nr_latitude = String.valueOf(objEvento.getLatitude());
         String nr_longitude = String.valueOf(objEvento.getLongitude());
         String ds_evento = objEvento.getTituloEvento();
 
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" +nr_latitude+","+nr_longitude+"("+ds_evento+")");
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + nr_latitude + "," + nr_longitude + "(" + ds_evento + ")");
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
 
     }
 
-    public void comentar()
-    {
-        Intent intent = new Intent(this,CadComentario.class);
+    public void comentar() {
+        Intent intent = new Intent(this, CadComentario.class);
         intent.putExtra("codigoEvento", codigoEvento);
         startActivity(intent);
     }
 
-    public void convidar()
-    {
-        Intent intent = new Intent(this,CadContato.class);
+    public void convidar() {
+        Intent intent = new Intent(this, CadContato.class);
         intent.putExtra("codigoEvento", codigoEvento);
         startActivity(intent);
     }
 
-    public void editarEvento()
-    {
-        Intent intent = new Intent(this,CadEvento.class);
+    public void editarEvento() {
+        Intent intent = new Intent(this, CadEvento.class);
         intent.putExtra("codigoEvento", codigoEvento);
         startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.fab1:
                 comentar();
                 break;
@@ -278,13 +269,13 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.fab4:
-                new particicarEvento().execute();
+                new participarEvento().execute();
                 break;
 
         }
     }
 
-    private class carregarEventoOnline extends AsyncTask<Void,Integer,Void>{
+    private class carregarEventoOnline extends AsyncTask<Void, Integer, Void> {
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(VisualizarEvento.this);
@@ -294,10 +285,10 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected Void doInBackground(Void... params) {
-            synchronized (this){
+            synchronized (this) {
                 try {
                     objEvento.carregarOnline(codigoEvento, getApplicationContext());
-                }catch ( Exception ex){
+                } catch (Exception ex) {
                     Toast.makeText(VisualizarEvento.this, "Falha ao carregar o evento", Toast.LENGTH_SHORT).show();
                     VisualizarEvento.this.finish();
                 }
@@ -317,9 +308,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private class cancelarEvento extends AsyncTask<Void, Integer,Void>{
+    private class cancelarEvento extends AsyncTask<Void, Integer, Void> {
         boolean fg_cancelado;
-        
+
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(VisualizarEvento.this);
@@ -348,8 +339,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private class particicarEvento extends AsyncTask<Void, Integer,Void>{
+    private class participarEvento extends AsyncTask<Void, Integer, Void> {
         private boolean fg_participa;
+
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(VisualizarEvento.this);
@@ -360,7 +352,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                fg_participa = objEvento.participar(VisualizarEvento.this, objUsuario.getCodigoUsuario(), codigoEvento);
+                fg_participa = objEvento.participar(VisualizarEvento.this, objUsuario.getCodigoUsuario(), codigoEvento, objUsuario.getNome());
             } catch (Exception e) {
                 mProgressDialog.dismiss();
                 Log.i(TAG, e.getMessage());

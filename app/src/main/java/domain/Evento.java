@@ -396,13 +396,14 @@ public class Evento {
         return selecionarEventosOnline(context,"buscarConvites", jsonObject.toString());
     }
 
-    public boolean participar(Context context, int cd_usuario, int cd_evento) throws  Exception{
+    public boolean participar(Context context, int cd_usuario, int cd_evento, String ds_nome) throws  Exception{
         boolean fg_retorno = false;
         String mResposta;
         Util util = new Util();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("cd_usuario", cd_usuario);
         jsonObject.put("cd_evento", cd_evento);
+        jsonObject.put("ds_nome", ds_nome);
         mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonObject.toString(),"participar");
         if (Integer.parseInt(mResposta) > 0 )
             fg_retorno = true;
