@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,12 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import domain.Contatos;
@@ -79,9 +86,25 @@ public class CustomListViewContato extends BaseAdapter {
             view = inflater.inflate(R.layout.item_menu_contato, null);
         }
 
-        ImageView img = (ImageView) view.findViewById(R.id.imgThumbnail);
+        final ImageView img = (ImageView) view.findViewById(R.id.imgThumbnail);
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+        final String url = context.getString(R.string.caminho_foto_perfil) + String.valueOf(item.getCodigoContato()) + ".png";
         img.setImageDrawable(roundedImage);
+
+
+        Thread thread = new Thread(){
+            public void run()
+            {
+                try {
+                    Drawable drawable = (Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
+                    RoundImage roundedImage  = new RoundImage(((BitmapDrawable)drawable).getBitmap());
+                    img.setImageDrawable(roundedImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
 
         //TextView txtSubTitle = (TextView) vi.findViewById(R.id.txtSubTitle);
 

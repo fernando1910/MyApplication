@@ -301,7 +301,6 @@ public class Evento {
 
     }
 
-
     public List<Evento> selecionarTodosEventosLocal(Context context) {
         EventoDAO eventoDAO = new EventoDAO(context);
         return eventoDAO.selecionarTodosEventos();
@@ -391,14 +390,24 @@ public class Evento {
     }
 
     public List<Evento> buscarConvites(Context context, String data, int codigoUsario) throws  Exception{
-        Util util = new Util();
-        List<Evento> mEventos = new ArrayList<>();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("codigoUsuario", codigoUsario);
         jsonObject.put("data", data);
-
-
         return selecionarEventosOnline(context,"buscarConvites", jsonObject.toString());
+    }
+
+    public boolean participar(Context context, int cd_usuario, int cd_evento) throws  Exception{
+        boolean fg_retorno = false;
+        String mResposta;
+        Util util = new Util();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cd_usuario", cd_usuario);
+        jsonObject.put("cd_evento", cd_evento);
+        mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonObject.toString(),"participar");
+        if (Integer.parseInt(mResposta) > 0 )
+            fg_retorno = true;
+
+        return  fg_retorno;
     }
     //endregion
 

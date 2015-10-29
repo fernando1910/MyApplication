@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Date;
 
 import domain.Evento;
 import domain.Usuario;
@@ -41,7 +42,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private RatingBar mRatingBar;
     private ProgressDialog mProgressDialog;
-    FloatingActionButton fab4;
+    private FloatingActionButton fab4, fab3;
     Menu menu;
 
     @Override
@@ -82,7 +83,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
             FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
             FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-            FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+            fab3 = (FloatingActionButton) findViewById(R.id.fab3);
             fab4 = (FloatingActionButton) findViewById(R.id.fab4);
             fab1.setOnClickListener(this);
             fab2.setOnClickListener(this);
@@ -161,7 +162,11 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         tvDataHora.setText(mDataHora);
         mRatingBar.setRating(objEvento.getClassificacao());
 
-
+        // evento antes da data de hoje
+        if (new Date().compareTo(objEvento.getDataEvento()) == 1){
+            fab3.setVisibility(View.GONE);
+            fab4.setVisibility(View.GONE);
+        }
 
     }
 
@@ -273,7 +278,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.fab4:
-
+                new particicarEvento().execute();
                 break;
 
         }
@@ -340,6 +345,36 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(VisualizarEvento.this, "Evento cancelado", Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(VisualizarEvento.this, "Falha ao cancelar evento", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class particicarEvento extends AsyncTask<Void, Integer,Void>{
+        private boolean fg_participa;
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(VisualizarEvento.this);
+            mProgressDialog = ProgressDialog.show(VisualizarEvento.this, "Carregando...",
+                    "Estamos confirmando a sua presença, por favor aguarde...", false, false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                fg_participa = objEvento.participar(VisualizarEvento.this, objUsuario.getCodigoUsuario(), codigoEvento);
+            } catch (Exception e) {
+                mProgressDialog.dismiss();
+                Log.i(TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mProgressDialog.dismiss();
+            if (fg_participa)
+                Toast.makeText(VisualizarEvento.this, "Confirmado", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(VisualizarEvento.this, "Falha ao confirmar sua presença", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,55 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    android:layout_height="fill_parent">
 
     <CheckBox
-        android:scaleType="centerInside"
         android:id="@+id/cbContato"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imgThumbnail"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/imgThumbnail"
+        android:scaleType="centerInside" />
 
     <ImageView
-
+        android:padding="5dp"
+        android:id="@+id/imgThumbnail"
         android:layout_width="40dip"
         android:layout_height="40dip"
-        android:id="@+id/imgThumbnail"
         android:layout_centerInParent="true"
         android:layout_marginLeft="3dip"
         android:layout_toRightOf="@id/cbContato"
-        android:scaleType="centerInside">
-    </ImageView>
+        android:scaleType="centerInside" />
 
     <TextView
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_width="wrap_content"
         android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/imgThumbnail"
         android:scaleType="centerInside"
-
-        >
-    </TextView>
-
-    <TextView
-        android:visibility="invisible"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:id="@+id/txtSubTitle"
-        android:layout_toRightOf="@+id/imgThumbnail"
-        android:layout_below="@+id/txtTitle"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dip"
-        android:layout_marginLeft="6dip">
-    </TextView>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
 
 
 </RelativeLayout>
