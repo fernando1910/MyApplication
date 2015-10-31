@@ -88,9 +88,21 @@ public class CustomListViewEndereco extends BaseAdapter{
         return view;
     }
 
-    public double getLatitude(int postion)
+    public double getLatitude(int position)
     {
-        Endereco item = items.get(postion);
+        Endereco item = items.get(position);
         return item.getLatitude();
+    }
+
+    public double getLongitude(int position)
+    {
+        Endereco item = items.get(position);
+        return item.getLongitude();
+    }
+
+    public String getNome(int position)
+    {
+        Endereco item = items.get(position);
+        return item.getNome();
     }
 }

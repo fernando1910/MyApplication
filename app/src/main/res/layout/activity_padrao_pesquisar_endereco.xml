@@ -8,68 +8,70 @@
 
     <fragment
 
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/map"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        tools:layout="@layout/abc_action_bar_title_item"
-        android:layout_margin="10dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        tools:layout="@layout/abc_action_bar_title_item" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/tvInstrucao"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:text="Procure um endereço" />
+            <TextView
+                android:id="@+id/tvInstrucao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerInside"
+                android:text="Procure um endereço"
+                android:textSize="24sp" />
 
 
             <ProgressBar
+                android:id="@+id/pbFooterLoading"
                 style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/pbFooterLoading"
-                android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
                 android:scaleType="centerInside"
                 android:visibility="gone" />
 
 
-        <ListView
+            <ListView
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/lvEndereco"
-            android:layout_weight="1">
+                android:id="@+id/lvEndereco"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-        </ListView>
+            </ListView>
         </RelativeLayout>
 
 
-
         <Button
-            android:layout_weight="0"
-            android:text="Confimar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:onClick="retonar"
+            android:layout_weight="0"
             android:background="#255E69"
+            android:onClick="retonar"
+            android:text="Confimar"
             android:textColor="#D8E9EB" />
-        </LinearLayout>
-
+    </LinearLayout>
 
 
 </LinearLayout>
