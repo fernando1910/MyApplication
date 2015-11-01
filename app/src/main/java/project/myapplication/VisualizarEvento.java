@@ -152,16 +152,14 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             }
         } else {
             tvPrivado.setText("Este evento é publico");
-
         }
-
 
         String mDataHora = util.formatarDataTela(objEvento.getDataEvento()) + " ás " + util.formatarHoraTela(objEvento.getDataEvento());
         tvDataHora.setText(mDataHora);
         mRatingBar.setRating(objEvento.getClassificacao());
 
         // evento antes da data de hoje
-        if (new Date().compareTo(objEvento.getDataEvento()) == 1) {
+        if (new Date().compareTo(objEvento.getDataEvento()) != 1) {
             fab3.setVisibility(View.GONE);
             fab4.setVisibility(View.GONE);
         }
@@ -210,9 +208,13 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        MenuItem item = menu.findItem(R.id.action_editar);
+        MenuItem itemEditar = menu.findItem(R.id.action_editar);
+        MenuItem itemCancelar = menu.findItem(R.id.action_cancelar);
         if (objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
-            item.setVisible(true);
+        {
+            itemEditar.setVisible(true);
+            itemCancelar.setVisible(true);
+        }
 
         return true;
     }

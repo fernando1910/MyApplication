@@ -148,7 +148,7 @@ public class Usuario {
     }
 
     public void carregar(Context context){
-        Usuario objUsuario;
+        Usuario objUsuario = new Usuario();
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
         objUsuario = usuario_dao.getUsuario();
         if(objUsuario != null) {

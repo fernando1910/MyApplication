@@ -336,7 +336,6 @@ public class Evento {
 
     public List<Evento> selecionarEventosOnline(Context context, String comando, String parametro) throws InterruptedException, JSONException {
         List<Evento> mEventos = new ArrayList<>();
-
         Util util = new Util();
         String jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), parametro, comando);
         JSONArray jsonArrayResultado = new JSONArray(jsonString);

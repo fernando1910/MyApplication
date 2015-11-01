@@ -13,10 +13,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import adapters.CustomListViewEvento;
 import domain.Evento;
+import domain.Usuario;
 
 
 public class PainelEventosConvites extends Fragment {
@@ -25,6 +28,7 @@ public class PainelEventosConvites extends Fragment {
     private CustomListViewEvento mAdapter;
     private Evento objEvento;
     private ProgressBar mProgressBar;
+    private Usuario objUsuario;
 
 
     @Override
@@ -36,6 +40,9 @@ public class PainelEventosConvites extends Fragment {
             lvEventos = (ListView) view.findViewById(R.id.lvEventos);
             mProgressBar = (ProgressBar) view.findViewById(R.id.pbFooterLoading);
             objEvento = new Evento();
+            objUsuario = new Usuario();
+            objUsuario.carregar(PainelEventosConvites.this.getActivity());
+
             new carregarEventos().execute();
         }catch (Exception ex){
             Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -55,8 +62,9 @@ public class PainelEventosConvites extends Fragment {
         protected Void doInBackground(Void... params) {
             synchronized (this){
                 try {
-
-                    List<Evento> mEventos = objEvento.selecionarTodosEventosLocal(getContext());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("cd_usuario", String.valueOf(objUsuario.getCodigoUsuario()));
+                    List<Evento> mEventos = objEvento.selecionarEventosOnline(getContext(),"selecionarTodosEventos",jsonObject.toString());
                     mAdapter = new CustomListViewEvento(getContext(), mEventos);
                 }catch (Exception ex){
                     Log.i(TAG, ex.getMessage());

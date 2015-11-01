@@ -15,6 +15,7 @@
         android:id="@+id/action_cancelar"
         android:orderInCategory="100"
         android:title="Cancelar"
+        android:visible="false"
         app:theme="@style/TemaActionBar"
         app:showAsAction="never" />
 

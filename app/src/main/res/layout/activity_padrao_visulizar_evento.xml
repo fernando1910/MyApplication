@@ -211,6 +211,7 @@
             android:src="@drawable/ic_comment_text_white_18dp"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_label="Comentar"
+            android:visibility="gone"
             app:fab_size="mini"
             app:theme="@style/Secundario" />
 
@@ -231,6 +232,7 @@
             android:src="@drawable/ic_account_multiple_plus_white_18dp"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_label="Convidar"
+            android:visibility="gone"
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
