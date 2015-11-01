@@ -31,6 +31,7 @@ public class CadConfiguracao extends AppCompatActivity {
 
             spKm = (Spinner) findViewById(R.id.spKm);
 
+
             objConfig = new Configuracoes();
             objConfig.carregar(this);
             //region Carrega as notificações
@@ -51,6 +52,24 @@ public class CadConfiguracao extends AppCompatActivity {
 
             if (objConfig.getBuscarFotosOnline() == 1)
                 ckBuscarFotosOnline.setChecked(true);
+
+            try {
+                    // TA BOM PROBLEMA
+                switch (objConfig.getAlcanceKm()) {
+                    case 1:
+                        spKm.setSelection(1);
+                        break;
+                    case 5:
+                        spKm.setSelection(2);
+                        break;
+                    default:
+                        spKm.setSelection(2);
+                        break;
+                }
+            }catch (Exception ex){
+                Toast.makeText(CadConfiguracao.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
 
 
             // endregion

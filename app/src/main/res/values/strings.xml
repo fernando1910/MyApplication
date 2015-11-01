@@ -122,7 +122,7 @@
     <string name="caminho_foto_perfil">http://www.fiesta1.hol.es/foto_perfil/</string>
     <string name="title_activity_menu_principal_novo">MenuPrincipalNovo</string>
     <string name="texto_padrao_aleracoes_evento">Eventos com aleterações importantes</string>
-    <string name="title_activity_pesquisar_eventos">PesquisarEventos</string>
+    <string name="title_activity_pesquisar_eventos">Pesquisar Eventos</string>
     <string name="title_activity_visualizar_comentario">VisualizarComentario</string>
     <string name="title_activity_painel_configuracao">Painel Configurações</string>
 

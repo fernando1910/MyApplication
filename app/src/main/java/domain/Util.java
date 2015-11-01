@@ -157,7 +157,7 @@ public class Util {
     }
 
     public LatLng retornaLocalizacao(Context context, LocationListener locationListener) {
-        boolean isGPSEnabled ;
+        boolean isGPSEnabled;
         boolean isNetworkEnabled;
 
         Location location = null;

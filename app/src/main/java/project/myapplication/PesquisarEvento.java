@@ -15,34 +15,51 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import domain.Configuracoes;
 import domain.Evento;
 import domain.Util;
 
-public class PesquisarEvento extends AppCompatActivity implements LocationListener {
+public class PesquisarEvento extends AppCompatActivity implements LocationListener, OnMapReadyCallback {
     private Util util;
     private GoogleMap mMap;
     private LatLng latLng;
     private boolean mStatusGPS;
     private ProgressDialog mProgressDialog;
     private String mQuery;
+    private Circle mapCircle;
+    private Configuracoes objConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesquisar_eventos);
 
-        setUpMapIfNeeded();
+
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mMap = supportMapFragment.getMap();
+        supportMapFragment.getMapAsync(this);
+        util = new Util();
+        objConfig = new Configuracoes();
+        objConfig.carregar(this);
+    }
+
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
@@ -56,9 +73,8 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
                     }
                 }
         );
-
-        util = new Util();
         validarGPS();
+
     }
 
     @Override
@@ -99,26 +115,9 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
         //super.onBackPressed();
     }
 
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
-            }
-        }
-    }
-
-    private void setUpMap() {
-        mMap.setMyLocationEnabled(true);
-    }
-
     @Override
     public void onLocationChanged(Location location) {
-        addCircle();
+
     }
 
     @Override
@@ -136,17 +135,20 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
 
     }
 
-    public void addCircle() {
+    public void addCircle(LatLng latLng) {
+        if (mapCircle != null)
+            mapCircle.remove();
 
-        mMap.addCircle(
-                new CircleOptions()
-                        .center(latLng)
-                        .radius(1000)
-                        .strokeColor(Color.parseColor("#66CCFF"))
-                        .fillColor(Color.parseColor("#2066CCFF"))
-                        .strokeWidth(2)
+        CircleOptions circle;
+        circle =  new CircleOptions()
+                .center(latLng)
+                .radius(objConfig.getAlcanceKm() * 1000)
+                .strokeColor(Color.parseColor("#66CCFF"))
+                .fillColor(Color.parseColor("#2066CCFF"))
+                .strokeWidth(2);
 
-        );
+        mapCircle  = mMap.addCircle(circle);
+
     }
 
     public void mostrarMensagemGPSDesligado() {
@@ -164,20 +166,28 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
                 .show();
     }
 
-    public void validarGPS() {
+    public boolean validarGPS() {
+        boolean fg_retorno;
         try {
             mStatusGPS = util.verificaGPS(getApplicationContext());
             if (mStatusGPS) {
+                fg_retorno = true;
                 latLng = util.retornaLocalizacao(getApplicationContext(), this);
-                addCircle();
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-                new pesquisarEventosProximos().execute();
+                if (latLng != null)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+                else
+                    fg_retorno = false;
+
             } else {
                 mostrarMensagemGPSDesligado();
+                fg_retorno = false;
             }
         } catch (Exception e) {
+            fg_retorno  = false;
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
+        return fg_retorno;
     }
 
     @Override
@@ -197,7 +207,7 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
         try {
             if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
                 mQuery = intent.getStringExtra(SearchManager.QUERY);
-                new pesquisarEventos().execute();
+                new pesquisarEventosPorNome().execute();
 
             }
         } catch (Exception ex) {
@@ -205,7 +215,8 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
         }
     }
 
-    public class pesquisarEventosProximos extends AsyncTask<Void, Integer, Void> {
+    private class pesquisarEventosProximos extends AsyncTask<Void, Integer, Void> {
+        private List<Evento> mListaEventos;
 
         @Override
         protected void onPreExecute() {
@@ -219,7 +230,8 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
                 synchronized (this) {
                     try {
                         Evento objEvento = new Evento();
-                        objEvento.pesquisarEventosProximos(getApplicationContext());
+                        mListaEventos = new ArrayList<>();
+                        mListaEventos = objEvento.pesquisarEventosProximos(getApplicationContext(),latLng.latitude,latLng.longitude, objConfig.getAlcanceKm());
 
                     } catch (Exception ex) {
                         mProgressDialog.dismiss();
@@ -232,10 +244,23 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressDialog.dismiss();
+            if (mListaEventos.size() > 0){
+                for (int i = 0; i < mListaEventos.size() ; i++){
+                    LatLng local =  new LatLng(mListaEventos.get(i).getLatitude(),mListaEventos.get(i).getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(local).title(mListaEventos.get(i).getTituloEvento()));
+                }
+            }
         }
     }
 
-    public class pesquisarEventos extends AsyncTask<Void, Integer, Void> {
+    public void pesquisar(View view){
+        if (validarGPS()) {
+            addCircle(latLng);
+            new pesquisarEventosProximos().execute();
+        }
+    }
+
+    public class pesquisarEventosPorNome extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {

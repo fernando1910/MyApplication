@@ -357,8 +357,12 @@ public class Evento {
         return mEventos;
     }
 
-    public List<Evento> pesquisarEventosProximos(Context context) throws JSONException, InterruptedException {
-        return selecionarEventosOnline(context, "buscarEventosProximos", null);
+    public List<Evento> pesquisarEventosProximos(Context context, double nr_latitude, double nr_longitude, int nr_distancia) throws JSONException, InterruptedException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("nr_latitude", nr_latitude);
+        jsonObject.put("nr_longitude", nr_longitude);
+        jsonObject.put("nr_distancia", nr_distancia);
+        return selecionarEventosOnline(context, "buscarEventosProximos", jsonObject.toString());
     }
 
     public List<Evento> pesquisarEventosOnline(Context context, String query) throws JSONException, InterruptedException {
