@@ -38,6 +38,7 @@ public class Evento {
     private byte[] img_foto_capa;
     private float ind_classificacao;
     private int fg_cancelado;
+    private int fg_participa;
 
     //endregion
 
@@ -187,6 +188,14 @@ public class Evento {
         this.fg_cancelado = fg_cancelado;
     }
 
+    public int getParticipa() {
+        return fg_participa;
+    }
+
+    public void setParticipa(int fg_participa) {
+        this.fg_participa = fg_participa;
+    }
+
     //endregion
 
     //region Metodos comunicação com servidor Online
@@ -292,6 +301,7 @@ public class Evento {
         this.setEventoPrivado(Integer.parseInt(jsonObject.getString("fg_evento_privado")));
         this.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
         this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
+        this.setParticipa(Integer.parseInt(jsonObject.getString("fg_participa")));
 
     }
 

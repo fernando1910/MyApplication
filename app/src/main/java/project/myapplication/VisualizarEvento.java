@@ -42,7 +42,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private RatingBar mRatingBar;
     private ProgressDialog mProgressDialog;
-    private FloatingActionButton fab4, fab3;
+    private FloatingActionButton fab4, fab3,fab1,fab2;
     Menu menu;
 
     @Override
@@ -81,8 +81,8 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 }
             });
 
-            FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-            FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+            fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+            fab2 = (FloatingActionButton) findViewById(R.id.fab2);
             fab3 = (FloatingActionButton) findViewById(R.id.fab3);
             fab4 = (FloatingActionButton) findViewById(R.id.fab4);
             fab1.setOnClickListener(this);
@@ -152,6 +152,13 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             }
         } else {
             tvPrivado.setText("Este evento é publico");
+        }
+        if(objEvento.getParticipa() == 1)
+        {
+            fab3.setVisibility(View.VISIBLE);
+            fab1.setVisibility(View.VISIBLE);
+            fab4.setVisibility(View.GONE);
+
         }
 
         String mDataHora = util.formatarDataTela(objEvento.getDataEvento()) + " ás " + util.formatarHoraTela(objEvento.getDataEvento());
