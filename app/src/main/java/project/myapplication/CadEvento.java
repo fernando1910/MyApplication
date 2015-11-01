@@ -28,6 +28,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
@@ -112,6 +114,9 @@ public class CadEvento extends AppCompatActivity {
         Bundle parameters = getIntent().getExtras();
         if (parameters != null) {
             codigoEvento = parameters.getInt("codigoEvento");
+            final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
+            if (url != null || url != "")
+                Picasso.with(ibFotoCapa.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ibFotoCapa);
             objEvento.carregarLocal(codigoEvento, this);
             carregarControles();
             tipoOperacao = 2;
