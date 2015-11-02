@@ -57,13 +57,28 @@ public class CadConfiguracao extends AppCompatActivity {
                     // TA BOM PROBLEMA
                 switch (objConfig.getAlcanceKm()) {
                     case 1:
+                        spKm.setSelection(0);
+                        break;
+                    case 2:
                         spKm.setSelection(1);
                         break;
-                    case 5:
+                    case 3:
                         spKm.setSelection(2);
                         break;
+                    case 4:
+                        spKm.setSelection(3);
+                        break;
+                    case 5:
+                        spKm.setSelection(4);
+                        break;
+                    case 10:
+                        spKm.setSelection(5);
+                        break;
+                    case 20:
+                        spKm.setSelection(6);
+                        break;
                     default:
-                        spKm.setSelection(2);
+                        spKm.setSelection(4);
                         break;
                 }
             }catch (Exception ex){
@@ -143,6 +158,33 @@ public class CadConfiguracao extends AppCompatActivity {
             objConfig.setBuscarFotosOnline(1);
         else
             objConfig.setBuscarFotosOnline(0);
+
+        switch (spKm.getSelectedItemPosition()) {
+            case 0:
+                objConfig.setAlcanceKm(1);
+                break;
+            case 1:
+                objConfig.setAlcanceKm(2);
+                break;
+            case 2:
+                objConfig.setAlcanceKm(3);
+                break;
+            case 3:
+                objConfig.setAlcanceKm(4);
+                break;
+            case 4:
+                objConfig.setAlcanceKm(5);
+                break;
+            case 5:
+                objConfig.setAlcanceKm(10);
+                break;
+            case 6:
+                objConfig.setAlcanceKm(20);
+                break;
+            default:
+                spKm.setSelection(4);
+                break;
+        }
 
         objConfig.atualizar(this);
 

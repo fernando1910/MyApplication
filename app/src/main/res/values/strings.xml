@@ -66,9 +66,14 @@
         <item>Japan</item>
     </string-array>
 
-    <string-array name="sessao_radius">
-        <item>1 Km</item>
-        <item>5 Km</item>
+    <string-array name="array_radius">
+        <item>1 KM</item>
+        <item>2 KM</item>
+        <item>3 KM</item>
+        <item>4 KM</item>
+        <item>5 KM</item>
+        <item>10 KM</item>
+        <item>20 KM</item>
     </string-array>
 
     <string name="wsBlueDate">http://www.fiesta1.hol.es/wsBlueDate.php</string>
