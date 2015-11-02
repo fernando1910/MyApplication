@@ -302,6 +302,7 @@ public class Evento {
         this.setLatitude(Double.parseDouble(jsonObject.getString("nr_latitude")));
         this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
         this.setParticipa(Integer.parseInt(jsonObject.getString("fg_participa")));
+        this.setClassificacao(Float.parseFloat(jsonObject.getString("ind_classificacao")));
 
     }
 

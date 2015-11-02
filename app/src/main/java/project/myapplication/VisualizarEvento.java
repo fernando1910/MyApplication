@@ -111,7 +111,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                     Usuario objUsuario = new Usuario();
                     objUsuario.carregar(this);
                     if (objUsuario.getCodigoUsuario() == objEvento.getCodigoUsarioInclusao()) {
+                        fab3.setVisibility(View.VISIBLE);
                         fab4.setVisibility(View.GONE);
+                        mRatingBar.setVisibility(View.GONE);
                     }
                     if (objEvento.getCodigoEvento() != 0)
                         carregarControles();
@@ -166,7 +168,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         mRatingBar.setRating(objEvento.getClassificacao());
 
         // evento antes da data de hoje
-        if (new Date().compareTo(objEvento.getDataEvento()) != 1) {
+        if (new Date().compareTo(objEvento.getDataEvento()) != -1) {
             fab3.setVisibility(View.GONE);
             fab4.setVisibility(View.GONE);
         }
