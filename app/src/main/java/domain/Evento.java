@@ -326,6 +326,14 @@ public class Evento {
         return selecionarEventosOnline(context, "selecionarTopFestas", null);
     }
 
+    public List<Evento> selecionarTopConvidados(Context context) throws Exception{
+        return selecionarEventosOnline(context, "selecionarTopConvidados", null);
+    }
+
+    public List<Evento> selecionarTopComentarios(Context context) throws Exception{
+        return selecionarEventosOnline(context, "selecionarTopComentarios", null);
+    }
+
     public boolean classificarEvento(Context context, int codigoEvento, float classificacaoEvento, int codigoUsuario) throws Exception {
         JSONObject jsonObject = new JSONObject();
         Util util = new Util();

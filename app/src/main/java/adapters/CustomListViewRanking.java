@@ -6,9 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -16,12 +20,22 @@ import domain.Evento;
 import project.myapplication.R;
 
 public class CustomListViewRanking extends BaseAdapter {
-    LayoutInflater mInflater;
-    List<Evento> mItems;
+    private LayoutInflater mInflater;
+    private List<Evento> mItems;
+    private int ind_ranking;
 
-    public CustomListViewRanking(Context context, List<Evento> items) {
-        this.mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);;
+    /*
+        int_ranking
+            0 - Top Classificação
+            1 - Top Convidados
+            2 - Top Comentarios
+
+    */
+
+    public CustomListViewRanking(Context context, List<Evento> items, int ind_ranking) {
+        this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mItems = items;
+        this.ind_ranking = ind_ranking;
     }
 
     @Override
@@ -45,20 +59,31 @@ public class CustomListViewRanking extends BaseAdapter {
         View view = convertView;
 
         if (convertView == null)
-                view = mInflater.inflate(R.layout.item_menu_ranking,null);
+            view = mInflater.inflate(R.layout.item_menu_ranking, null);
 
-        ImageView mImageView = (ImageView) view.findViewById(R.id.ivCapaEvento);
+        ImageView ivCapaEvento = (ImageView) view.findViewById(R.id.ivCapaEvento);
         TextView mTextView = (TextView) view.findViewById(R.id.tvTituloEvento);
-        RatingBar mRatingBar = (RatingBar) view.findViewById(R.id.rbClassificacao);
+        ImageView ivICone = (ImageView) view.findViewById(R.id.ivIcone);
+        TextView tvInfo = (TextView) view.findViewById(R.id.tvInfo);
+
+        String url = ivCapaEvento.getContext().getString(R.string.caminho_foto_capa_evento)
+                + String.valueOf(mItem.getCodigoEvento())
+                + ".png";
+        Picasso.with(ivCapaEvento.getContext())
+                .load(url)
+                .placeholder(R.drawable.ic_placeholder_evento)
+                .into(ivCapaEvento);
 
         //mImageView.setImageResource(mItem.getCodigoEvento());
         mTextView.setText(mItem.getTituloEvento());
-        mRatingBar.setRating(mItem.getClassificacao());
+        if (ind_ranking == 0)
+            tvInfo.setText(String.valueOf(mItem.getClassificacao()));
+
 
         return view;
     }
 
-    public int getCodigoEvento(int postion){
+    public int getCodigoEvento(int postion) {
         Evento objEvento = mItems.get(postion);
         return objEvento.getCodigoEvento();
     }

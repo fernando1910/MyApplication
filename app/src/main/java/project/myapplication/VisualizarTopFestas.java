@@ -70,7 +70,7 @@ public class VisualizarTopFestas extends Fragment {
                     fg_conexao_internet = util.verificaInternet(VisualizarTopFestas.this.getContext());
                     if (fg_conexao_internet) {
                         mItems = objEvento.selecionarTopFestas(getContext());
-                        mAdapter = new CustomListViewRanking(getContext(), mItems);
+                        mAdapter = new CustomListViewRanking(getContext(), mItems, 0);
                     }
                 } catch (Exception ex) {
                     Log.i(TAG, ex.getMessage());
@@ -99,8 +99,7 @@ public class VisualizarTopFestas extends Fragment {
 
                         }
                     });
-                }
-                else {
+                } else {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
                 }

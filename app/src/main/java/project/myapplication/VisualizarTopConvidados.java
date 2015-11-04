@@ -2,6 +2,7 @@ package project.myapplication;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -48,7 +50,7 @@ public class VisualizarTopConvidados extends Fragment {
         return view;
     }
 
-    public class listarEventos extends AsyncTask<Void,Integer,Void> {
+    public class listarEventos extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -60,9 +62,17 @@ public class VisualizarTopConvidados extends Fragment {
             super.onPostExecute(aVoid);
             try {
                 mProgressBar.setVisibility(View.INVISIBLE);
-                //mProgressDialog.dismiss();
                 mListView.setAdapter(mAdapter);
-            }catch (Exception ex){
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                        intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                        startActivity(intent);
+
+                    }
+                });
+            } catch (Exception ex) {
                 Log.i(TAG, ex.getMessage());
             }
 
@@ -70,11 +80,11 @@ public class VisualizarTopConvidados extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            synchronized (this){
-                try{
-                    mItems  = objEvento.selecionarTopFestas(getContext());
-                    mAdapter = new CustomListViewRanking(getContext(),mItems);
-                }catch (Exception ex){
+            synchronized (this) {
+                try {
+                    mItems = objEvento.selecionarTopConvidados(getContext());
+                    mAdapter = new CustomListViewRanking(getContext(), mItems, 1);
+                } catch (Exception ex) {
                     Log.i(TAG, ex.getMessage());
 
                 }
