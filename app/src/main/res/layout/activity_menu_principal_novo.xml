@@ -10,32 +10,16 @@
         android:id="@+id/tb_main"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentLeft="true"
-        android:titleTextColor="@color/White"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:theme="@style/ThemeActionBar" />
 
     <LinearLayout
         android:id="@+id/layoutConteudo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tb_main"
         android:orientation="vertical">
 
-        <!--extras.SlidingTabLayout
-            android:id="@+id/stl_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:theme="@style/Secundario">
-
-        </extras.SlidingTabLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" /-->
     </LinearLayout>
 </LinearLayout>
