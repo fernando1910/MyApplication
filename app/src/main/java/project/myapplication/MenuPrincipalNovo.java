@@ -17,8 +17,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -51,17 +49,17 @@ public class MenuPrincipalNovo extends AppCompatActivity {
     private final String TAG = "LOG";
     private Toolbar mToolbar;
     private Configuracoes objConfig;
-
+    private Util util;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal_novo);
 
         objConfig = new Configuracoes();
+        util = new Util();
         objConfig.carregar(this);
         boolean fg_notificacoes = false;
         if (objConfig.getStatusPerfil() != 5) {
-            Util util = new Util();
             util.validarTela(this, 5);
         }
         if (objConfig.getPermitePush() == 1)
@@ -163,9 +161,13 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                     final CaldroidListener mCaldroidListener = new CaldroidListener() {
                                         @Override
                                         public void onSelectDate(Date date, View view) {
-                                            Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
-                                            intent.putExtra("dt_evento", date.toString());
-                                            startActivity(intent);
+                                            if (util.verificaInternet(getApplicationContext())) {
+                                                Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
+                                                intent.putExtra("dt_evento", date.toString());
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(MenuPrincipalNovo.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
+                                            }
                                         }
                                     };
                                     mFragmentCalendar.setCaldroidListener(mCaldroidListener);

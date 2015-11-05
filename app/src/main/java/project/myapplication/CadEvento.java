@@ -376,9 +376,13 @@ public class CadEvento extends AppCompatActivity {
     }
 
     public void onClickCriarEvento(View v) {
-
-        if (ValidarCampos()) {
-            new salvarEvento().execute();
+        if (util.verificaInternet(this)) {
+            if (ValidarCampos()) {
+                new salvarEvento().execute();
+            }
+        }else
+        {
+            Toast.makeText(CadEvento.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
         }
     }
 

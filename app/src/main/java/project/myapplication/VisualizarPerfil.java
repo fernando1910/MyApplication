@@ -81,7 +81,10 @@ public class VisualizarPerfil extends AppCompatActivity {
             ibPerfil.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    alterarFoto();
+                    if (util.verificaInternet(VisualizarPerfil.this))
+                        alterarFoto();
+                    else
+                        Toast.makeText(VisualizarPerfil.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -115,8 +118,14 @@ public class VisualizarPerfil extends AppCompatActivity {
     }
 
     public void onClickSalvarNome(View v) {
-        objUsuario.setNome(String.valueOf(etNome.getText()));
-        new atualizarNome().execute();
+        if (util.verificaInternet(this)) {
+            objUsuario.setNome(String.valueOf(etNome.getText()));
+            new atualizarNome().execute();
+        }
+        else
+        {
+            Toast.makeText(VisualizarPerfil.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void alterarFoto(){
