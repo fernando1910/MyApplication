@@ -10,13 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
 import adapters.CustomListViewRanking;
 import domain.Evento;
+import domain.Util;
 
 
 /**
@@ -29,11 +32,9 @@ public class VisualizarTopComentarios extends Fragment {
     private CustomListViewRanking mAdapter;
     private ProgressBar mProgressBar;
     private Evento objEvento;
+    private Button btTentar;
+    private TextView tvMensagem;
 
-
-    public VisualizarTopComentarios() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -42,45 +43,43 @@ public class VisualizarTopComentarios extends Fragment {
         View view = inflater.inflate(R.layout.fragment_visualizar_top_comentarios, container, false);
         mListView = (ListView) view.findViewById(R.id.lvTopComentarios);
         mProgressBar = (ProgressBar) view.findViewById(R.id.pbFooterLoading);
+        tvMensagem = (TextView) view.findViewById(R.id.tvMensagem);
+        btTentar = (Button) view.findViewById(R.id.btTentar);
+        btTentar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btTentar.setVisibility(View.INVISIBLE);
+                tvMensagem.setVisibility(View.INVISIBLE);
+                new listarEventos().execute();
+            }
+        });
+
         objEvento = new Evento();
         new listarEventos().execute();
         return view;
     }
 
     public class listarEventos extends AsyncTask<Void, Integer, Void> {
+        private Util util;
+        private boolean fg_conexao_internet;
 
         @Override
         protected void onPreExecute() {
             mProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            try {
-                mProgressBar.setVisibility(View.INVISIBLE);
-                mListView.setAdapter(mAdapter);
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(getContext(), VisualizarEvento.class);
-                        intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
-                        startActivity(intent);
-
-                    }
-                });
-            } catch (Exception ex) {
-                Log.i(TAG, ex.getMessage());
-            }
-
+            tvMensagem.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             synchronized (this) {
                 try {
-                    mItems = objEvento.selecionarTopComentarios(getContext());
-                    mAdapter = new CustomListViewRanking(getContext(), mItems, 2);
+                    util = new Util();
+                    fg_conexao_internet = util.verificaInternet(VisualizarTopComentarios.this.getContext());
+                    if (fg_conexao_internet) {
+                        mItems = objEvento.selecionarTopComentarios(getContext());
+                        mAdapter = new CustomListViewRanking(getContext(), mItems, 2);
+                    }
 
                 } catch (Exception ex) {
                     Log.i(TAG, ex.getMessage());
@@ -88,6 +87,37 @@ public class VisualizarTopComentarios extends Fragment {
             }
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            try {
+                mProgressBar.setVisibility(View.INVISIBLE);
+                btTentar.setVisibility(View.INVISIBLE);
+                tvMensagem.setVisibility(View.INVISIBLE);
+                if (fg_conexao_internet) {
+                    mListView.setAdapter(mAdapter);
+                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                            intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                            startActivity(intent);
+
+                        }
+                    });
+                }
+                else {
+                    btTentar.setVisibility(View.VISIBLE);
+                    tvMensagem.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception ex) {
+                Log.i(TAG, ex.getMessage());
+            }
+
+        }
+
+
     }
 
 

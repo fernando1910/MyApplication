@@ -130,5 +130,6 @@
     <string name="title_activity_pesquisar_eventos">Pesquisar Eventos</string>
     <string name="title_activity_visualizar_comentario">VisualizarComentario</string>
     <string name="title_activity_painel_configuracao">Painel Configurações</string>
+    <string name="sem_internet">Sem Internet</string>
 
 </resources>
