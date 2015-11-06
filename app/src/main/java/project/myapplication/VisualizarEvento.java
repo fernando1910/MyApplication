@@ -113,7 +113,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                     if (objUsuario.getCodigoUsuario() == objEvento.getCodigoUsarioInclusao()) {
                         fab3.setVisibility(View.VISIBLE);
                         fab4.setVisibility(View.GONE);
-                        mRatingBar.setVisibility(View.GONE);
+                        mRatingBar.setVisibility(View.INVISIBLE);
                     }
                     if (objEvento.getCodigoEvento() != 0)
                         carregarControles();
