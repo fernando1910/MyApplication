@@ -371,7 +371,7 @@ public class Evento {
             mEvento.setLongitude(jsonObjectResultado.getDouble("nr_longitude"));
             mEvento.setEventoPrivado(jsonObjectResultado.getInt("fg_evento_privado"));
             mEvento.setEndereco(jsonObjectResultado.getString("ds_endereco"));
-            mEvento.setClassificacao(3);
+            mEvento.setClassificacao(Float.parseFloat(jsonObjectResultado.getString("ind_classificacao")));
             mEventos.add(mEvento);
 
         }

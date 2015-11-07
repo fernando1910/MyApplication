@@ -43,10 +43,10 @@
 
     </style>
 
-    <style name="TemaActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="TemaActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColor">@color/White</item>
         <item name="colorControlNormal">@color/White</item>
-
+        <item name="android:textColorPrimaryInverse">@color/White</item>
     </style>
 
 </resources>

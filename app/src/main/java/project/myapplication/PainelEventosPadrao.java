@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
                 dt_evento_string = parameters.getString("dt_evento");
                 if (dt_evento_string != null){
                     mTipoAcao = "buscarEventoData";
-                    getSupportActionBar().setTitle("Todos os eventos do dia");
+                    getSupportActionBar().setTitle(parameters.getString("dt_evento_tela"));
                 }
 
                 btNovo.setOnClickListener(new View.OnClickListener() {

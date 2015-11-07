@@ -29,6 +29,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import helpers.HttpConnection;
@@ -42,27 +43,16 @@ import project.myapplication.ValidarTelefone;
 
 public class Util {
 
-    public Date formataData(String date) {
-        Date dataConvertida = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-        try {
-            dataConvertida = simpleDateFormat.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dataConvertida;
-    }
-
     public String formatarSalvarBanco(Date data) {
         String dataFinal;
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss" , Locale.getDefault());
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
 
     public Date formataSelecionaBanco(String date) {
         Date dataConvertida = null;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm" , Locale.getDefault());
         try {
             dataConvertida = simpleDateFormat.parse(date);
         } catch (ParseException e) {
@@ -73,7 +63,7 @@ public class Util {
 
     public Date converterData(String date) {
         Date dataConvertida = null;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H:mm:ss", Locale.getDefault());
         try {
             dataConvertida = simpleDateFormat.parse(date);
         } catch (ParseException e) {
@@ -93,21 +83,21 @@ public class Util {
 
     public String formatarDataBanco(Date data) {
         String dataFinal;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
 
     public String formatarDataTela(Date data) {
         String dataFinal;
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
 
     public String formatarHoraTela(Date data) {
         String dataFinal;
-        DateFormat dateFormat = new SimpleDateFormat("H:mm");
+        DateFormat dateFormat = new SimpleDateFormat("H:mm", Locale.getDefault());
         dataFinal = dateFormat.format(data);
         return dataFinal;
     }
