@@ -317,9 +317,11 @@ public class Evento {
         return eventoDAO.selecionarTodosEventos();
     }
 
-    public List<Evento> selecionarEventosPorData(Context context, Date dt_evento) {
-        EventoDAO eventoDAO = new EventoDAO(context);
-        return eventoDAO.selecionarEventoPorData(dt_evento);
+    public List<Evento> selecionarEventosPorData(Context context, String dt_evento_string, int cd_usuario) throws Exception{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("dt_evento", dt_evento_string);
+        jsonObject.put("cd_usuario", cd_usuario);
+        return selecionarEventosOnline(context, "selecionarEventosPorData", jsonObject.toString());
     }
 
     public List<Evento> selecionarTopFestas(Context context) throws InterruptedException, JSONException, NullPointerException {

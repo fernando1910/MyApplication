@@ -163,7 +163,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                         public void onSelectDate(Date date, View view) {
                                             if (util.verificaInternet(getApplicationContext())) {
                                                 Intent intent = new Intent(MenuPrincipalNovo.this, PainelEventosPadrao.class);
-                                                intent.putExtra("dt_evento", date.toString());
+                                                intent.putExtra("dt_evento", util.formatarDataBanco(date));
                                                 startActivity(intent);
                                             } else {
                                                 Toast.makeText(MenuPrincipalNovo.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();

@@ -33,7 +33,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
     private String mTipoAcao;
     private TextView tvMensagem;
     private Evento objEvento;
-    private Date dt_evento;
+    private String dt_evento_string;
     private ListView lvEventos;
     private CustomListViewEvento mAdapter;
     private Button btNovo;
@@ -69,6 +69,12 @@ public class PainelEventosPadrao extends AppCompatActivity {
                 if (fg_convite) {
                     mTipoAcao = "buscarConvites";
                     getSupportActionBar().setTitle("Novos Convites");
+                }
+
+                dt_evento_string = parameters.getString("dt_evento");
+                if (dt_evento_string != null){
+                    mTipoAcao = "buscarEventoData";
+                    getSupportActionBar().setTitle("Todos os eventos do dia");
                 }
 
                 btNovo.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +154,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
                 try {
                     switch (mTipoAcao) {
                         case "buscarEventoData":
-                            mListaEventos = objEvento.selecionarEventosPorData(PainelEventosPadrao.this.getApplicationContext(), dt_evento);
+                            mListaEventos = objEvento.selecionarEventosPorData(PainelEventosPadrao.this.getApplicationContext(), dt_evento_string, codigoUsuario);
                             break;
 
                         case "buscarConvites":
