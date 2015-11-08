@@ -288,10 +288,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         protected Void doInBackground(Void... params) {
             synchronized (this) {
                 try {
-                    objEvento.carregarOnline(codigoEvento, getApplicationContext());
+                    objEvento.carregarOnline(codigoEvento, getApplicationContext(), objUsuario.getCodigoUsuario());
                 } catch (Exception ex) {
-                    Toast.makeText(VisualizarEvento.this, "Falha ao carregar o evento", Toast.LENGTH_SHORT).show();
-                    VisualizarEvento.this.finish();
+                    objEvento.setCodigoEvento(Integer.MIN_VALUE);
                 }
             }
             return null;
@@ -299,7 +298,13 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            carregarControles();
+
+            if (objEvento.getCodigoEvento() == Integer.MIN_VALUE) {
+                Toast.makeText(VisualizarEvento.this.getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_SHORT).show();
+                VisualizarEvento.this.finish();
+            }
+            else
+                carregarControles();
             mProgressDialog.dismiss();
         }
 

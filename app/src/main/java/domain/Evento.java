@@ -274,16 +274,17 @@ public class Evento {
         return eventoDAO.salvar(this);
     }
 
-    public void carregarOnline(int codigoEvento, Context context) throws Exception {
+    public void carregarOnline(int cd_evento, Context context, int cd_usuario) throws Exception {
         Util util = new Util();
         JSONObject jsonObjectEnviar = new JSONObject();
 
-        jsonObjectEnviar.put("cd_evento", String.valueOf(codigoEvento));
+        jsonObjectEnviar.put("cd_evento", cd_evento);
+        jsonObjectEnviar.put("cd_usuario", cd_usuario);
         String jsonString = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObjectEnviar.toString(), "selecionarEvento");
         JSONArray jsonArray = new JSONArray(jsonString);
         JSONObject jsonObject = new JSONObject(jsonArray.getString(0));
 
-        this.setCodigoEvento(codigoEvento);
+
         this.setTituloEvento(jsonObject.getString("ds_titulo_evento"));
         this.setDescricao(jsonObject.getString("ds_descricao"));
         this.setEndereco(jsonObject.getString("ds_endereco"));
@@ -293,7 +294,7 @@ public class Evento {
         this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
         this.setParticipa(Integer.parseInt(jsonObject.getString("fg_participa")));
         this.setClassificacao(Float.parseFloat(jsonObject.getString("ind_classificacao")));
-
+        this.setCodigoEvento(cd_evento);
     }
 
     public void carregarLocal(int codigoEvento, Context context) {
