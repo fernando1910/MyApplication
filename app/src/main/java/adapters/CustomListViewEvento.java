@@ -29,7 +29,7 @@ public class CustomListViewEvento extends BaseAdapter {
     public CustomListViewEvento(Context mContext, List<Evento> mEventos) {
         this.mContext = mContext;
         this.mEventos = mEventos;
-        this.mLayoutInflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -57,23 +57,25 @@ public class CustomListViewEvento extends BaseAdapter {
 
         final ImageView ivEvento = (ImageView) view.findViewById(R.id.ivEvento);
         TextView tvEvento = (TextView) view.findViewById(R.id.tvEvento);
-        TextView tvEndereco = (TextView) view.findViewById(R.id.tvEndereco);
+        TextView tvConvidados = (TextView) view.findViewById(R.id.tvConvidados);
+        TextView tvComentarios = (TextView) view.findViewById(R.id.tvComentarios);
 
         tvEvento.setText(mEvento.getTituloEvento());
+        tvConvidados.setText(String.valueOf(mEvento.getConvidados()));
+        tvComentarios.setText(String.valueOf(mEvento.getComentarios()));
 
-        if (mEvento.getImagemFotoCapa() != null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(mEvento.getImagemFotoCapa(),0,mEvento.getImagemFotoCapa().length);
+        if (mEvento.getImagemFotoCapa() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(mEvento.getImagemFotoCapa(), 0, mEvento.getImagemFotoCapa().length);
             ivEvento.setImageBitmap(bitmap);
-        }
-        else {
-            final String url = mContext.getString(R.string.caminho_foto_capa_evento) + mEvento.getCodigoEvento() +".png";
+        } else {
+            final String url = mContext.getString(R.string.caminho_foto_capa_evento) + mEvento.getCodigoEvento() + ".png";
             Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
         }
 
         return view;
     }
 
-    public int getCodigoEvento(int position){
+    public int getCodigoEvento(int position) {
         Evento mEvento = mEventos.get(position);
         return mEvento.getCodigoEvento();
     }

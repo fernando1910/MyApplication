@@ -39,6 +39,8 @@ public class Evento {
     private float ind_classificacao;
     private int fg_cancelado;
     private int fg_participa;
+    private int nr_convidados;
+    private int nr_comentarios;
 
     //endregion
 
@@ -194,6 +196,22 @@ public class Evento {
 
     public void setParticipa(int fg_participa) {
         this.fg_participa = fg_participa;
+    }
+
+    public void setConvidados(int nr_convidados){
+        this.nr_convidados = nr_convidados;
+    }
+
+    public int getConvidados(){
+        return this.nr_convidados;
+    }
+
+    public int getComentarios() {
+        return nr_comentarios;
+    }
+
+    public void setComentarios(int nr_comentarios) {
+        this.nr_comentarios = nr_comentarios;
     }
 
     //endregion
@@ -355,6 +373,11 @@ public class Evento {
             mEvento.setEventoPrivado(jsonObjectResultado.getInt("fg_evento_privado"));
             mEvento.setEndereco(jsonObjectResultado.getString("ds_endereco"));
             mEvento.setClassificacao(Float.parseFloat(jsonObjectResultado.getString("ind_classificacao")));
+            if (jsonObjectResultado.has("nr_convidados"))
+                mEvento.setConvidados(jsonObjectResultado.getInt("nr_convidados"));
+            if (jsonObjectResultado.has("nr_comentarios"))
+                mEvento.setComentarios(jsonObjectResultado.getInt("nr_comentarios"));
+
             mEventos.add(mEvento);
         }
         return mEventos;
