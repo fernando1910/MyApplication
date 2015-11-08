@@ -17,15 +17,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
-
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
-
 import domain.Evento;
 import domain.Usuario;
 import domain.Util;
@@ -143,7 +138,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         } else {
             tvPrivado.setText("Este evento é publico");
         }
-        if(objEvento.getParticipa() == 1)
+        if(objEvento.getParticipa() == 1 || objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
         {
             fab3.setVisibility(View.VISIBLE);
             fab1.setVisibility(View.VISIBLE);
@@ -159,6 +154,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         if (new Date().compareTo(objEvento.getDataEvento()) != -1) {
             fab3.setVisibility(View.GONE);
             fab4.setVisibility(View.GONE);
+        }
+        else {
+            mRatingBar.setVisibility(View.INVISIBLE);
         }
 
     }

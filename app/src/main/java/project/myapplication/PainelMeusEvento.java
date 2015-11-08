@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,8 @@ public class PainelMeusEvento extends Fragment  {
     private ListView lvEventos;
     private ProgressBar mProgressBar;
     private Util util;
+    private Button btTentar;
+    private TextView tvMensagem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +45,9 @@ public class PainelMeusEvento extends Fragment  {
         try {
             lvEventos = (ListView) view.findViewById(R.id.lvEventos);
             mProgressBar = (ProgressBar) view.findViewById(R.id.pbFooterLoading);
+            btTentar = (Button) view.findViewById(R.id.btTentar);
+            tvMensagem = (TextView) view.findViewById(R.id.tvMensagem);
+
             objEvento = new Evento();
             util = new Util();
             new carregarEventos().execute();
@@ -57,6 +64,8 @@ public class PainelMeusEvento extends Fragment  {
         @Override
         protected void onPreExecute() {
             mProgressBar.setVisibility(View.VISIBLE);
+            btTentar.setVisibility(View.INVISIBLE);
+            tvMensagem.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -82,15 +91,41 @@ public class PainelMeusEvento extends Fragment  {
         protected void onPostExecute(Void aVoid) {
             mProgressBar.setVisibility(View.GONE);
             if (fg_conexao_internet) {
-                lvEventos.setAdapter(mAdapter);
-                lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        int codigoEvento = mAdapter.getCodigoEvento(position);
-                        Intent intent = new Intent(getContext(), VisualizarEvento.class);
-                        intent.putExtra("codigoEvento", codigoEvento);
-                        startActivity(intent);
+                if(mAdapter.getCount() > 0) {
+                    lvEventos.setAdapter(mAdapter);
+                    lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            int codigoEvento = mAdapter.getCodigoEvento(position);
+                            Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                            intent.putExtra("codigoEvento", codigoEvento);
+                            startActivity(intent);
 
+                        }
+                    });
+                }
+                else{
+                    btTentar.setVisibility(View.VISIBLE);
+                    tvMensagem.setVisibility(View.VISIBLE);
+                    btTentar.setText("Criar");
+                    tvMensagem.setText("Não há nenhum evento criado. \nCrie um novo evento");
+                    btTentar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(PainelMeusEvento.this.getContext(), CadEvento.class));
+                        }
+                    });
+                }
+            }
+            else{
+                btTentar.setVisibility(View.VISIBLE);
+                tvMensagem.setVisibility(View.VISIBLE);
+                btTentar.setText("Tentar");
+                tvMensagem.setText("Sem conexão");
+                btTentar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new carregarEventos().execute();
                     }
                 });
             }
