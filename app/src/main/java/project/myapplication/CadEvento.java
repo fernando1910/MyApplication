@@ -345,8 +345,6 @@ public class CadEvento extends AppCompatActivity {
             try {
                 synchronized (this) {
                     salvarEvento();
-                    fg_criou = true;
-
                 }
             } catch (Exception e) {
                 fg_criou = false;
@@ -390,10 +388,8 @@ public class CadEvento extends AppCompatActivity {
         try {
             descarregarControles();
             codigoEvento =  objEvento.salvarEventoOnline(this, tipoOperacao);
-
         } catch (Exception e) {
             fg_criou = false;
-
         }
     }
 
@@ -408,7 +404,7 @@ public class CadEvento extends AppCompatActivity {
             objEvento.setEventoPrivado(1);
         else
             objEvento.setEventoPrivado(0);
-        objEvento.setCodigoUsarioInclusao(objUsuario.getCodigoUsuario());
+        objEvento.setCodigoUsuarioInclusao(objUsuario.getCodigoUsuario());
         objEvento.setDataEvento(calendar.getTime());
         objEvento.setDataInclusao(new Date());
         objEvento.setLatitude(nr_latitude);

@@ -132,13 +132,13 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         tvEndereco.setText(objEvento.getEndereco());
         if (objEvento.getEventoPrivado() == 1) {
             tvPrivado.setText("Este evento é privado");
-            if (objEvento.getCodigoUsarioInclusao() != objUsuario.getCodigoUsuario()) {
+            if (objEvento.getCodigoUsuarioInclusao() != objUsuario.getCodigoUsuario()) {
                 fab4.setVisibility(View.GONE);
             }
         } else {
             tvPrivado.setText("Este evento é publico");
         }
-        if(objEvento.getParticipa() == 1 || objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
+        if(objEvento.getParticipa() == 1 || objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario())
         {
             fab3.setVisibility(View.VISIBLE);
             fab1.setVisibility(View.VISIBLE);
@@ -207,7 +207,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         MenuItem itemEditar = menu.findItem(R.id.action_editar);
         MenuItem itemCancelar = menu.findItem(R.id.action_cancelar);
-        if (objEvento.getCodigoUsarioInclusao() == objUsuario.getCodigoUsuario())
+        if (objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario())
         {
             itemEditar.setVisible(true);
             itemCancelar.setVisible(true);

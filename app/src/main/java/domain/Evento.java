@@ -21,7 +21,7 @@ public class Evento {
     private int cd_evento;
     private String ds_titulo_evento;
     private String ds_descricao;
-    private int cd_usario_inclusao;
+    private int cd_usuario_inclusao;
     private Date dt_evento;
     private Date dt_inclusao;
     private Date dt_alteracao;
@@ -70,12 +70,12 @@ public class Evento {
         this.ds_descricao = ds_descricao;
     }
 
-    public int getCodigoUsarioInclusao() {
-        return cd_usario_inclusao;
+    public int getCodigoUsuarioInclusao() {
+        return cd_usuario_inclusao;
     }
 
-    public void setCodigoUsarioInclusao(int cd_usario_inclusao) {
-        this.cd_usario_inclusao = cd_usario_inclusao;
+    public void setCodigoUsuarioInclusao(int cd_usuario_inclusao) {
+        this.cd_usuario_inclusao = cd_usuario_inclusao;
     }
 
     public Date getDataEvento() {
@@ -264,7 +264,7 @@ public class Evento {
                 jsonObject.put("cd_evento", this.getCodigoEvento());
             jsonObject.put("ds_titulo_evento", this.getTituloEvento());
             jsonObject.put("ds_descricao", this.getDescricao());
-            jsonObject.put("cd_usario_inclusao", this.getCodigoUsarioInclusao());
+            jsonObject.put("cd_usuario_inclusao", this.getCodigoUsuarioInclusao());
             jsonObject.put("dt_evento", dataEvento);
             jsonObject.put("fg_evento_privado", this.getEventoPrivado());
             jsonObject.put("ds_endereco", this.getEndereco());
@@ -312,7 +312,7 @@ public class Evento {
         this.setLongitude(Double.parseDouble(jsonObject.getString("nr_longitude")));
         this.setParticipa(Integer.parseInt(jsonObject.getString("fg_participa")));
         this.setClassificacao(Float.parseFloat(jsonObject.getString("ind_classificacao")));
-        this.setCodigoUsarioInclusao(jsonObject.getInt("cd_usuario_inclusao"));
+        this.setCodigoUsuarioInclusao(jsonObject.getInt("cd_usuario_inclusao"));
         this.setCodigoEvento(cd_evento);
     }
 
@@ -406,9 +406,9 @@ public class Evento {
         return Integer.parseInt(mResposta) > 0;
     }
 
-    public List<Evento> buscarConvites(Context context, String data, int codigoUsario) throws Exception {
+    public List<Evento> buscarConvites(Context context, String data, int codigoUsuario) throws Exception {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("codigoUsuario", codigoUsario);
+        jsonObject.put("codigoUsuario", codigoUsuario);
         jsonObject.put("data", data);
         return selecionarEventosOnline(context, "buscarConvites", jsonObject.toString());
     }

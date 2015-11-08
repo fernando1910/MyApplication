@@ -70,7 +70,7 @@ public class EventoDAO {
         values.put("ds_descricao", objEvento.getDescricao());
         values.put("nr_latitude", objEvento.getLatitude());
         values.put("nr_longitude", objEvento.getLongitude());
-        values.put("cd_usuario_inclusao", objEvento.getCodigoUsarioInclusao());
+        values.put("cd_usuario_inclusao", objEvento.getCodigoUsuarioInclusao());
         values.put("dt_evento", util.formatarSalvarBanco(objEvento.getDataEvento()));
         values.put("dt_inclusao", util.formatarSalvarBanco(objEvento.getDataInclusao()));
         values.put("fg_evento_privado", objEvento.getEventoPrivado());
@@ -91,7 +91,7 @@ public class EventoDAO {
             objEvento.setDescricao(c.getString(2));
             objEvento.setLatitude(c.getDouble(3));
             objEvento.setLongitude(c.getDouble(4));
-            objEvento.setCodigoUsarioInclusao(c.getInt(5));
+            objEvento.setCodigoUsuarioInclusao(c.getInt(5));
             objEvento.setDataEvento(util.formataSelecionaBanco(c.getString(6)));
             objEvento.setDataInclusao(util.formataSelecionaBanco(c.getString(7)));
             objEvento.setEventoPrivado(c.getInt(9));
@@ -126,7 +126,7 @@ public class EventoDAO {
                 objEvento.setDescricao(mCursor.getString(2));
                 objEvento.setLatitude(mCursor.getDouble(3));
                 objEvento.setLongitude(mCursor.getDouble(4));
-                objEvento.setCodigoUsarioInclusao(mCursor.getInt(5));
+                objEvento.setCodigoUsuarioInclusao(mCursor.getInt(5));
                 objEvento.setDataEvento(util.formataSelecionaBanco(mCursor.getString(6)));
                 objEvento.setDataInclusao(util.formataSelecionaBanco(mCursor.getString(7)));
 //                /objEvento.setDataAlteracao(util.formataData(mCursor.getString(8)));
@@ -152,7 +152,7 @@ public class EventoDAO {
         values.put(ds_descricao, objEvento.getDescricao());
         values.put(nr_latitude, objEvento.getLatitude());
         values.put(nr_longitude, objEvento.getLongitude());
-        values.put(cd_usuario_inclusao, objEvento.getCodigoUsarioInclusao());
+        values.put(cd_usuario_inclusao, objEvento.getCodigoUsuarioInclusao());
         values.put(dt_evento, objEvento.getDataEvento().toString());
         values.put(dt_inclusao, objEvento.getDataInclusao().toString());
         values.put(fg_evento_privado, objEvento.getEventoPrivado());
@@ -177,7 +177,7 @@ public class EventoDAO {
                 objEvento.setDescricao(mCursor.getString(2));
                 objEvento.setLatitude(mCursor.getDouble(3));
                 objEvento.setLongitude(mCursor.getDouble(4));
-                objEvento.setCodigoUsarioInclusao(mCursor.getInt(5));
+                objEvento.setCodigoUsuarioInclusao(mCursor.getInt(5));
                 //objEvento.setDataEvento(util.formataData(mCursor.getString(6)));
                 //objEvento.setDataInclusao(util.formataData(mCursor.getString(7)));
 //                /objEvento.setDataAlteracao(util.formataData(mCursor.getString(8)));
