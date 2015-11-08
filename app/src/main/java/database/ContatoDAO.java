@@ -32,9 +32,9 @@ public class ContatoDAO {
         db = dbH.getWritableDatabase();
     }
 
-    public List<Contatos> Carregar() {
+    public List<Contatos> Carregar(int cd_usuario) {
         List<Contatos> contatos = new ArrayList<>();
-        Cursor cursor = db.query(true, TABELA, ContatoDAO.colunas, null,null, null,null,null,null);
+        Cursor cursor = db.query(true, TABELA, ContatoDAO.colunas, "cd_contato != ? " , new String[] {String.valueOf(cd_usuario)} , null,null,null,null);
         cursor.moveToFirst();
         if(cursor.getCount() > 0)
         {
@@ -48,6 +48,8 @@ public class ContatoDAO {
                 contatos.add(objContatos);
             }while (cursor.moveToNext());
         }
+
+        cursor.close();
 
         return  contatos;
     }

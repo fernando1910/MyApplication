@@ -395,10 +395,6 @@ public class Evento {
         return selecionarEventosOnline(context, "pesquisarEvento", query);
     }
 
-    public String atualizar(Context context) {
-        EventoDAO eventoDAO = new EventoDAO(context);
-        return eventoDAO.atualizar(this);
-    }
 
     public boolean cancelar(Context context, int codigoEvento) throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -429,6 +425,14 @@ public class Evento {
             fg_retorno = true;
 
         return fg_retorno;
+    }
+
+    public List<Evento> selecionarMeusEventos(Context context, String dt_evento, int cd_usuario) throws  Exception{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("dt_evento", dt_evento);
+        jsonObject.put("cd_usuario", cd_usuario);
+        return selecionarEventosOnline(context, "selecionarMeusEventos", jsonObject.toString());
+
     }
     //endregion
 }

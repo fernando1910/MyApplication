@@ -163,8 +163,10 @@ public class Contatos {
 
     public List<Contatos> retonarContatos(Context context) {
         List<Contatos> list = new ArrayList<>();
+        Usuario objUsuario = new Usuario();
+        objUsuario.carregar(context);
         ContatoDAO contatoDAO = new ContatoDAO(context);
-        list = contatoDAO.Carregar();
+        list = contatoDAO.Carregar(objUsuario.getCodigoUsuario());
         return list;
     }
 
