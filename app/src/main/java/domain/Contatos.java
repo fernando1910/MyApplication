@@ -147,8 +147,8 @@ public class Contatos {
                 for (int i = 0; i < jsonArrayResultado.length(); i++) {
                     jsonObjectResultado = new JSONObject(jsonArrayResultado.getString(i));
                     Contatos objContatos = new Contatos();
-                    objContatos.setCodigoContato(Integer.parseInt(jsonObjectResultado.getString("cd_usuario_contato")));
-                    objContatos.setNomeContato(jsonObjectResultado.getString("ds_nome"));
+                    objContatos.setCodigoContato(Integer.parseInt(jsonObjectResultado.getString("cd_contato")));
+                    objContatos.setNomeContato(jsonObjectResultado.getString("ds_contato"));
                     contatoDAO.Salvar(objContatos);
 
                 }

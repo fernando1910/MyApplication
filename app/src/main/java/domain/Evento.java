@@ -211,10 +211,6 @@ public class Evento {
             mResposta = util.enviarServidor(caminhoServidor, jsonString, "inserirEvento");
             if (Integer.parseInt(mResposta) != 0) {
                 this.cd_evento = Integer.parseInt(mResposta);
-                mResposta = this.salvarEventoLocal(context);
-                if (Integer.parseInt(mResposta) < 1)
-                    throw new Exception("Não salvou local");
-
                 if (getImagemFotoCapa() != null)
                     util.salvarFoto(getImagemFotoCapa(), "Evento", context, mResposta);
             } else {
@@ -222,13 +218,8 @@ public class Evento {
             }
         } else {
             mResposta = util.enviarServidor(caminhoServidor, jsonString, "atualizarEvento");
-            if (Integer.parseInt(mResposta) > 0) {
-                mResposta = this.atualizar(context);
-                if (Integer.parseInt(mResposta) < 1)
-                    throw new Exception("Não salvou local");
-            } else {
+            if (Integer.parseInt(mResposta) <= 0)
                 throw new Exception("Não salvou online");
-            }
         }
         return this.cd_evento;
 
@@ -243,7 +234,6 @@ public class Evento {
 
         return util.enviarServidor(url, jsonObject.toString(), "comentarEvento");
     }
-
 
     public String gerarEventoJSON() throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
@@ -309,7 +299,6 @@ public class Evento {
     public void carregarLocal(int codigoEvento, Context context) {
         EventoDAO eventoDAO = new EventoDAO(context);
         eventoDAO.selecionar(codigoEvento, this);
-
     }
 
     public List<Evento> selecionarTodosEventosLocal(Context context) {
@@ -317,7 +306,7 @@ public class Evento {
         return eventoDAO.selecionarTodosEventos();
     }
 
-    public List<Evento> selecionarEventosPorData(Context context, String dt_evento_string, int cd_usuario) throws Exception{
+    public List<Evento> selecionarEventosPorData(Context context, String dt_evento_string, int cd_usuario) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("dt_evento", dt_evento_string);
         jsonObject.put("cd_usuario", cd_usuario);
@@ -328,11 +317,11 @@ public class Evento {
         return selecionarEventosOnline(context, "selecionarTopFestas", null);
     }
 
-    public List<Evento> selecionarTopConvidados(Context context) throws Exception{
+    public List<Evento> selecionarTopConvidados(Context context) throws Exception {
         return selecionarEventosOnline(context, "selecionarTopConvidados", null);
     }
 
-    public List<Evento> selecionarTopComentarios(Context context) throws Exception{
+    public List<Evento> selecionarTopComentarios(Context context) throws Exception {
         return selecionarEventosOnline(context, "selecionarTopComentarios", null);
     }
 
@@ -344,14 +333,7 @@ public class Evento {
         jsonObject.put("ind_classificacao", String.valueOf(classificacaoEvento));
         jsonObject.put("cd_usuario", String.valueOf(codigoUsuario));
         String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "classificarEvento");
-        if (Integer.parseInt(mResposta) > 1) {
-            EventoDAO eventoDAO = new EventoDAO(context);
-            this.carregarLocal(codigoEvento, context);
-            this.ind_classificacao = classificacaoEvento;
-            eventoDAO.atualizar(this);
-        }
-
-        return true;
+        return Integer.parseInt(mResposta) > 1;
     }
 
 
@@ -373,7 +355,6 @@ public class Evento {
             mEvento.setEndereco(jsonObjectResultado.getString("ds_endereco"));
             mEvento.setClassificacao(Float.parseFloat(jsonObjectResultado.getString("ind_classificacao")));
             mEventos.add(mEvento);
-
         }
         return mEventos;
     }
@@ -400,27 +381,18 @@ public class Evento {
         Util util = new Util();
         String mURL = context.getString(R.string.wsBlueDate);
         jsonObject.put("cd_evento", String.valueOf(codigoEvento));
-        String[] mResposta = new String[1];
-        mResposta[0] = util.enviarServidor(mURL, jsonObject.toString(), "cancelarEvento");
-
-        if (Integer.parseInt(mResposta[0]) > 0) {
-            this.carregarLocal(codigoEvento, context);
-            this.fg_cancelado = 1;
-            this.atualizar(context);
-            return true;
-        } else {
-            return false;
-        }
+        String mResposta = util.enviarServidor(mURL, jsonObject.toString(), "cancelarEvento");
+        return Integer.parseInt(mResposta) > 0;
     }
 
-    public List<Evento> buscarConvites(Context context, String data, int codigoUsario) throws  Exception{
+    public List<Evento> buscarConvites(Context context, String data, int codigoUsario) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("codigoUsuario", codigoUsario);
         jsonObject.put("data", data);
-        return selecionarEventosOnline(context,"buscarConvites", jsonObject.toString());
+        return selecionarEventosOnline(context, "buscarConvites", jsonObject.toString());
     }
 
-    public boolean participar(Context context, int cd_usuario, int cd_evento, String ds_nome) throws  Exception{
+    public boolean participar(Context context, int cd_usuario, int cd_evento, String ds_nome) throws Exception {
         boolean fg_retorno = false;
         String mResposta;
         Util util = new Util();
@@ -428,15 +400,11 @@ public class Evento {
         jsonObject.put("cd_usuario", cd_usuario);
         jsonObject.put("cd_evento", cd_evento);
         jsonObject.put("ds_nome", ds_nome);
-        mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonObject.toString(),"participar");
-        if (Integer.parseInt(mResposta) > 0 )
+        mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "participar");
+        if (Integer.parseInt(mResposta) > 0)
             fg_retorno = true;
 
-        return  fg_retorno;
+        return fg_retorno;
     }
     //endregion
-
 }
-
-
-

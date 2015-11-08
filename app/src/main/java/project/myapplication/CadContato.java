@@ -129,13 +129,8 @@ public class CadContato extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 objContatos.atualizarContatos(getContentResolver(), getString(R.string.wsBlueDate), CadContato.this);
-                List<Contatos> contatosList = objContatos.retonarContatos(CadContato.this);
-                arrayAdapter = new CustomListViewContato(CadContato.this, contatosList, cbContatoVisivel);
-
-
             } catch (Exception ex) {
                 Toast.makeText(CadContato.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                CadContato.this.finish();
             }
             return null;
         }
@@ -144,6 +139,8 @@ public class CadContato extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             //super.onPostExecute(aVoid);
             mActionProgressItem.setVisible(false);
+            List<Contatos> contatosList = objContatos.retonarContatos(CadContato.this);
+            arrayAdapter = new CustomListViewContato(CadContato.this, contatosList, cbContatoVisivel);
             lvContatos.setAdapter(arrayAdapter);
         }
     }

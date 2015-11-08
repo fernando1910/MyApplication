@@ -105,20 +105,8 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
                 } else {
                     final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
                     Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
-
                     objEvento = new Evento();
-                    objEvento.carregarLocal(codigoEvento, this);
-                    Usuario objUsuario = new Usuario();
-                    objUsuario.carregar(this);
-                    if (objUsuario.getCodigoUsuario() == objEvento.getCodigoUsarioInclusao()) {
-                        fab3.setVisibility(View.VISIBLE);
-                        fab4.setVisibility(View.GONE);
-                        mRatingBar.setVisibility(View.INVISIBLE);
-                    }
-                    if (objEvento.getCodigoEvento() != 0)
-                        carregarControles();
-                    else
-                        new carregarEventoOnline().execute();
+                    new carregarEventoOnline().execute();
                 }
 
             } else {
