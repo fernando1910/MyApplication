@@ -1,16 +1,33 @@
 package project.myapplication;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import adapters.CustomListViewContato;
+import domain.Contatos;
+import domain.Evento;
+import domain.Util;
 
 public class VisualizarConvidados extends AppCompatActivity {
     private final String TAG = "LOG";
-    private ListView mListView;
+    private ListView lvConvidados;
     private int codigoEvento;
+    private Contatos objContatos;
+    private CustomListViewContato mAdapter;
+    private List<Contatos> mContatos;
+    private Util util;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,19 +35,27 @@ public class VisualizarConvidados extends AppCompatActivity {
 
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.action_convidar);
             setContentView(R.layout.activity_visualizar_convidados);
-            mListView = (ListView) findViewById(R.id.lvConvidados);
-            Bundle parameters = getIntent().getExtras();
-            if(parameters != null) {
-                codigoEvento = parameters.getInt("codigoEvento");
-            }
+            lvConvidados = (ListView) findViewById(R.id.lvConvidados);
+            mProgressBar = (ProgressBar) findViewById(R.id.pbFooterLoading);
+            objContatos = new Contatos();
+            util = new Util();
+            mContatos = new ArrayList<>();
 
-        }catch (Exception ex){
+            Bundle parameters = getIntent().getExtras();
+            if (parameters != null) {
+                codigoEvento = parameters.getInt("codigoEvento");
+                new buscarContatos().execute();
+            }
+            else{
+                this.finish();
+                Toast.makeText(VisualizarConvidados.this, "Erro interno cod. 1", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception ex) {
             Log.i(TAG, ex.getMessage());
-            Toast.makeText(VisualizarConvidados.this, "Erro", Toast.LENGTH_SHORT).show();
-        }
-        finally {
             this.finish();
+            Toast.makeText(VisualizarConvidados.this, "Erro interno cod. 0", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -45,5 +70,40 @@ public class VisualizarConvidados extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class buscarContatos extends AsyncTask<Void, Integer, Void> {
+        boolean fg_conexao_internet;
+
+        @Override
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            synchronized (this) {
+                try {
+                    fg_conexao_internet = util.verificaInternet(VisualizarConvidados.this.getApplicationContext());
+                    if (fg_conexao_internet) {
+                        mContatos = objContatos.buscarConvidados(VisualizarConvidados.this.getApplicationContext(), codigoEvento, util);
+                        mAdapter = new CustomListViewContato(VisualizarConvidados.this, mContatos, false);
+                    }
+                } catch (Exception ex) {
+                    Log.i(TAG, ex.getMessage());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressBar.setVisibility(View.GONE);
+            if (fg_conexao_internet) {
+                lvConvidados.setAdapter(mAdapter);
+            }
+        }
     }
 }

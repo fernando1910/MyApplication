@@ -197,7 +197,9 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         }
 
         if (id == R.id.action_convidados) {
-            startActivity(new Intent(this, VisualizarConvidados.class));
+            Intent intent = new Intent(this, VisualizarConvidados.class);
+            intent.putExtra("codigoEvento", codigoEvento);
+            startActivity(intent);
             return true;
 
         }

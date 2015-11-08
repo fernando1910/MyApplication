@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import database.ContatoDAO;
+import project.myapplication.R;
 
 public class Contatos {
 
@@ -85,15 +86,15 @@ public class Contatos {
             while (cursor.moveToNext()) {
 
                 String contact_id = cursor.getString(cursor.getColumnIndex(_ID));
-                String name = cursor.getString(cursor.getColumnIndex( DISPLAY_NAME ));
-                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex( HAS_PHONE_NUMBER )));
+                String name = cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+                int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(HAS_PHONE_NUMBER)));
 
                 if (hasPhoneNumber > 0) {
 
                     output.append("\n First Name:" + name);
                     final String finalName = name;
 
-                    Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
+                    Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[]{contact_id}, null);
                     while (phoneCursor.moveToNext()) {
 
                         phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
@@ -101,12 +102,12 @@ public class Contatos {
 
                         if (Patterns.PHONE.matcher(phoneNumber).matches()) {
                             phoneNumber = phoneNumber
-                                    .replace("-","")
-                                    .replace(" ","")
-                                    .replace("+","")
-                                    .replace("/","")
-                                    .replace("(","")
-                                    .replace(")","");
+                                    .replace("-", "")
+                                    .replace(" ", "")
+                                    .replace("+", "")
+                                    .replace("/", "")
+                                    .replace("(", "")
+                                    .replace(")", "");
 
                             if (phoneNumber.length() > 7) {
                                 String finalPhoneNumber = phoneNumber.substring((phoneNumber.length() - 8), phoneNumber.length());
@@ -128,28 +129,27 @@ public class Contatos {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             try {
-                for (int i = 0; i < arrayNumeros.size(); i ++) {
+                for (int i = 0; i < arrayNumeros.size(); i++) {
                     JSONObject aux = new JSONObject();
                     aux.put("nr_telefone", arrayNumeros.get(i));
                     jsonArray.put(aux);
                 }
 
-            jsonObject.put("numeros", jsonArray);
+                jsonObject.put("numeros", jsonArray);
 
                 Util util = new Util();
                 String jsonString;
-                jsonString = util.enviarServidor(url,jsonObject.toString(),"atualizarContatos");
+                jsonString = util.enviarServidor(url, jsonObject.toString(), "atualizarContatos");
                 JSONArray jsonArrayResultado = new JSONArray(jsonString);
                 JSONObject jsonObjectResultado;
                 ContatoDAO contatoDAO = new ContatoDAO(context);
                 contatoDAO.DeletarTudo();
-                for (int i = 0 ; i < jsonArrayResultado.length(); i++)
-                {
+                for (int i = 0; i < jsonArrayResultado.length(); i++) {
                     jsonObjectResultado = new JSONObject(jsonArrayResultado.getString(i));
                     Contatos objContatos = new Contatos();
                     objContatos.setCodigoContato(Integer.parseInt(jsonObjectResultado.getString("cd_usuario_contato")));
                     objContatos.setNomeContato(jsonObjectResultado.getString("ds_nome"));
-                    contatoDAO.Salvar(objContatos );
+                    contatoDAO.Salvar(objContatos);
 
                 }
 
@@ -161,11 +161,27 @@ public class Contatos {
 
     }
 
-    public List<Contatos> retonarContatos(Context context){
+    public List<Contatos> retonarContatos(Context context) {
         List<Contatos> list = new ArrayList<>();
         ContatoDAO contatoDAO = new ContatoDAO(context);
         list = contatoDAO.Carregar();
-        return  list;
+        return list;
+    }
+
+    public List<Contatos> buscarConvidados(Context context, int cd_evento, Util util) throws Exception {
+        List<Contatos> mListaContatos = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cd_evento", cd_evento);
+        String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "buscarConvidados");
+        JSONArray jsonArray = new JSONArray(mResposta);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            jsonObject = new JSONObject(jsonArray.getString(i));
+            Contatos mContato = new Contatos();
+            mContato.setCodigoContato(jsonObject.getInt("cd_contato"));
+            mContato.setNomeContato(jsonObject.getString("ds_contato"));
+            mListaContatos.add(mContato);
+        }
+        return mListaContatos;
     }
 
     //endregion
