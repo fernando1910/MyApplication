@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import database.EventoDAO;
 import project.myapplication.R;
@@ -198,11 +199,11 @@ public class Evento {
         this.fg_participa = fg_participa;
     }
 
-    public void setConvidados(int nr_convidados){
+    public void setConvidados(int nr_convidados) {
         this.nr_convidados = nr_convidados;
     }
 
-    public int getConvidados(){
+    public int getConvidados() {
         return this.nr_convidados;
     }
 
@@ -218,15 +219,15 @@ public class Evento {
 
     //region Metodos comunicação com servidor Online
 
-    public int salvarEventoOnline(Context context, int tipoOperacao) throws Exception {
+    public int salvarEventoOnline(Context context, int tipoOperacao, String ds_mensagem) throws Exception {
 
         Util util = new Util();
         final String caminhoServidor = context.getResources().getString(R.string.wsBlueDate);
-        final String jsonString = gerarEventoJSON();
+        final JSONObject jsonObject = gerarEventoJSON(util);
         String mResposta;
 
         if (tipoOperacao == 1) {
-            mResposta = util.enviarServidor(caminhoServidor, jsonString, "inserirEvento");
+            mResposta = util.enviarServidor(caminhoServidor, jsonObject.toString(), "inserirEvento");
             if (Integer.parseInt(mResposta) != 0) {
                 this.cd_evento = Integer.parseInt(mResposta);
                 if (getImagemFotoCapa() != null)
@@ -235,7 +236,8 @@ public class Evento {
                 throw new Exception("Não salvou online");
             }
         } else {
-            mResposta = util.enviarServidor(caminhoServidor, jsonString, "atualizarEvento");
+            jsonObject.put("ds_mensagem", ds_mensagem);
+            mResposta = util.enviarServidor(caminhoServidor, jsonObject.toString(), "atualizarEvento");
             if (Integer.parseInt(mResposta) <= 0)
                 throw new Exception("Não salvou online");
         }
@@ -253,10 +255,9 @@ public class Evento {
         return util.enviarServidor(url, jsonObject.toString(), "comentarEvento");
     }
 
-    public String gerarEventoJSON() throws InterruptedException {
+    public JSONObject gerarEventoJSON(Util util) throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        String dataEvento = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.getDataEvento());
 
 
         try {
@@ -265,7 +266,7 @@ public class Evento {
             jsonObject.put("ds_titulo_evento", this.getTituloEvento());
             jsonObject.put("ds_descricao", this.getDescricao());
             jsonObject.put("cd_usuario_inclusao", this.getCodigoUsuarioInclusao());
-            jsonObject.put("dt_evento", dataEvento);
+            jsonObject.put("dt_evento", util.formatarStringDataBanco(this.getDataEvento()));
             jsonObject.put("fg_evento_privado", this.getEventoPrivado());
             jsonObject.put("ds_endereco", this.getEndereco());
             jsonObject.put("nr_latitude", this.getLatitude());
@@ -273,10 +274,10 @@ public class Evento {
             jsonObject.put("ds_foto_capa", this.getFotoCapa());
 
             if (this.getDataInclusao() != null) {
-                jsonObject.put("dt_inclusao", this.getDataInclusao());
+                jsonObject.put("dt_inclusao", util.formatarStringDataBanco(this.getDataInclusao()));
             }
             if (this.getDataAlteracao() != null) {
-                jsonObject.put("dt_alteracao", this.getDataAlteracao());
+                jsonObject.put("dt_alteracao", util.formatarStringDataBanco(this.getDataAlteracao()));
             }
 
 
@@ -284,7 +285,7 @@ public class Evento {
             e.printStackTrace();
         }
 
-        return jsonObject.toString();
+        return jsonObject;
     }
 
     public String salvarEventoLocal(Context context) {
@@ -428,12 +429,61 @@ public class Evento {
         return fg_retorno;
     }
 
-    public List<Evento> selecionarMeusEventos(Context context, String dt_evento, int cd_usuario) throws  Exception{
+    public List<Evento> selecionarMeusEventos(Context context, String dt_evento, int cd_usuario) throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("dt_evento", dt_evento);
         jsonObject.put("cd_usuario", cd_usuario);
         return selecionarEventosOnline(context, "selecionarMeusEventos", jsonObject.toString());
 
+    }
+
+    public String verificarMudancaEvento(Evento objEvento, Evento objEventoBkp, String ds_nome) {
+        boolean fg_primeiro = true;
+        String mMensagem = "";
+        if (!objEvento.getTituloEvento().equals(objEventoBkp.getTituloEvento())) {
+            mMensagem = "Alterou o titulo";
+            fg_primeiro = false;
+        }
+        if (!objEvento.getDescricao().equals(objEventoBkp.getDescricao())) {
+            if (fg_primeiro) {
+                mMensagem = "Alterou a descrição";
+                fg_primeiro = false;
+            } else {
+                mMensagem += ", descrição";
+            }
+        }
+
+        if (objEvento.getDataEvento().equals(objEventoBkp.getDataEvento())) {
+            if (fg_primeiro) {
+                mMensagem = "Alterou a data";
+                fg_primeiro = false;
+            } else {
+                mMensagem += ", data";
+            }
+        }
+
+        if (objEvento.getEndereco().equals(objEventoBkp.getEndereco())) {
+            if (fg_primeiro) {
+                mMensagem = "Alterou o endereço";
+            } else {
+                mMensagem += ", endereço";
+            }
+        }
+
+        if (!fg_primeiro)
+            mMensagem = ds_nome + " "+ mMensagem;
+
+        return mMensagem;
+
+    }
+
+    public Evento gerarBackup(){
+        Evento objEventoBkp = new Evento();
+        objEventoBkp.setTituloEvento(this.getTituloEvento());
+        objEventoBkp.setDescricao(this.getDescricao());
+        objEventoBkp.setEndereco(this.getEndereco());
+        objEventoBkp.setDataEvento(this.getDataEvento());
+        return objEventoBkp;
     }
     //endregion
 }

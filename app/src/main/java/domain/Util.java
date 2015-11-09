@@ -103,19 +103,10 @@ public class Util {
     }
 
 
-    public String formatarStringDataBanco(String data) {
-        String dataFinal = null;
-        data = data.replace("/", "-");
-        String[] dataTemp = data.split("//-");
 
-        int i = 0;
 
-        while (i > dataTemp.length) {
-            dataFinal = dataFinal + dataTemp[i];
-            i++;
-        }
-
-        return dataFinal;
+    public String formatarStringDataBanco(Date data) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(data);
     }
 
     public String enviarServidor(final String url, final String data, final String comando) throws InterruptedException {
@@ -146,7 +137,7 @@ public class Util {
 
     }
 
-    public LatLng retornaLocalizacao(Context context, LocationListener locationListener) {
+    public LatLng retornaLocalizacao(Context context, LocationListener locationListener) throws SecurityException{
         boolean isGPSEnabled;
         boolean isNetworkEnabled;
 

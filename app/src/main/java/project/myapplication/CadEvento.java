@@ -13,10 +13,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -27,15 +27,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import domain.Configuracoes;
 import domain.Evento;
 import domain.Usuario;
@@ -44,6 +41,7 @@ import domain.Util;
 
 public class CadEvento extends AppCompatActivity {
     //region Variaveis
+    private String TAG = "LOG";
     private int codigoEvento;
     private int tipoOperacao = 0; // 1 inclusão, 2 alteração
     private DateFormat formatDate = DateFormat.getDateInstance();
@@ -59,9 +57,10 @@ public class CadEvento extends AppCompatActivity {
     private Configuracoes objConf;
     private Uri imgEvento;
     private Bitmap imgRetorno;
-    private boolean fg_criou = true;
+    private boolean fg_criou = true, fg_mudanca;
     private ProgressDialog progressDialog;
-    private Evento objEvento;
+    private Evento objEvento, objEventoBkp;
+    private Usuario objUsuario;
 
     //endregion
     @Override
@@ -91,6 +90,8 @@ public class CadEvento extends AppCompatActivity {
         objConf = new Configuracoes();
         objConf.carregar(this);
         objEvento = new Evento();
+        objUsuario = new Usuario();
+        objUsuario.carregar(this);
 
 
         btData.setImageDrawable(util.retornarIcone(getResources().getDrawable(R.drawable.ic_calendar1), getResources()));
@@ -115,11 +116,9 @@ public class CadEvento extends AppCompatActivity {
         if (parameters != null) {
             codigoEvento = parameters.getInt("codigoEvento");
             final String url = getString(R.string.caminho_foto_capa_evento) + String.valueOf(codigoEvento) + ".png";
-            if (url != null || url != "")
-                Picasso.with(ibFotoCapa.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ibFotoCapa);
-            objEvento.carregarLocal(codigoEvento, this);
-            carregarControles();
+            Picasso.with(ibFotoCapa.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ibFotoCapa);
             tipoOperacao = 2;
+            new carregarEvento().execute();
         } else {
             tipoOperacao = 1;
         }
@@ -132,6 +131,7 @@ public class CadEvento extends AppCompatActivity {
             tvEndereco.setText(objEvento.getEndereco());
             tvData.setText(formatDate.format(objEvento.getDataEvento()));
             tvHora.setText(formatHour.format(objEvento.getDataEvento()));
+            calendar.setTime(objEvento.getDataEvento());
         } else {
             Toast.makeText(CadEvento.this, "Falha ao carregar evento", Toast.LENGTH_SHORT).show();
             finish();
@@ -269,7 +269,7 @@ public class CadEvento extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-        startActivity(new Intent(this,MenuPrincipalNovo.class));
+        startActivity(new Intent(this, MenuPrincipalNovo.class));
 
     }
 
@@ -347,6 +347,7 @@ public class CadEvento extends AppCompatActivity {
                     salvarEvento();
                 }
             } catch (Exception e) {
+                Log.i(TAG, e.getMessage());
                 fg_criou = false;
                 erro = e.getMessage();
             }
@@ -358,8 +359,13 @@ public class CadEvento extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             if (fg_criou) {
-                if (objConf.getPermiteAlarme() == 1) {
-                    criarEventoCalendarioAndroid();
+                if (tipoOperacao == 1) {
+                    if (objConf.getPermiteAlarme() == 1) {
+                        criarEventoCalendarioAndroid();
+                    }
+                }else {
+                    if (!fg_mudanca)
+                        Toast.makeText(CadEvento.this, "Não houve alteração", Toast.LENGTH_SHORT).show();
                 }
                 CadEvento.this.finish();
                 Intent intent = new Intent(CadEvento.this, VisualizarEvento.class);
@@ -378,8 +384,7 @@ public class CadEvento extends AppCompatActivity {
             if (ValidarCampos()) {
                 new salvarEvento().execute();
             }
-        }else
-        {
+        } else {
             Toast.makeText(CadEvento.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
         }
     }
@@ -387,16 +392,21 @@ public class CadEvento extends AppCompatActivity {
     public void salvarEvento() {
         try {
             descarregarControles();
-            codigoEvento =  objEvento.salvarEventoOnline(this, tipoOperacao);
+            String mMensagem = "";
+            if (tipoOperacao == 2)
+                mMensagem = objEvento.verificarMudancaEvento(objEvento, objEventoBkp, objUsuario.getNome());
+
+            if (!mMensagem.equals("") || tipoOperacao == 1) {
+                fg_mudanca = true;
+                codigoEvento = objEvento.salvarEventoOnline(this, tipoOperacao, mMensagem);
+            }
+
         } catch (Exception e) {
             fg_criou = false;
         }
     }
 
     public void descarregarControles() {
-
-        Usuario objUsuario = new Usuario();
-        objUsuario = objUsuario.selecionarUsuario(this);
         objEvento.setTituloEvento(etTitulo.getText().toString());
         objEvento.setDescricao(etDescricao.getText().toString());
         objEvento.setEndereco(tvEndereco.getText().toString());
@@ -406,7 +416,7 @@ public class CadEvento extends AppCompatActivity {
             objEvento.setEventoPrivado(0);
         objEvento.setCodigoUsuarioInclusao(objUsuario.getCodigoUsuario());
         objEvento.setDataEvento(calendar.getTime());
-        objEvento.setDataInclusao(new Date());
+
         objEvento.setLatitude(nr_latitude);
         objEvento.setLongitude(nr_longitude);
 
@@ -417,8 +427,11 @@ public class CadEvento extends AppCompatActivity {
             //objEvento.setImagemFotoCapa(byteArray);
             String imagemServidor = Base64.encodeToString(byteArray, 0);
             objEvento.setFotoCapa(imagemServidor);
-
         }
+        if (tipoOperacao == 1)
+            objEvento.setDataInclusao(new Date());
+        else
+            objEvento.setDataAlteracao(new Date());
     }
 
     public boolean ValidarCampos() {
@@ -437,12 +450,43 @@ public class CadEvento extends AppCompatActivity {
             Toast.makeText(this, "Necessário informar se é Público ou Privado", Toast.LENGTH_SHORT).show();
             fg = false;
         }
-        if(valida > -1){
+        if (valida > -1) {
             Toast.makeText(this, "A data do evento precisa ser maior que o dia de hoje", Toast.LENGTH_SHORT).show();
             fg = false;
         }
         return fg;
     }
     //endregion
+
+    private class carregarEvento extends AsyncTask<Void,Integer,Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(CadEvento.this);
+            progressDialog = ProgressDialog.show(CadEvento.this, "Carregando...",
+                    "Por favor aguarde...", false, false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            synchronized (this){
+                try{
+                    objEvento.carregarOnline(codigoEvento, getApplicationContext(), objUsuario.getCodigoUsuario());
+                    objEventoBkp = objEvento.gerarBackup();
+                }catch (Exception ex){
+                    Log.i(TAG, ex.getMessage());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            carregarControles();
+            progressDialog.dismiss();
+        }
+    }
 
 }
