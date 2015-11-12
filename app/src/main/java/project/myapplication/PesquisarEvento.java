@@ -26,9 +26,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import domain.Configuracoes;
@@ -243,20 +245,38 @@ public class PesquisarEvento extends AppCompatActivity implements LocationListen
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            final HashMap<Marker, Integer> mHashMap = new HashMap<Marker, Integer>();
             mProgressDialog.dismiss();
             if (mListaEventos.size() > 0){
                 for (int i = 0; i < mListaEventos.size() ; i++){
                     LatLng local =  new LatLng(mListaEventos.get(i).getLatitude(),mListaEventos.get(i).getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(local).title(mListaEventos.get(i).getTituloEvento()));
+                    Marker marker = mMap.addMarker(new MarkerOptions().position(local).title(mListaEventos.get(i).getTituloEvento()));
+                    mHashMap.put(marker, mListaEventos.get(i).getCodigoEvento());
+                    mMap.setOnMarkerClickListener(
+                            new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(Marker marker) {
+                                    int pos = mHashMap.get(marker);
+                                    Intent it = new Intent(PesquisarEvento.this, VisualizarEvento.class);
+                                    it.putExtra("codigoEvento", pos);
+                                    startActivity(it);
+                                    return false;
+                                }
+                            }
+                    );
                 }
             }
         }
     }
 
     public void pesquisar(View view){
-        if (validarGPS()) {
-            addCircle(latLng);
-            new pesquisarEventosProximos().execute();
+        if (util.verificaInternet(PesquisarEvento.this.getApplicationContext())) {
+            if (validarGPS()) {
+                addCircle(latLng);
+                new pesquisarEventosProximos().execute();
+            } else {
+                Toast.makeText(PesquisarEvento.this, "GPS DESLIGADO", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

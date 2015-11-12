@@ -2,6 +2,7 @@ package project.myapplication;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -9,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import domain.Configuracoes;
+import domain.Usuario;
 
 public class CadConfiguracao extends AppCompatActivity {
     private CheckBox ckPermitePush, ckPermiteAlarme, ckNotificaComentario, ckNotificaMudanca, ckTelefoneVisivel, ckBuscarFotosOnline;
@@ -187,6 +189,18 @@ public class CadConfiguracao extends AppCompatActivity {
         }
 
         objConfig.atualizar(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Usuario objUsuario = new Usuario();
+                objUsuario.carregar(CadConfiguracao.this);
+                try {
+                    objConfig.atualizarTelefoneVisivel(CadConfiguracao.this, objUsuario.getCodigoUsuario(), objConfig.getTelefoneVisivel());
+                } catch (Exception e) {
+                    Log.i("erro", e.getMessage());
+                }
+            }
+        }).start();
 
     }
 }

@@ -2,7 +2,10 @@ package domain;
 
 import android.content.Context;
 
+import org.json.JSONObject;
+
 import database.ConfiguracoesDAO;
+import project.myapplication.R;
 
 public class Configuracoes {
 
@@ -102,6 +105,19 @@ public class Configuracoes {
     public void atualizar(Context context){
         ConfiguracoesDAO configuracoesDAO = new ConfiguracoesDAO(context);
         configuracoesDAO.atualizar(this);
+    }
+
+    public void atualizarTelefoneVisivel(Context context, int cd_usuario, int fg_telefone_visivel) throws  Exception{
+        Util util = new Util();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cd_usuario", cd_usuario);
+        jsonObject.put("fg_telefone_visivel", fg_telefone_visivel);
+
+        util.enviarServidor(
+                context.getString(R.string.wsBlueDate),
+                jsonObject.toString(),
+                "atualizarTelefoneVisivel"
+        );
     }
 
     //endregion
