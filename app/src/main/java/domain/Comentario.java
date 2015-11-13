@@ -93,7 +93,17 @@ public class Comentario {
         return  mComentarios;
     }
 
-
+    public void carregar(Context context, Util util, int cd_comentario) throws Exception{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cd_comentario", cd_comentario);
+        String mResposta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "carregarComentario");
+        JSONArray jsonArray = new JSONArray(mResposta);
+        jsonObject = new JSONObject(jsonArray.getString(0));
+        this.setComentario(jsonObject.getString("ds_comentario"));
+        this.setUsuarioComentario("ds_nome");
+        this.setDataInclusao(util.formataSelecionaBanco("dt_inclusao"));
+        this.setCodigoComentario(cd_comentario);
+    }
 
     //endregion
 }
