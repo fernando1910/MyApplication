@@ -23,7 +23,7 @@ public class CustomListViewRanking extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<Evento> mItems;
     private int ind_ranking;
-
+    private Context context;
     /*
         int_ranking
             0 - Top Classificação
@@ -36,6 +36,7 @@ public class CustomListViewRanking extends BaseAdapter {
         this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mItems = items;
         this.ind_ranking = ind_ranking;
+        this.context = context;
     }
 
     @Override
@@ -61,6 +62,7 @@ public class CustomListViewRanking extends BaseAdapter {
         if (convertView == null)
             view = mInflater.inflate(R.layout.item_menu_ranking, null);
 
+
         ImageView ivCapaEvento = (ImageView) view.findViewById(R.id.ivCapaEvento);
         TextView mTextView = (TextView) view.findViewById(R.id.tvTituloEvento);
         ImageView ivICone = (ImageView) view.findViewById(R.id.ivIcone);
@@ -76,8 +78,16 @@ public class CustomListViewRanking extends BaseAdapter {
 
         //mImageView.setImageResource(mItem.getCodigoEvento());
         mTextView.setText(mItem.getTituloEvento());
-        if (ind_ranking == 0)
+        if (ind_ranking == 0) {
             tvInfo.setText(String.valueOf(mItem.getClassificacao()));
+            ivICone.setImageDrawable(context.getResources().getDrawable(R.drawable.star));
+        }
+        else if(ind_ranking == 1){
+            ivICone.setImageDrawable(context.getResources().getDrawable(R.drawable.people));
+        }
+        else if(ind_ranking == 2){
+            ivICone.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_comentarios_painel));
+        }
 
 
         return view;
