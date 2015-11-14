@@ -17,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
+
 import java.util.Date;
+
 import domain.Evento;
 import domain.Usuario;
 import domain.Util;
@@ -37,7 +40,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private RatingBar mRatingBar;
     private ProgressDialog mProgressDialog;
-    private FloatingActionButton fab4, fab3,fab1,fab2;
+    private FloatingActionButton fab4, fab3, fab1, fab2;
     Menu menu;
 
     @Override
@@ -112,11 +115,17 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                    try {
-                        objEvento.classificarEvento(getApplicationContext(), codigoEvento, rating, objUsuario.getCodigoUsuario());
-                    } catch (Exception e) {
-                        Log.i(TAG, e.getMessage());
-                    }
+                    final float ind_classificacao = rating;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                objEvento.classificarEvento(getApplicationContext(), codigoEvento, ind_classificacao, objUsuario.getCodigoUsuario());
+                            } catch (Exception e) {
+                                Log.i(TAG, e.getMessage());
+                            }
+                        }
+                    }).start();
                 }
             });
 
@@ -138,8 +147,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         } else {
             tvPrivado.setText("Este evento é publico");
         }
-        if(objEvento.getParticipa() == 1 || objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario())
-        {
+        if (objEvento.getParticipa() == 1 || objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario()) {
             fab3.setVisibility(View.VISIBLE);
             fab1.setVisibility(View.VISIBLE);
             fab4.setVisibility(View.GONE);
@@ -154,8 +162,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         if (new Date().compareTo(objEvento.getDataEvento()) != -1) {
             fab3.setVisibility(View.GONE);
             fab4.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             mRatingBar.setVisibility(View.INVISIBLE);
         }
 
@@ -207,8 +214,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         MenuItem itemEditar = menu.findItem(R.id.action_editar);
         MenuItem itemCancelar = menu.findItem(R.id.action_cancelar);
-        if (objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario())
-        {
+        if (objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario()) {
             itemEditar.setVisible(true);
             itemCancelar.setVisible(true);
         }
@@ -300,8 +306,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             if (objEvento.getCodigoEvento() == Integer.MIN_VALUE) {
                 Toast.makeText(VisualizarEvento.this.getApplicationContext(), "Falha ao carregar o evento", Toast.LENGTH_SHORT).show();
                 VisualizarEvento.this.finish();
-            }
-            else
+            } else
                 carregarControles();
             mProgressDialog.dismiss();
         }
