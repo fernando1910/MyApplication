@@ -1,5 +1,6 @@
 package project.myapplication;
 
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -7,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -66,8 +68,11 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
             setSupportActionBar(mToolbar);
 
             try {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeButtonEnabled(false);
+                ActionBar mActionBar = getSupportActionBar();
+                if (mActionBar != null) {
+                    mActionBar.setDisplayHomeAsUpEnabled(true);
+                    mActionBar.setHomeButtonEnabled(false);
+                }
             } catch (Exception e) {
                 Toast.makeText(VisualizarEvento.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }

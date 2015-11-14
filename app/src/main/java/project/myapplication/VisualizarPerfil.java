@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,7 @@ import extras.RoundImage;
 
 public class VisualizarPerfil extends AppCompatActivity {
     private EditText etNome;
-    private ImageButton ibPerfil, ibSalvarNome;
+    private ImageButton ibPerfil;
     private RoundImage roundedImage;
     private Uri imgPerfil;
     private Usuario objUsuario;
@@ -37,17 +38,18 @@ public class VisualizarPerfil extends AppCompatActivity {
     private ByteArrayOutputStream byteArrayOutputStream;
     private ProgressDialog mProgressDialog;
     private Util util;
-    private Bitmap mImamge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_padrao_perfil);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ActionBar mActionBar = getSupportActionBar();
+            if (mActionBar != null)
+                mActionBar.setDisplayHomeAsUpEnabled(true);
 
             ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
-            ibSalvarNome = (ImageButton) findViewById(R.id.ibSalvarNome);
+            ImageButton ibSalvarNome = (ImageButton) findViewById(R.id.ibSalvarNome);
             etNome = (EditText) findViewById(R.id.etNome);
 
             util = new Util();
@@ -183,7 +185,7 @@ public class VisualizarPerfil extends AppCompatActivity {
                 Bundle extras = data.getExtras();
                 Bitmap thumbnail = extras.getParcelable("data");
                 roundedImage = new RoundImage(thumbnail);
-                mImamge = roundedImage.getBitmap();
+                Bitmap mImamge = roundedImage.getBitmap();
                 byteArrayOutputStream = new ByteArrayOutputStream();
                 mImamge.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 new atualizarFoto().execute();

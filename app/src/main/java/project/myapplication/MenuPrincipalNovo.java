@@ -1,5 +1,6 @@
 package project.myapplication;
 
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -153,7 +155,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                                     break;
                                 case 2:
                                     mFragment = new PainelTodosEventos();
-                                    setTitleActionBar("Convites");
+                                    setTitleActionBar("Eventos de hoje");
                                     break;
                                 case 3:
                                     CaldroidFragment mFragmentCalendar = new CaldroidFragment();
@@ -281,7 +283,9 @@ public class MenuPrincipalNovo extends AppCompatActivity {
 
     public void setTitleActionBar(String mTitle) {
         try {
-            getSupportActionBar().setTitle(mTitle);
+             ActionBar mActionBar = getSupportActionBar();
+            if (mActionBar != null)
+                mActionBar.setTitle(mTitle);
         } catch (Exception ex) {
             Log.i(TAG, ex.getMessage());
         }

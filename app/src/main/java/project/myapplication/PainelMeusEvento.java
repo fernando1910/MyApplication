@@ -38,7 +38,7 @@ public class PainelMeusEvento extends Fragment  {
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_painel_evento, container, false);
-        getActivity().setTitle("Meus Eventos");
+        ((MenuPrincipalNovo)getActivity()).setTitleActionBar("Meus Eventos");
 
 
         String TAG = "LOG";

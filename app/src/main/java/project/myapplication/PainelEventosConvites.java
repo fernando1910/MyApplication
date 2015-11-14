@@ -121,8 +121,7 @@ public class PainelEventosConvites extends Fragment {
                 }
                 else
                 {
-                    Toast.makeText(PainelEventosConvites.this.getContext(), "Erro ao carregar seus convites", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                    tvMensagem.setText("Erro Interno");
                 }
             }
             else{
