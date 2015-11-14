@@ -374,7 +374,8 @@ public class Evento {
             mEvento.setLongitude(jsonObjectResultado.getDouble("nr_longitude"));
             mEvento.setEventoPrivado(jsonObjectResultado.getInt("fg_evento_privado"));
             mEvento.setEndereco(jsonObjectResultado.getString("ds_endereco"));
-            mEvento.setClassificacao(Float.parseFloat(jsonObjectResultado.getString("ind_classificacao")));
+            if (jsonObjectResultado.has("ind_classificacao"))
+                mEvento.setClassificacao(Float.parseFloat(jsonObjectResultado.getString("ind_classificacao")));
             if (jsonObjectResultado.has("nr_convidados"))
                 mEvento.setConvidados(jsonObjectResultado.getInt("nr_convidados"));
             if (jsonObjectResultado.has("nr_comentarios"))

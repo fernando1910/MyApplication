@@ -93,30 +93,36 @@ public class PainelEventosConvites extends Fragment {
         protected void onPostExecute(Void aVoid) {
             mProgressBar.setVisibility(View.GONE);
             if (fg_conexao_internet) {
-                if (mAdapter.getCount() > 0) {
-                    lvEventos.setAdapter(mAdapter);
-                    lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            int codigoEvento = mAdapter.getCodigoEvento(position);
-                            Intent intent = new Intent(getContext(), VisualizarEvento.class);
-                            intent.putExtra("codigoEvento", codigoEvento);
-                            startActivity(intent);
+                if (mAdapter != null) {
+                    if (mAdapter.getCount() > 0) {
+                        lvEventos.setAdapter(mAdapter);
+                        lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                int codigoEvento = mAdapter.getCodigoEvento(position);
+                                Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                                intent.putExtra("codigoEvento", codigoEvento);
+                                startActivity(intent);
 
-                        }
-                    });
+                            }
+                        });
+                    } else {
+                        btTentar.setVisibility(View.VISIBLE);
+                        tvMensagem.setVisibility(View.VISIBLE);
+                        btTentar.setText("Criar");
+                        tvMensagem.setText("Não há nenhum evento criado. \nCrie um novo evento");
+                        btTentar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(PainelEventosConvites.this.getContext(), CadEvento.class));
+                            }
+                        });
+                    }
                 }
-                else{
-                    btTentar.setVisibility(View.VISIBLE);
-                    tvMensagem.setVisibility(View.VISIBLE);
-                    btTentar.setText("Criar");
-                    tvMensagem.setText("Não há nenhum evento criado. \nCrie um novo evento");
-                    btTentar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(PainelEventosConvites.this.getContext(), CadEvento.class));
-                        }
-                    });
+                else
+                {
+                    Toast.makeText(PainelEventosConvites.this.getContext(), "Erro ao carregar seus convites", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
                 }
             }
             else{
