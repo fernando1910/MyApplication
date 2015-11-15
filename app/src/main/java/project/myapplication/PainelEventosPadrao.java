@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -49,7 +50,9 @@ public class PainelEventosPadrao extends AppCompatActivity {
             Usuario objUsuario = new Usuario();
             objUsuario.carregar(this);
             codigoUsuario = objUsuario.getCodigoUsuario();
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ActionBar mActionBar = getSupportActionBar();
+            if (mActionBar != null)
+                mActionBar .setDisplayHomeAsUpEnabled(true);
 
             tvMensagem = (TextView) findViewById(R.id.tvMensagem);
             lvEventos = (ListView) findViewById(R.id.lvEventos);
@@ -58,7 +61,7 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
 
             Bundle parameters = getIntent().getExtras();
-            boolean fg_comentario, fg_convite;
+            boolean fg_comentario, fg_convite, fg_alteracoes;
 
             if (parameters != null) {
                 fg_comentario = parameters.getBoolean("fg_comentario");
@@ -70,6 +73,12 @@ public class PainelEventosPadrao extends AppCompatActivity {
                 if (fg_convite) {
                     mTipoAcao = "buscarConvites";
                     getSupportActionBar().setTitle("Novos Convites");
+                }
+
+                fg_alteracoes = parameters.getBoolean("fg_alteracoes");
+                if (fg_alteracoes){
+                    mTipoAcao = "buscarAlteracoes";
+                    getSupportActionBar().setTitle("Eventos com alterações");
                 }
 
                 dt_evento_string = parameters.getString("dt_evento");
@@ -160,6 +169,12 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
                         case "buscarConvites":
                             mListaEventos = objEvento.buscarConvites(PainelEventosPadrao.this.getApplicationContext(), util.formatarDataBanco(new Date()),codigoUsuario);
+                            break;
+                        case "buscarAlteracoes":
+                            mListaEventos = objEvento.buscarAlteracoes(PainelEventosPadrao.this.getApplicationContext(), codigoUsuario);
+                            break;
+                        case "buscarNovosComentario":
+                            mListaEventos = objEvento.buscarNovosComentario(PainelEventosPadrao.this.getApplicationContext(), codigoUsuario);
                             break;
                         default:
                             PainelEventosPadrao.this.finish();

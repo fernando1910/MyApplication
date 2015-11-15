@@ -257,9 +257,6 @@ public class Evento {
 
     public JSONObject gerarEventoJSON(Util util) throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-
-
         try {
             if (this.getCodigoEvento() != Integer.MIN_VALUE)
                 jsonObject.put("cd_evento", this.getCodigoEvento());
@@ -357,7 +354,6 @@ public class Evento {
         return Integer.parseInt(mResposta) > 1;
     }
 
-
     public List<Evento> selecionarEventosOnline(Context context, String comando, String parametro) throws InterruptedException, JSONException {
         List<Evento> mEventos = new ArrayList<>();
         Util util = new Util();
@@ -397,7 +393,6 @@ public class Evento {
     public List<Evento> pesquisarEventosOnline(Context context, String query) throws JSONException, InterruptedException {
         return selecionarEventosOnline(context, "pesquisarEvento", query);
     }
-
 
     public boolean cancelar(Context context, int codigoEvento) throws Exception {
         JSONObject jsonObject = new JSONObject();
@@ -472,19 +467,31 @@ public class Evento {
         }
 
         if (!fg_primeiro)
-            mMensagem = ds_nome + " "+ mMensagem;
+            mMensagem = ds_nome + " " + mMensagem;
 
         return mMensagem;
 
     }
 
-    public Evento gerarBackup(){
+    public Evento gerarBackup() {
         Evento objEventoBkp = new Evento();
         objEventoBkp.setTituloEvento(this.getTituloEvento());
         objEventoBkp.setDescricao(this.getDescricao());
         objEventoBkp.setEndereco(this.getEndereco());
         objEventoBkp.setDataEvento(this.getDataEvento());
         return objEventoBkp;
+    }
+
+    public List<Evento> buscarAlteracoes(Context context, int cd_usuario) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cd_usuario", cd_usuario);
+        return selecionarEventosOnline(context, "buscarAlterecoes", jsonObject.toString());
+    }
+
+    public List<Evento> buscarNovosComentario(Context context, int cd_usuario) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cd_usuario", cd_usuario);
+        return selecionarEventosOnline(context, "buscarNovosComentario", jsonObject.toString());
     }
     //endregion
 }
