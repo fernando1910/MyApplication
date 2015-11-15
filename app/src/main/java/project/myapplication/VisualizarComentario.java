@@ -62,7 +62,7 @@ public class VisualizarComentario extends AppCompatActivity {
                 try{
                     objComentario.carregar(VisualizarComentario.this, util, cd_comentario);
                 }catch (Exception ex){
-                    Log.i(TAG, ex.getMessage());
+                    Log.e(TAG, ex.getMessage());
                 }
             }
             return null;
@@ -72,8 +72,13 @@ public class VisualizarComentario extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
 
             super.onPostExecute(aVoid);
-            mProgressDialog.dismiss();
-            carregarControles();
+            try {
+                carregarControles();
+                mProgressDialog.dismiss();
+            }catch (Exception ex){
+                mProgressDialog.dismiss();
+                Log.e(TAG, ex.getMessage());
+            }
         }
     }
 }

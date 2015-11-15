@@ -85,6 +85,7 @@ public class Comentario {
             for (int i = 0; i < jsonArray.length(); i++) {
                 jsonObject = new JSONObject(jsonArray.getString(i));
                 Comentario mComentario = new Comentario();
+                mComentario.setCodigoComentario(jsonObject.getInt("cd_comentario"));
                 mComentario.setUsuarioComentario(jsonObject.getString("ds_nome") + ": ");
                 mComentario.setComentario(jsonObject.getString("ds_comentario"));
                 mComentarios.add(mComentario);
@@ -100,8 +101,8 @@ public class Comentario {
         JSONArray jsonArray = new JSONArray(mResposta);
         jsonObject = new JSONObject(jsonArray.getString(0));
         this.setComentario(jsonObject.getString("ds_comentario"));
-        this.setUsuarioComentario("ds_nome");
-        this.setDataInclusao(util.formataSelecionaBanco("dt_inclusao"));
+        this.setUsuarioComentario(jsonObject.getString("ds_nome"));
+        this.setDataInclusao(util.formataSelecionaBanco(jsonObject.getString("dt_inclusao")));
         this.setCodigoComentario(cd_comentario);
     }
 
