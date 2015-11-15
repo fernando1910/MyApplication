@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -21,10 +22,17 @@ public class PainelNovidades extends Fragment implements View.OnClickListener {
         LinearLayout llAlteracoes = (LinearLayout) view.findViewById(R.id.llAlteracoes);
         LinearLayout llComentarios = (LinearLayout) view.findViewById(R.id.llComentarios);
         LinearLayout llConvites = (LinearLayout) view.findViewById(R.id.llConvites);
+        ImageButton ibConvites = (ImageButton) view.findViewById(R.id.ibConvites);
+        ImageButton ibAlteracoes = (ImageButton) view.findViewById(R.id.ibAlteracoes);
+        ImageButton ibComentarios = (ImageButton) view.findViewById(R.id.ibComentarios);
+
 
         llComentarios.setOnClickListener(this);
         llAlteracoes.setOnClickListener(this);
         llConvites.setOnClickListener(this);
+        ibConvites.setOnClickListener(this);
+        ibAlteracoes.setOnClickListener(this);
+        ibComentarios.setOnClickListener(this);
         util = new Util();
         return view;
     }
@@ -38,10 +46,19 @@ public class PainelNovidades extends Fragment implements View.OnClickListener {
                 case R.id.llComentarios:
                     intent.putExtra("fg_comentario", true);
                     break;
+                case R.id.ibComentarios:
+                    intent.putExtra("fg_comentario", true);
+                    break;
                 case R.id.llAlteracoes:
                     intent.putExtra("fg_alteracoes", true);
                     break;
+                case R.id.ibAlteracoes:
+                    intent.putExtra("fg_alteracoes", true);
+                    break;
                 case R.id.llConvites:
+                    intent.putExtra("fg_convite", true);
+                    break;
+                case R.id.ibConvites:
                     intent.putExtra("fg_convite", true);
                     break;
             }
@@ -50,8 +67,7 @@ public class PainelNovidades extends Fragment implements View.OnClickListener {
         }
         else
         {
-            Toast.makeText(PainelNovidades.this.getContext(), "Sem Internet", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(PainelNovidades.this.getContext(), R.string.sem_internet, Toast.LENGTH_SHORT).show();
         }
     }
 }
