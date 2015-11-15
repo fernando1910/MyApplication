@@ -11,7 +11,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import project.myapplication.CadComentario;
 import project.myapplication.R;
+import project.myapplication.VisualizarConvidados;
 import project.myapplication.VisualizarEvento;
 
 public class PushMessage {
@@ -21,6 +23,9 @@ public class PushMessage {
     private int cd_evento = Integer.MIN_VALUE;
     // 0 - Convites
     // 1 - Comentários
+    // 2 - Cancelamento
+    // 3 - Confirmação convite
+    // 4 - Atualizacao Evento
 
     public PushMessage(String title, String message, int ind_tipo_notifacao, int cd_evento) {
         this.title = title;
@@ -62,6 +67,24 @@ public class PushMessage {
                 intent = new Intent(mContext, VisualizarEvento.class);
                 intent.putExtra("codigoEvento", cd_evento);
                 break;
+
+            case 1:
+                intent = new Intent(mContext, CadComentario.class);
+                intent.putExtra("codigoEvento", cd_evento);
+                break;
+            case 2:
+                intent = new Intent(mContext, VisualizarEvento.class);
+                intent.putExtra("codigoEvento", cd_evento);
+                break;
+            case 3:
+                intent = new Intent(mContext, VisualizarConvidados.class);
+                intent.putExtra("codigoEvento", cd_evento);
+                break;
+            case 4:
+                intent = new Intent(mContext, VisualizarEvento.class);
+                intent.putExtra("codigoEvento", cd_evento);
+                break;
+
         }
 
         if (intent != null) {

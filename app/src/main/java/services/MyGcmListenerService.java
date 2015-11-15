@@ -41,6 +41,18 @@ public class MyGcmListenerService extends GcmListenerService {
                 if (objConfig.getNotificaComentario() == 0)
                     enviarMensagem = false;
             }
+
+            if (mTipoNotificacao.equals("cancelamento")){
+                ind_tipo_notifacao = 2;
+            }
+
+            if (mTipoNotificacao.equals("confirmacaoConvite")){
+                ind_tipo_notifacao = 3;
+            }
+
+            if (mTipoNotificacao.equals("atualizacaoEvento")){
+                ind_tipo_notifacao = 4;
+            }
         }
         if (enviarMensagem) {
             PushMessage objPushMessage = new PushMessage(title, message, ind_tipo_notifacao, cd_evento);
