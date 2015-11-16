@@ -53,15 +53,16 @@ public class PainelEventosConvites extends Fragment {
             objUsuario.carregar(PainelEventosConvites.this.getActivity());
 
             new carregarEventos().execute();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         return view;
     }
 
-    private class carregarEventos extends AsyncTask<Void,Integer,Void>{
+    private class carregarEventos extends AsyncTask<Void, Integer, Void> {
         private boolean fg_conexao_internet;
+
         @Override
         protected void onPreExecute() {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -71,7 +72,7 @@ public class PainelEventosConvites extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            synchronized (this){
+            synchronized (this) {
 
                 fg_conexao_internet = util.verificaInternet(getContext());
                 if (fg_conexao_internet) {
@@ -88,12 +89,11 @@ public class PainelEventosConvites extends Fragment {
             return null;
         }
 
-
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressBar.setVisibility(View.GONE);
-            if (fg_conexao_internet) {
-                if (mAdapter != null) {
+            try {
+                if (fg_conexao_internet) {
                     if (mAdapter.getCount() > 0) {
                         lvEventos.setAdapter(mAdapter);
                         lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -118,17 +118,24 @@ public class PainelEventosConvites extends Fragment {
                             }
                         });
                     }
-                }
-                else
+                } else
                 {
-                    tvMensagem.setText("Erro Interno");
+                    btTentar.setVisibility(View.VISIBLE);
+                    tvMensagem.setVisibility(View.VISIBLE);
+                    btTentar.setText(R.string.string_tentar);
+                    tvMensagem.setText(R.string.sem_internet);
+                    btTentar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new carregarEventos().execute();
+                        }
+                    });
                 }
-            }
-            else{
+            }catch (Exception ex){
                 btTentar.setVisibility(View.VISIBLE);
                 tvMensagem.setVisibility(View.VISIBLE);
-                btTentar.setText("Tentar");
-                tvMensagem.setText("Sem conexão");
+                btTentar.setText(R.string.string_tentar);
+                tvMensagem.setText(R.string.erro_padrao);
                 btTentar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

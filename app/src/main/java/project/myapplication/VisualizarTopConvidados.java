@@ -101,6 +101,7 @@ public class VisualizarTopConvidados extends Fragment {
             btTentar.setVisibility(View.INVISIBLE);
             tvMensagem.setVisibility(View.INVISIBLE);
             try {
+                if (mAdapter.getCount() > 0){
                 if (fg_conexao_internet) {
                     mListView.setAdapter(mAdapter);
                     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -116,8 +117,19 @@ public class VisualizarTopConvidados extends Fragment {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
                 }
+                }else
+                {
+                    btTentar.setVisibility(View.VISIBLE);
+                    tvMensagem.setVisibility(View.VISIBLE);
+                    btTentar.setText(R.string.string_tentar);
+                    tvMensagem.setText(R.string.erro_padrao);
+                }
             } catch (Exception ex) {
                 Log.i(TAG, ex.getMessage());
+                btTentar.setVisibility(View.VISIBLE);
+                tvMensagem.setVisibility(View.VISIBLE);
+                btTentar.setText(R.string.string_tentar);
+                tvMensagem.setText(R.string.erro_padrao);
             }
 
         }

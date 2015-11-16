@@ -128,8 +128,13 @@
     <string name="title_activity_menu_principal_novo">MenuPrincipalNovo</string>
     <string name="texto_padrao_aleracoes_evento">Eventos com aleterações importantes</string>
     <string name="title_activity_pesquisar_eventos">Pesquisar Eventos</string>
-    <string name="title_activity_visualizar_comentario">VisualizarComentario</string>
+    <string name="title_activity_visualizar_comentario">Visualizar Comentario</string>
     <string name="title_activity_painel_configuracao">Painel Configurações</string>
     <string name="sem_internet">Sem Internet</string>
+
+    <string name="string_tentar">Tentar</string>
+    <string name="erro_padrao">Não é possivel carregar seus evento</string>
+
+    <string name="string_top_sem_evento">Não há nenhum evento</string>
 
 </resources>

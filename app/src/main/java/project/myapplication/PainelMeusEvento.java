@@ -23,8 +23,8 @@ import domain.Usuario;
 import domain.Util;
 
 
-public class PainelMeusEvento extends Fragment  {
-    private final String TAG  ="Erro";
+public class PainelMeusEvento extends Fragment {
+    private final String TAG = "Erro";
     private CustomListViewEvento mAdapter;
     private Evento objEvento;
     private ListView lvEventos;
@@ -38,7 +38,7 @@ public class PainelMeusEvento extends Fragment  {
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_painel_evento, container, false);
-        ((MenuPrincipalNovo)getActivity()).setTitleActionBar("Meus Eventos");
+        ((MenuPrincipalNovo) getActivity()).setTitleActionBar("Meus Eventos");
 
 
         String TAG = "LOG";
@@ -52,15 +52,16 @@ public class PainelMeusEvento extends Fragment  {
             util = new Util();
             new carregarEventos().execute();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.i(TAG, ex.getMessage());
         }
 
         return view;
     }
 
-    private class carregarEventos extends AsyncTask<Void,Integer,Void>{
+    private class carregarEventos extends AsyncTask<Void, Integer, Void> {
         private boolean fg_conexao_internet;
+
         @Override
         protected void onPreExecute() {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -70,7 +71,7 @@ public class PainelMeusEvento extends Fragment  {
 
         @Override
         protected Void doInBackground(Void... params) {
-            synchronized (this){
+            synchronized (this) {
 
                 fg_conexao_internet = util.verificaInternet(getContext());
                 if (fg_conexao_internet) {
@@ -78,8 +79,9 @@ public class PainelMeusEvento extends Fragment  {
                         Usuario objUsuario = new Usuario();
                         objUsuario.carregar(getContext());
                         List<Evento> mEventos = objEvento.selecionarMeusEventos(getContext(), util.formatarDataBanco(new Date()), objUsuario.getCodigoUsuario());
-                        mAdapter = new CustomListViewEvento(getContext(), mEventos);
-                    }catch (Exception ex){
+                        if (mEventos.size() != 0)
+                            mAdapter = new CustomListViewEvento(getContext(), mEventos);
+                    } catch (Exception ex) {
                         Log.i(TAG, ex.getMessage());
                     }
                 }
@@ -90,38 +92,50 @@ public class PainelMeusEvento extends Fragment  {
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressBar.setVisibility(View.GONE);
-            if (fg_conexao_internet) {
-                if(mAdapter.getCount() > 0) {
-                    lvEventos.setAdapter(mAdapter);
-                    lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            int codigoEvento = mAdapter.getCodigoEvento(position);
-                            Intent intent = new Intent(getContext(), VisualizarEvento.class);
-                            intent.putExtra("codigoEvento", codigoEvento);
-                            startActivity(intent);
+            try {
+                if (fg_conexao_internet) {
+                    if (mAdapter.getCount() > 0) {
+                        lvEventos.setAdapter(mAdapter);
+                        lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                int codigoEvento = mAdapter.getCodigoEvento(position);
+                                Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                                intent.putExtra("codigoEvento", codigoEvento);
+                                startActivity(intent);
 
-                        }
-                    });
-                }
-                else{
+                            }
+                        });
+                    } else {
+                        btTentar.setVisibility(View.VISIBLE);
+                        tvMensagem.setVisibility(View.VISIBLE);
+                        btTentar.setText("Criar");
+                        tvMensagem.setText("Não há nenhum evento criado. \nCrie um novo evento");
+                        btTentar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(PainelMeusEvento.this.getContext(), CadEvento.class));
+                            }
+                        });
+                    }
+                } else {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
-                    btTentar.setText("Criar");
-                    tvMensagem.setText("Não há nenhum evento criado. \nCrie um novo evento");
+                    btTentar.setText(R.string.string_tentar);
+                    tvMensagem.setText(R.string.sem_internet);
                     btTentar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startActivity(new Intent(PainelMeusEvento.this.getContext(), CadEvento.class));
+                            new carregarEventos().execute();
                         }
                     });
                 }
-            }
-            else{
+            } catch (Exception ex) {
+                Log.e(TAG, ex.getMessage());
                 btTentar.setVisibility(View.VISIBLE);
                 tvMensagem.setVisibility(View.VISIBLE);
-                btTentar.setText("Tentar");
-                tvMensagem.setText("Sem conexão");
+                tvMensagem.setText(R.string.erro_padrao);
+                btTentar.setText(R.string.string_tentar);
                 btTentar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -129,7 +143,6 @@ public class PainelMeusEvento extends Fragment  {
                     }
                 });
             }
-
         }
     }
 

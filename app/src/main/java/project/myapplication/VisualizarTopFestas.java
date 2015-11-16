@@ -88,24 +88,39 @@ public class VisualizarTopFestas extends Fragment {
                 tvMensagem.setVisibility(View.INVISIBLE);
 
                 if (fg_conexao_internet) {
-                    //mProgressDialog.dismiss();
-                    mListView.setAdapter(mAdapter);
-                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(getContext(), VisualizarEvento.class);
-                            intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
-                            startActivity(intent);
+                    if (mAdapter.getCount() > 0) {
+                        mListView.setAdapter(mAdapter);
+                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                                intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                                startActivity(intent);
 
-                        }
-                    });
-                } else {
+                            }
+                        });
+                    } else {
+                        btTentar.setVisibility(View.VISIBLE);
+                        tvMensagem.setVisibility(View.VISIBLE);
+                        btTentar.setText(R.string.string_tentar);
+                        tvMensagem.setText(R.string.erro_padrao);
+                    }
+                }
+                else
+                {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
+                    btTentar.setText(R.string.string_tentar);
+                    tvMensagem.setText(R.string.string_top_sem_evento);
                 }
 
             } catch (Exception ex) {
-                Log.i(TAG, ex.getMessage());
+                Log.e(TAG, ex.getMessage());
+                btTentar.setVisibility(View.VISIBLE);
+                tvMensagem.setVisibility(View.VISIBLE);
+                btTentar.setText(R.string.string_tentar);
+                tvMensagem.setText(R.string.erro_padrao);
+
             }
         }
     }

@@ -95,24 +95,35 @@ public class VisualizarTopComentarios extends Fragment {
                 mProgressBar.setVisibility(View.INVISIBLE);
                 btTentar.setVisibility(View.INVISIBLE);
                 tvMensagem.setVisibility(View.INVISIBLE);
-                if (fg_conexao_internet) {
-                    mListView.setAdapter(mAdapter);
-                    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent intent = new Intent(getContext(), VisualizarEvento.class);
-                            intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
-                            startActivity(intent);
+                if(mAdapter.getCount() > 0) {
+                    if (fg_conexao_internet) {
+                        mListView.setAdapter(mAdapter);
+                        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(getContext(), VisualizarEvento.class);
+                                intent.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                                startActivity(intent);
 
-                        }
-                    });
-                }
-                else {
+                            }
+                        });
+                    } else {
+                        btTentar.setVisibility(View.VISIBLE);
+                        tvMensagem.setVisibility(View.VISIBLE);
+                    }
+                }else
+                {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
+                    btTentar.setText(R.string.string_tentar);
+                    tvMensagem.setText(R.string.erro_padrao);
                 }
             } catch (Exception ex) {
                 Log.i(TAG, ex.getMessage());
+                btTentar.setVisibility(View.VISIBLE);
+                tvMensagem.setVisibility(View.VISIBLE);
+                btTentar.setText(R.string.string_tentar);
+                tvMensagem.setText(R.string.erro_padrao);
             }
 
         }
