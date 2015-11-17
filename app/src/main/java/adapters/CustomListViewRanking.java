@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import domain.Configuracoes;
 import domain.Evento;
 import project.myapplication.R;
 
@@ -68,13 +69,21 @@ public class CustomListViewRanking extends BaseAdapter {
         ImageView ivICone = (ImageView) view.findViewById(R.id.ivIcone);
         TextView tvInfo = (TextView) view.findViewById(R.id.tvInfo);
 
-        String url = ivCapaEvento.getContext().getString(R.string.caminho_foto_capa_evento)
-                + String.valueOf(mItem.getCodigoEvento())
-                + ".png";
-        Picasso.with(ivCapaEvento.getContext())
-                .load(url)
-                .placeholder(R.drawable.ic_placeholder_evento)
-                .into(ivCapaEvento);
+        Configuracoes objConfig = new Configuracoes();
+        objConfig.carregar(ivCapaEvento.getContext());
+        if (objConfig.getBuscarFotosOnline() == 1) {
+
+            String url = ivCapaEvento.getContext().getString(R.string.caminho_foto_capa_evento)
+                    + String.valueOf(mItem.getCodigoEvento())
+                    + ".png";
+            Picasso.with(ivCapaEvento.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.ic_placeholder_evento)
+                    .into(ivCapaEvento);
+        }
+        else {
+            ivCapaEvento.getResources().getDrawable(R.drawable.ic_placeholder_evento);
+        }
 
         //mImageView.setImageResource(mItem.getCodigoEvento());
         mTextView.setText(mItem.getTituloEvento());

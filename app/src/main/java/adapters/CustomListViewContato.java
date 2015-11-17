@@ -87,11 +87,11 @@ public class CustomListViewContato extends BaseAdapter {
 
         final ImageView img = (ImageView) view.findViewById(R.id.imgThumbnail);
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+        img.setImageDrawable(roundedImage);
 
         Configuracoes objConfig = new Configuracoes();
         objConfig.carregar(img.getContext());
         if (objConfig.getBuscarFotosOnline() == 1) {
-
             final String url = context.getString(R.string.caminho_foto_perfil) + String.valueOf(item.getCodigoContato()) + ".png";
             img.setImageDrawable(roundedImage);
 
