@@ -210,22 +210,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_menu_principal_novo, menu);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView;
-        MenuItem item = menu.findItem(R.id.action_search);
-        searchView = (SearchView) item.getActionView();
-        try {
-
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setQueryHint("Pesquisar");
-
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        searchView.setIconifiedByDefault(false);
         return true;
     }
 
@@ -259,17 +244,6 @@ public class MenuPrincipalNovo extends AppCompatActivity {
         System.exit(0);
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        hendleSearch(intent);
-    }
-
-    public void hendleSearch(Intent intent) {
-        if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
-            String mQuery = intent.getStringExtra(SearchManager.QUERY);
-        }
-    }
 
 
     private final OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {

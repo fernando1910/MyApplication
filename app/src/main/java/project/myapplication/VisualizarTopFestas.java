@@ -111,7 +111,7 @@ public class VisualizarTopFestas extends Fragment {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
                     btTentar.setText(R.string.string_tentar);
-                    tvMensagem.setText(R.string.string_top_sem_evento);
+                    tvMensagem.setText(R.string.sem_internet);
                 }
 
             } catch (Exception ex) {

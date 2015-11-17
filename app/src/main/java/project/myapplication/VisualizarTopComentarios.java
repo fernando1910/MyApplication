@@ -36,7 +36,6 @@ public class VisualizarTopComentarios extends Fragment {
     private TextView tvMensagem;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,8 +94,8 @@ public class VisualizarTopComentarios extends Fragment {
                 mProgressBar.setVisibility(View.INVISIBLE);
                 btTentar.setVisibility(View.INVISIBLE);
                 tvMensagem.setVisibility(View.INVISIBLE);
-                if(mAdapter.getCount() > 0) {
-                    if (fg_conexao_internet) {
+                if (fg_conexao_internet) {
+                    if (mAdapter.getCount() > 0) {
                         mListView.setAdapter(mAdapter);
                         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -110,14 +109,14 @@ public class VisualizarTopComentarios extends Fragment {
                     } else {
                         btTentar.setVisibility(View.VISIBLE);
                         tvMensagem.setVisibility(View.VISIBLE);
+                        btTentar.setText(R.string.string_tentar);
+                        tvMensagem.setText(R.string.erro_padrao);
                     }
-                }else
-                {
+                } else {
                     btTentar.setVisibility(View.VISIBLE);
                     tvMensagem.setVisibility(View.VISIBLE);
-                    btTentar.setText(R.string.string_tentar);
-                    tvMensagem.setText(R.string.erro_padrao);
                 }
+
             } catch (Exception ex) {
                 Log.i(TAG, ex.getMessage());
                 btTentar.setVisibility(View.VISIBLE);
