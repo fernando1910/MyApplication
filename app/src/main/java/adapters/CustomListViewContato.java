@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+import domain.Configuracoes;
 import domain.Contatos;
 import extras.RoundImage;
 import project.myapplication.R;
@@ -86,23 +87,28 @@ public class CustomListViewContato extends BaseAdapter {
 
         final ImageView img = (ImageView) view.findViewById(R.id.imgThumbnail);
         TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
-        final String url = context.getString(R.string.caminho_foto_perfil) + String.valueOf(item.getCodigoContato()) + ".png";
-        img.setImageDrawable(roundedImage);
+
+        Configuracoes objConfig = new Configuracoes();
+        objConfig.carregar(img.getContext());
+        if (objConfig.getBuscarFotosOnline() == 1) {
+
+            final String url = context.getString(R.string.caminho_foto_perfil) + String.valueOf(item.getCodigoContato()) + ".png";
+            img.setImageDrawable(roundedImage);
 
 
-        Thread thread = new Thread(){
-            public void run()
-            {
-                try {
-                    Drawable drawable = (Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
-                    RoundImage roundedImage  = new RoundImage(((BitmapDrawable)drawable).getBitmap());
-                    img.setImageDrawable(roundedImage);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            Thread thread = new Thread() {
+                public void run() {
+                    try {
+                        Drawable drawable = (Drawable.createFromStream((InputStream) new URL(url).getContent(), "src"));
+                        RoundImage roundedImage = new RoundImage(((BitmapDrawable) drawable).getBitmap());
+                        img.setImageDrawable(roundedImage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        };
-        thread.start();
+            };
+            thread.start();
+        }
 
         //TextView txtSubTitle = (TextView) vi.findViewById(R.id.txtSubTitle);
 

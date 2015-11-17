@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+import domain.Configuracoes;
 import domain.Evento;
 import project.myapplication.R;
 
@@ -64,12 +65,20 @@ public class CustomListViewEvento extends BaseAdapter {
         tvConvidados.setText(String.valueOf(mEvento.getConvidados()));
         tvComentarios.setText(String.valueOf(mEvento.getComentarios()));
 
-        if (mEvento.getImagemFotoCapa() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(mEvento.getImagemFotoCapa(), 0, mEvento.getImagemFotoCapa().length);
-            ivEvento.setImageBitmap(bitmap);
-        } else {
-            final String url = mContext.getString(R.string.caminho_foto_capa_evento) + mEvento.getCodigoEvento() + ".png";
-            Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
+        Configuracoes objConfig = new Configuracoes();
+        objConfig.carregar(ivEvento.getContext());
+
+        if (objConfig.getBuscarFotosOnline() == 1) {
+            if (mEvento.getImagemFotoCapa() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(mEvento.getImagemFotoCapa(), 0, mEvento.getImagemFotoCapa().length);
+                ivEvento.setImageBitmap(bitmap);
+            } else {
+                final String url = mContext.getString(R.string.caminho_foto_capa_evento) + mEvento.getCodigoEvento() + ".png";
+                Picasso.with(ivEvento.getContext()).load(url).placeholder(R.drawable.ic_placeholder_evento).into(ivEvento);
+            }
+        }
+        else{
+            ivEvento.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_placeholder_evento));
         }
 
         return view;
