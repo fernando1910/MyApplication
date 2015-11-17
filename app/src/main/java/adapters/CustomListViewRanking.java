@@ -82,7 +82,7 @@ public class CustomListViewRanking extends BaseAdapter {
                     .into(ivCapaEvento);
         }
         else {
-            ivCapaEvento.getResources().getDrawable(R.drawable.ic_placeholder_evento);
+            ivCapaEvento.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_placeholder_evento));
         }
 
         //mImageView.setImageResource(mItem.getCodigoEvento());
@@ -92,9 +92,11 @@ public class CustomListViewRanking extends BaseAdapter {
             ivICone.setImageDrawable(context.getResources().getDrawable(R.drawable.star));
         }
         else if(ind_ranking == 1){
+            tvInfo.setText(String.valueOf(mItem.getConvidados()));
             ivICone.setImageDrawable(context.getResources().getDrawable(R.drawable.people));
         }
         else if(ind_ranking == 2){
+            tvInfo.setText(String.valueOf(mItem.getComentarios()));
             ivICone.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_comentarios_painel));
         }
 

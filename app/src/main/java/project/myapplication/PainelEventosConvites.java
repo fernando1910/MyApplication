@@ -110,7 +110,7 @@ public class PainelEventosConvites extends Fragment {
                         btTentar.setVisibility(View.VISIBLE);
                         tvMensagem.setVisibility(View.VISIBLE);
                         btTentar.setText("Criar");
-                        tvMensagem.setText("Não há nenhum evento criado. \nCrie um novo evento");
+                        tvMensagem.setText("Não há nenhum evento hoje. \n    Crie um novo evento");
                         btTentar.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
