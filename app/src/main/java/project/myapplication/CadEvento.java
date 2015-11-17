@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -27,12 +28,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 import domain.Configuracoes;
 import domain.Evento;
 import domain.Usuario;
@@ -67,7 +71,9 @@ public class CadEvento extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_padrao_criar_evento);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar mActionBar = getSupportActionBar();
+        if (mActionBar != null)
+            mActionBar.setDisplayHomeAsUpEnabled(true);
 
         //region Vincular variaveis com interface
         tvData = (TextView) findViewById(R.id.tvData);
@@ -101,7 +107,11 @@ public class CadEvento extends AppCompatActivity {
         ibFotoCapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selecionarFoto();
+                try {
+                    selecionarFoto();
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
             }
         });
 
@@ -148,30 +158,31 @@ public class CadEvento extends AppCompatActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int item) {
+                try {
+                    if (options[item].equals("Tirar foto")) {
 
-                if (options[item].equals("Tirar foto")) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
+                                + getString(R.string.app_name));
 
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File diretorio = new File(Environment.getExternalStorageDirectory() + "/"
-                            + getString(R.string.app_name));
+                        diretorio = new File(diretorio.getPath() + "/Evento");
 
-                    diretorio = new File(diretorio.getPath() + "/Evento");
+                        imgEvento = Uri.fromFile(new File(diretorio, "0.png"));
 
-                    imgEvento = Uri.fromFile(new File(diretorio, "0.png"));
+                        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgEvento);
 
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgEvento);
 
-                    try {
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, 2);
-                    } catch (ActivityNotFoundException e) {
 
+                    } else if (options[item].equals("Escolher da Galeria")) {
+                        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 3);
+                    } else if (options[item].equals("Cancelar")) {
+                        dialog.dismiss();
                     }
-                } else if (options[item].equals("Escolher da Galeria")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 3);
-                } else if (options[item].equals("Cancelar")) {
-                    dialog.dismiss();
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
                 }
             }
         });
@@ -180,16 +191,19 @@ public class CadEvento extends AppCompatActivity {
     }
 
     public void cortarFoto(Uri selectedImage) {
-        Intent cropIntent = new Intent("com.android.camera.action.CROP");
-
-        cropIntent.setDataAndType(selectedImage, "image/*");
-        cropIntent.putExtra("crop", "true");
-        cropIntent.putExtra("aspectX", 1.5);
-        cropIntent.putExtra("aspectY", 1);
-        cropIntent.putExtra("outputX", 800);
-        cropIntent.putExtra("outputY", 500);
-        cropIntent.putExtra("return-data", true);
-        startActivityForResult(cropIntent, 4);
+        try {
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            cropIntent.setDataAndType(selectedImage, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1.5);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 800);
+            cropIntent.putExtra("outputY", 500);
+            cropIntent.putExtra("return-data", true);
+            startActivityForResult(cropIntent, 4);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+        }
     }
 
     //endregion
@@ -308,9 +322,13 @@ public class CadEvento extends AppCompatActivity {
 
     public void chamarMapa(View view) {
         try {
-            Bundle parameters = new Bundle();
-            Intent intent = new Intent(getApplicationContext(), PesquisarEndereco.class);
-            startActivityForResult(intent, 1, parameters);
+            if (util.verificaInternet(this)) {
+                Bundle parameters = new Bundle();
+                Intent intent = new Intent(getApplicationContext(), PesquisarEndereco.class);
+                startActivityForResult(intent, 1, parameters);
+            } else {
+                Toast.makeText(CadEvento.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -363,7 +381,7 @@ public class CadEvento extends AppCompatActivity {
                     if (objConf.getPermiteAlarme() == 1) {
                         criarEventoCalendarioAndroid();
                     }
-                }else {
+                } else {
                     if (!fg_mudanca)
                         Toast.makeText(CadEvento.this, "Não houve alteração", Toast.LENGTH_SHORT).show();
                 }
@@ -372,10 +390,10 @@ public class CadEvento extends AppCompatActivity {
                 intent.putExtra("codigoEvento", codigoEvento);
                 startActivity(intent);
             } else {
+                if (erro.equals(""))
+                    erro = "Problemas ao criar evento";
                 Toast.makeText(CadEvento.this, erro, Toast.LENGTH_SHORT).show();
-
             }
-
         }
     }
 
@@ -458,7 +476,7 @@ public class CadEvento extends AppCompatActivity {
     }
     //endregion
 
-    private class carregarEvento extends AsyncTask<Void,Integer,Void> {
+    private class carregarEvento extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -470,11 +488,11 @@ public class CadEvento extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            synchronized (this){
-                try{
+            synchronized (this) {
+                try {
                     objEvento.carregarOnline(codigoEvento, getApplicationContext(), objUsuario.getCodigoUsuario());
                     objEventoBkp = objEvento.gerarBackup();
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     Log.i(TAG, ex.getMessage());
                 }
             }

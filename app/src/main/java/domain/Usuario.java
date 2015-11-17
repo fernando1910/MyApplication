@@ -2,6 +2,7 @@ package domain;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Base64;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,40 +119,36 @@ public class Usuario {
         usuario_dao.atualizar(this);
     }
 
-    public boolean atualizarNome(Context context) throws  Exception {
+    public boolean atualizarNome(Context context) throws Exception {
         Util util = new Util();
         String jsonString = gerarUsuarioJSON();
-        String [] mResposnta = new String[1];
-
-        mResposnta[0] = util.enviarServidor(context.getString(R.string.wsBlueDate),jsonString , "atualizarNome");
-        if (Integer.parseInt(mResposnta[0]) > 0) {
+        String mResposnta = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonString, "atualizarNome");
+        if (Integer.parseInt(mResposnta) > 0) {
             UsuarioDAO usuario_dao = new UsuarioDAO(context);
             usuario_dao.atualizarNome(this.ds_nome);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public void atualizarFoto(Context context, byte[] img_perfil) {
-        UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        String r = usuario_dao.atualizarFotoPerfil(img_perfil);
-        r = "";
+    public boolean atualizarFoto(Context context, byte[] img_perfil, Util util, int cd_usuario) throws Exception {
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("ds_foto_perfil", Base64.encodeToString(img_perfil, 0));
+        jsonObject.put("cd_usuario", cd_usuario);
+        String mRespota = util.enviarServidor(context.getString(R.string.wsBlueDate), jsonObject.toString(), "atualizarFotoPerfil");
+
+        return Integer.parseInt(mRespota) > 0;
+
     }
 
-    public Usuario selecionarUsuario(Context context){
-        Usuario objUsuario;
-        UsuarioDAO usuario_dao = new UsuarioDAO(context);
-        objUsuario = usuario_dao.getUsuario();
-        return objUsuario;
-    }
-
-    public void carregar(Context context){
+    public void carregar(Context context) {
         Usuario objUsuario = new Usuario();
         UsuarioDAO usuario_dao = new UsuarioDAO(context);
         objUsuario = usuario_dao.getUsuario();
-        if(objUsuario != null) {
+        if (objUsuario != null) {
             this.cd_usuario = objUsuario.getCodigoUsuario();
             this.ds_nome = objUsuario.getNome();
             this.ds_telefone = objUsuario.getTelefone();
@@ -171,24 +168,21 @@ public class Usuario {
 
     public String gerarUsuarioJSON() {
         JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-
         try {
+            jsonObject.put("cd_usuario", this.getCodigoUsuario());
             jsonObject.put("ds_nome", this.getNome());
             jsonObject.put("ds_telefone", this.getTelefone());
             jsonObject.put("nr_ddi", this.getDDI());
             jsonObject.put("img_perfil", this.getImagemPerfil());
             jsonObject.put("nr_codigo_valida_telefone", this.getCodigoVerificardor());
             jsonObject.put("ds_foto_perfil", this.getFotoPerfilServidor());
-
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return jsonObject.toString();
     }
 
-    public boolean salvarPerfilOnline(Context context)throws  Exception {
+    public boolean salvarPerfilOnline(Context context) throws Exception {
         boolean mRetorno = true;
         Util util = new Util();
         if (util.checarServico(context)) {
@@ -206,12 +200,10 @@ public class Usuario {
                     }
                 }
                 this.atualizar(context);
-            }
-            else{
+            } else {
                 mRetorno = false;
             }
-        }
-        else{
+        } else {
             mRetorno = false;
         }
         return mRetorno;

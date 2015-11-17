@@ -52,12 +52,12 @@ public class PainelEventosPadrao extends AppCompatActivity {
             codigoUsuario = objUsuario.getCodigoUsuario();
             ActionBar mActionBar = getSupportActionBar();
             if (mActionBar != null)
-                mActionBar .setDisplayHomeAsUpEnabled(true);
+                mActionBar.setDisplayHomeAsUpEnabled(true);
 
             tvMensagem = (TextView) findViewById(R.id.tvMensagem);
             lvEventos = (ListView) findViewById(R.id.lvEventos);
             mProgressBar = (ProgressBar) findViewById(R.id.pbFooterLoading);
-            btNovo =(Button) findViewById(R.id.btNovo);
+            btNovo = (Button) findViewById(R.id.btNovo);
 
 
             Bundle parameters = getIntent().getExtras();
@@ -76,29 +76,22 @@ public class PainelEventosPadrao extends AppCompatActivity {
                 }
 
                 fg_alteracoes = parameters.getBoolean("fg_alteracoes");
-                if (fg_alteracoes){
+                if (fg_alteracoes) {
                     mTipoAcao = "buscarAlteracoes";
                     getSupportActionBar().setTitle("Eventos com alterações");
                 }
 
                 dt_evento_string = parameters.getString("dt_evento");
-                if (dt_evento_string != null){
+                if (dt_evento_string != null) {
                     mTipoAcao = "buscarEventoData";
                     getSupportActionBar().setTitle(parameters.getString("dt_evento_tela"));
                 }
-
-                btNovo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PainelEventosPadrao.this.finish();
-                        startActivity(new Intent(PainelEventosPadrao.this, CadEvento.class));
-                    }
-                });
             }
 
 
             new carregar().execute();
         } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
             util.gravarLogErro(this, codigoUsuario, "PainelEventosPadrao", ex.getMessage());
             finish();
             startActivity(new Intent(this, MenuPrincipalNovo.class));
@@ -150,7 +143,8 @@ public class PainelEventosPadrao extends AppCompatActivity {
 
 
     public class carregar extends AsyncTask<Void, Integer, Void> {
-        boolean fg_novo_evento;
+        boolean fg_conexao_internet;
+
         @Override
         protected void onPreExecute() {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -162,35 +156,31 @@ public class PainelEventosPadrao extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             synchronized (this) {
                 try {
-                    switch (mTipoAcao) {
-                        case "buscarEventoData":
-                            mListaEventos = objEvento.selecionarEventosPorData(PainelEventosPadrao.this.getApplicationContext(), dt_evento_string, codigoUsuario);
-                            break;
+                    fg_conexao_internet = util.verificaInternet(PainelEventosPadrao.this.getApplicationContext());
+                    if (fg_conexao_internet) {
+                        switch (mTipoAcao) {
+                            case "buscarEventoData":
+                                mListaEventos = objEvento.selecionarEventosPorData(PainelEventosPadrao.this.getApplicationContext(), dt_evento_string, codigoUsuario);
+                                break;
 
-                        case "buscarConvites":
-                            mListaEventos = objEvento.buscarConvites(PainelEventosPadrao.this.getApplicationContext(), util.formatarDataBanco(new Date()),codigoUsuario);
-                            break;
-                        case "buscarAlteracoes":
-                            mListaEventos = objEvento.buscarAlteracoes(PainelEventosPadrao.this.getApplicationContext(), codigoUsuario);
-                            break;
-                        case "buscarNovosComentario":
-                            mListaEventos = objEvento.buscarNovosComentario(PainelEventosPadrao.this.getApplicationContext(), codigoUsuario);
-                            break;
-                        default:
-                            PainelEventosPadrao.this.finish();
-                            startActivity(new Intent(PainelEventosPadrao.this, MenuPrincipalNovo.class));
-                            break;
+                            case "buscarConvites":
+                                mListaEventos = objEvento.buscarConvites(PainelEventosPadrao.this.getApplicationContext(), util.formatarDataBanco(new Date()), codigoUsuario);
+                                break;
+                            case "buscarAlteracoes":
+                                mListaEventos = objEvento.buscarAlteracoes(PainelEventosPadrao.this.getApplicationContext(), codigoUsuario);
+                                break;
+                            case "buscarNovosComentario":
+                                mListaEventos = objEvento.buscarNovosComentario(PainelEventosPadrao.this.getApplicationContext(), codigoUsuario);
+                                break;
+                            default:
+                                PainelEventosPadrao.this.finish();
+                                startActivity(new Intent(PainelEventosPadrao.this, MenuPrincipalNovo.class));
+                                break;
+                        }
                     }
-
-                    if (mListaEventos.size() > 0){
-                        mAdapter = new CustomListViewEvento(PainelEventosPadrao.this, mListaEventos);
-                    }
-                    else{
-                        fg_novo_evento = true;
-                    }
-
+                    mAdapter = new CustomListViewEvento(PainelEventosPadrao.this, mListaEventos);
                 } catch (Exception ex) {
-                    Log.i(TAG, ex.getMessage());
+                    Log.e(TAG, ex.getMessage());
                 }
             }
             return null;
@@ -204,22 +194,41 @@ public class PainelEventosPadrao extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             mProgressBar.setVisibility(View.GONE);
-            if (fg_novo_evento){
-                tvMensagem.setText("Sem novos convites, crie um evento");
+            if (fg_conexao_internet) {
+                if (mAdapter.getCount() > 0) {
+                    lvEventos.setAdapter(mAdapter);
+                    lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent it = new Intent(PainelEventosPadrao.this, VisualizarEvento.class);
+                            it.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                            startActivity(it);
+                        }
+                    });
+
+                } else {
+                    tvMensagem.setText("Nenhum evento encontrado. \n Crie um evento!");
+                    tvMensagem.setVisibility(View.VISIBLE);
+                    btNovo.setVisibility(View.VISIBLE);
+                    btNovo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PainelEventosPadrao.this.finish();
+                            startActivity(new Intent(PainelEventosPadrao.this, CadEvento.class));
+                        }
+                    });
+                }
+            } else {
+                tvMensagem.setText(R.string.sem_internet);
                 tvMensagem.setVisibility(View.VISIBLE);
                 btNovo.setVisibility(View.VISIBLE);
-            }else {
-                lvEventos.setAdapter(mAdapter);
-                lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                btNovo.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent it =  new Intent(PainelEventosPadrao.this,VisualizarEvento.class);
-                        it.putExtra("codigoEvento",mAdapter.getCodigoEvento(position));
-                        startActivity(it);
+                    public void onClick(View v) {
+                        new carregar().execute();
                     }
                 });
             }
-
         }
     }
 }

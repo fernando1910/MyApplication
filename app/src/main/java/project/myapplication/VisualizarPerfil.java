@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import extras.RoundImage;
 
 
 public class VisualizarPerfil extends AppCompatActivity {
+    private final String TAG = "ERRO";
     private EditText etNome;
     private ImageButton ibPerfil;
     private RoundImage roundedImage;
@@ -65,9 +67,8 @@ public class VisualizarPerfil extends AppCompatActivity {
                 File mFile = new File(objUsuario.getCaminhoFoto());
                 if (mFile.exists()) {
                     BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(),bmOptions);
-                }
-                else if (objUsuario.getImagemPerfil() != null)
+                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(), bmOptions);
+                } else if (objUsuario.getImagemPerfil() != null)
                     bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
             }
 
@@ -77,7 +78,6 @@ public class VisualizarPerfil extends AppCompatActivity {
             roundedImage = new RoundImage(bitmap);
             ibPerfil = (ImageButton) findViewById(R.id.ibPerfil);
             ibPerfil.setImageDrawable(roundedImage);
-
 
 
             ibPerfil.setOnClickListener(new View.OnClickListener() {
@@ -90,8 +90,8 @@ public class VisualizarPerfil extends AppCompatActivity {
                 }
             });
 
-        }catch (Exception ex){
-            Toast.makeText(VisualizarPerfil.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
         }
 
     }
@@ -121,16 +121,17 @@ public class VisualizarPerfil extends AppCompatActivity {
 
     public void onClickSalvarNome(View v) {
         if (util.verificaInternet(this)) {
-            objUsuario.setNome(String.valueOf(etNome.getText()));
-            new atualizarNome().execute();
-        }
-        else
-        {
+            String mNome = String.valueOf(etNome.getText());
+            if (!objUsuario.getNome().equals(mNome)) {
+                objUsuario.setNome(String.valueOf(etNome.getText()));
+                new atualizarNome().execute();
+            }
+        } else {
             Toast.makeText(VisualizarPerfil.this, R.string.sem_internet, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void alterarFoto(){
+    public void alterarFoto() {
         final CharSequence[] options = {"Tirar foto", "Escolher da Galeria", "Cancelar"};
         AlertDialog.Builder builder = new AlertDialog.Builder(VisualizarPerfil.this);
         builder.setTitle("Adcionar Foto");
@@ -147,15 +148,15 @@ public class VisualizarPerfil extends AppCompatActivity {
                             + getString(R.string.app_name));
 
                     diretorio = new File(diretorio.getPath() + "/Perfil");
-                    imgPerfil = Uri.fromFile(new File(diretorio,"0.png"));
+                    imgPerfil = Uri.fromFile(new File(diretorio, "0.png"));
 
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imgPerfil);
 
                     try {
                         intent.putExtra("return-data", true);
                         startActivityForResult(intent, 1);
-                    } catch (ActivityNotFoundException e) {
-
+                    } catch (ActivityNotFoundException ex) {
+                        Log.e(TAG, ex.getMessage());
                     }
                 } else if (options[item].equals("Escolher da Galeria")) {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -194,25 +195,28 @@ public class VisualizarPerfil extends AppCompatActivity {
     }
 
     public void cortarFoto(Uri selectedImage) {
-        Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        cropIntent.setDataAndType(selectedImage, "image/*");
-        cropIntent.putExtra("crop", "true");
-        cropIntent.putExtra("aspectX", 1);
-        cropIntent.putExtra("aspectY", 1);
-        cropIntent.putExtra("outputX", 640);
-        cropIntent.putExtra("outputY", 640);
-        cropIntent.putExtra("return-data", true);
-        startActivityForResult(cropIntent, 3);
-
+        try {
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            cropIntent.setDataAndType(selectedImage, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 640);
+            cropIntent.putExtra("outputY", 640);
+            cropIntent.putExtra("return-data", true);
+            startActivityForResult(cropIntent, 3);
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage());
+        }
     }
 
 
-    private class atualizarNome extends AsyncTask<Void,Integer,Void>{
+    private class atualizarNome extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 fg_atualiza_nome = objUsuario.atualizarNome(VisualizarPerfil.this);
-            }catch (Exception e){
+            } catch (Exception e) {
                 fg_atualiza_nome = false;
             }
             return null;
@@ -227,22 +231,26 @@ public class VisualizarPerfil extends AppCompatActivity {
         }
     }
 
-    private class atualizarFoto extends AsyncTask<Void,Integer,Void>{
+    private class atualizarFoto extends AsyncTask<Void, Integer, Void> {
+        private boolean fg_alterou;
 
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(VisualizarPerfil.this);
-            mProgressDialog = ProgressDialog.show(VisualizarPerfil.this,"Carregando", "Aguarde", false, false);
+            mProgressDialog = ProgressDialog.show(VisualizarPerfil.this, "Carregando", "Aguarde", false, false);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 String mCodigoUsuario = String.valueOf(objUsuario.getCodigoUsuario());
-                util.salvarFoto(byteArrayOutputStream.toByteArray(),"Perfil", VisualizarPerfil.this,mCodigoUsuario);
-                objUsuario.atualizarFoto(VisualizarPerfil.this, byteArrayOutputStream.toByteArray());
-            }catch (Exception ex){
+                fg_alterou = objUsuario.atualizarFoto(VisualizarPerfil.this, byteArrayOutputStream.toByteArray(), util, objUsuario.getCodigoUsuario());
+                if (fg_alterou)
+                    util.salvarFoto(byteArrayOutputStream.toByteArray(), "Perfil", VisualizarPerfil.this, mCodigoUsuario);
+            } catch (Exception ex) {
                 mProgressDialog.dismiss();
+                fg_alterou = false;
+                Log.e(TAG, ex.getMessage());
             }
             return null;
         }
@@ -250,7 +258,10 @@ public class VisualizarPerfil extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressDialog.dismiss();
-            ibPerfil.setImageDrawable(roundedImage);
+            if (fg_alterou)
+                ibPerfil.setImageDrawable(roundedImage);
+            else
+                Toast.makeText(VisualizarPerfil.this, "Foto não atualizada", Toast.LENGTH_SHORT).show();
         }
     }
 

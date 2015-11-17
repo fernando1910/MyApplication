@@ -37,6 +37,7 @@
             android:id="@+id/tvMensagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Sem novos convites"
             android:textSize="16sp"
             android:visibility="gone" />
@@ -45,12 +46,12 @@
             android:id="@+id/btNovo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:background="@color/Gainsboro"
-            android:text="Tentar"
 
-            android:visibility="gone"
-            android:layout_gravity="center_vertical" />
+            android:text="Tentar"
+            android:visibility="gone" />
 
     </LinearLayout>
 
