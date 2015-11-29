@@ -1,16 +1,20 @@
 package project.myapplication;
 
 
-import android.app.SearchManager;
-import android.content.Context;
+
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 
@@ -37,6 +40,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.Date;
@@ -77,7 +81,17 @@ public class MenuPrincipalNovo extends AppCompatActivity {
                 File mFile = new File(objUsuario.getCaminhoFoto());
                 if (mFile.exists()) {
                     BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                    bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(), bmOptions);
+                    if (Build.VERSION.SDK_INT  < Build.VERSION_CODES.M)
+                        bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(), bmOptions);
+                    else {
+                        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+                        }
+                        else
+                            bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(), bmOptions);
+
+                    }
                 } else {
                     if (objUsuario.getImagemPerfil() != null)
                         bitmap = BitmapFactory.decodeByteArray(objUsuario.getImagemPerfil(), 0, objUsuario.getImagemPerfil().length);
@@ -88,6 +102,7 @@ public class MenuPrincipalNovo extends AppCompatActivity {
             }
         } catch (Exception ex) {
             Log.i(TAG, ex.getMessage());
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
         }
 
 
