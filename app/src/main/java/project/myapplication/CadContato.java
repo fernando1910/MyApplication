@@ -64,10 +64,10 @@ public class CadContato extends AppCompatActivity {
                 btConfirmar.setVisibility(View.VISIBLE);
                 cbContatoVisivel = true;
             }
-            contatosList = objContatos.retonarContatos(this);
+               /* contatosList = objContatos.retonarContatos(this);
             arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
             lvContatos.setAdapter(arrayAdapter);
-            mQuantidadeContatos = lvContatos.getCount();
+            mQuantidadeContatos = lvContatos.getCount(); */
 
         } catch (Exception ex) {
             this.finish();
@@ -208,6 +208,31 @@ public class CadContato extends AppCompatActivity {
             } catch (Exception ex) {
                 Log.i(TAG, ex.getMessage());
             }
+        }
+    }
+
+    public class visualizarContatos extends AsyncTask<Void,Integer,Void >{
+        boolean fg_conexao_internet;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            synchronized (this){
+                fg_conexao_internet = util.verificaInternet(CadContato.this.getApplicationContext());
+                if(fg_conexao_internet)
+                {
+
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
         }
     }
 
