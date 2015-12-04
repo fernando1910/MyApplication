@@ -186,5 +186,11 @@ public class Contatos {
         return mListaContatos;
     }
 
+    public List<Contatos>buscarPossiveisConvidados(Context context, int cd_evento,Util util) throws Exception{
+        List<Contatos> mListaContatos = new ArrayList<>();
+
+        return mListaContatos;
+    }
+
     //endregion
 }

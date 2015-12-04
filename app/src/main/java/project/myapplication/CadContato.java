@@ -39,6 +39,8 @@ public class CadContato extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private int mQuantidadeContatos;
     private Usuario objUsuario;
+    private CustomListViewContato mAdapter;
+    private List<Contatos> mContatos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,10 +223,14 @@ public class CadContato extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             synchronized (this){
-                fg_conexao_internet = util.verificaInternet(CadContato.this.getApplicationContext());
-                if(fg_conexao_internet)
-                {
-
+                try {
+                    fg_conexao_internet = util.verificaInternet(CadContato.this.getApplicationContext());
+                    if (fg_conexao_internet) {
+                        mContatos = objContatos.buscarConvidados(CadContato.this.getApplicationContext(), codigoEvento, util);
+                        mAdapter = new CustomListViewContato(CadContato.this, mContatos, false);
+                    }
+                } catch (Exception ex) {
+                    Log.i(TAG, ex.getMessage());
                 }
             }
             return null;
