@@ -10,8 +10,12 @@
     <dimen name="layout_paddingPadrao">18dp</dimen>
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
+
     <dimen name="navigation_drawer_width">240dp</dimen>
 
+    <!-- Painel -->
+    <dimen name="layout_marginPadraoPainel">10dp</dimen>
+    <dimen name="layout_marginPadraoPainelLateral">12dp</dimen>
     <!-- Altura foto capa -->
     <dimen name="imagem_capa_evento">250dp</dimen>
 
