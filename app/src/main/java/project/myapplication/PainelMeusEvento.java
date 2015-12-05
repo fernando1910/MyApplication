@@ -94,7 +94,7 @@ public class PainelMeusEvento extends Fragment {
             mProgressBar.setVisibility(View.GONE);
             try {
                 if (fg_conexao_internet) {
-                    if (mAdapter.getCount() > 0) {
+                    if (mAdapter != null) {
                         lvEventos.setAdapter(mAdapter);
                         lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

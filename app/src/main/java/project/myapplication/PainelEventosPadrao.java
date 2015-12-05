@@ -192,42 +192,53 @@ public class PainelEventosPadrao extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            mProgressBar.setVisibility(View.GONE);
-            if (fg_conexao_internet) {
-                if (mAdapter.getCount() > 0) {
-                    lvEventos.setAdapter(mAdapter);
-                    lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent it = new Intent(PainelEventosPadrao.this, VisualizarEvento.class);
-                            it.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
-                            startActivity(it);
-                        }
-                    });
+        protected void onCancelled() {
+            onBackPressed();
+        }
 
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+
+                mProgressBar.setVisibility(View.GONE);
+                if (fg_conexao_internet) {
+                    if (mAdapter != null) {
+                        lvEventos.setAdapter(mAdapter);
+                        lvEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent it = new Intent(PainelEventosPadrao.this, VisualizarEvento.class);
+                                it.putExtra("codigoEvento", mAdapter.getCodigoEvento(position));
+                                startActivity(it);
+                            }
+                        });
+
+                    } else {
+                        tvMensagem.setText("Nenhum evento encontrado. \n Crie um evento!");
+                        tvMensagem.setVisibility(View.VISIBLE);
+                        btNovo.setVisibility(View.VISIBLE);
+                        btNovo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                PainelEventosPadrao.this.finish();
+                                startActivity(new Intent(PainelEventosPadrao.this, CadEvento.class));
+                            }
+                        });
+                    }
                 } else {
-                    tvMensagem.setText("Nenhum evento encontrado. \n Crie um evento!");
+                    tvMensagem.setText(R.string.sem_internet);
                     tvMensagem.setVisibility(View.VISIBLE);
                     btNovo.setVisibility(View.VISIBLE);
                     btNovo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            PainelEventosPadrao.this.finish();
-                            startActivity(new Intent(PainelEventosPadrao.this, CadEvento.class));
+                            new carregar().execute();
                         }
                     });
                 }
-            } else {
-                tvMensagem.setText(R.string.sem_internet);
-                tvMensagem.setVisibility(View.VISIBLE);
-                btNovo.setVisibility(View.VISIBLE);
-                btNovo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new carregar().execute();
-                    }
-                });
+
+            }catch (Exception ex){
+                Log.e(TAG,ex.getMessage());
             }
         }
     }
