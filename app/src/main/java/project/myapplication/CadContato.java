@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +48,9 @@ public class CadContato extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_padrao_contatos);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ActionBar mActionBar = getSupportActionBar();
+            if (mActionBar != null)
+                mActionBar .setDisplayHomeAsUpEnabled(true);
 
 
             //region Vinculação com XML
@@ -66,10 +69,10 @@ public class CadContato extends AppCompatActivity {
                 btConfirmar.setVisibility(View.VISIBLE);
                 cbContatoVisivel = true;
             }
-               /* contatosList = objContatos.retonarContatos(this);
+            contatosList = objContatos.retonarContatos(this);
             arrayAdapter = new CustomListViewContato(this, contatosList, cbContatoVisivel);
             lvContatos.setAdapter(arrayAdapter);
-            mQuantidadeContatos = lvContatos.getCount(); */
+            mQuantidadeContatos = lvContatos.getCount();
 
         } catch (Exception ex) {
             this.finish();

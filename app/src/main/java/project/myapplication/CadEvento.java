@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -379,7 +380,17 @@ public class CadEvento extends AppCompatActivity {
             if (fg_criou) {
                 if (tipoOperacao == 1) {
                     if (objConf.getPermiteAlarme() == 1) {
-                        criarEventoCalendarioAndroid();
+                        new AlertDialog.Builder(CadEvento.this)
+                                .setMessage("Deseja salvar esse evento no calendário do celular?")
+                                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        criarEventoCalendarioAndroid();
+                                    }
+                                })
+                                .setNegativeButton("Não", null)
+                                .show();
+
                     }
                 } else {
                     if (!fg_mudanca)
@@ -412,7 +423,8 @@ public class CadEvento extends AppCompatActivity {
             descarregarControles();
             String mMensagem = "";
             if (tipoOperacao == 2)
-                mMensagem = objEvento.verificarMudancaEvento(objEvento, objEventoBkp, objUsuario.getNome());
+                mMensagem = objUsuario.getNome() + " alterou o evento";
+                //mMensagem = objEvento.verificarMudancaEvento(objEvento, objEventoBkp, objUsuario.getNome());
 
             if (!mMensagem.equals("") || tipoOperacao == 1) {
                 fg_mudanca = true;

@@ -147,7 +147,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         if (objEvento.getEventoPrivado() == 1) {
             tvPrivado.setText("Este evento é privado");
             if (objEvento.getCodigoUsuarioInclusao() != objUsuario.getCodigoUsuario()) {
-                fab4.setVisibility(View.INVISIBLE);
+                fab4.setVisibility(View.GONE);
             }
         } else {
             tvPrivado.setText("Este evento é publico");
@@ -155,7 +155,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         if (objEvento.getParticipa() == 1 || objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario()) {
             fab3.setVisibility(View.VISIBLE);
             fab1.setVisibility(View.VISIBLE);
-            fab4.setVisibility(View.INVISIBLE);
+            fab4.setVisibility(View.GONE);
 
         }
 
@@ -165,8 +165,8 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         // evento antes da data de hoje
         if (new Date().compareTo(objEvento.getDataEvento()) != -1) {
-            fab3.setVisibility(View.INVISIBLE);
-            fab4.setVisibility(View.INVISIBLE);
+            fab3.setVisibility(View.GONE);
+            fab4.setVisibility(View.GONE);
         } else {
             mRatingBar.setVisibility(View.INVISIBLE);
         }
@@ -219,7 +219,7 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
 
         MenuItem itemEditar = menu.findItem(R.id.action_editar);
         MenuItem itemCancelar = menu.findItem(R.id.action_cancelar);
-        if (objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario() && new Date().compareTo(objEvento.getDataEvento()) < 1) {
+        if (objEvento.getCodigoUsuarioInclusao() == objUsuario.getCodigoUsuario() && new Date().compareTo(objEvento.getDataEvento()) != 1) {
             itemEditar.setVisible(true);
             itemCancelar.setVisible(true);
         }
@@ -319,6 +319,12 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onProgressUpdate(Integer... values) {
             mProgressDialog.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            onBackPressed();
         }
     }
 
