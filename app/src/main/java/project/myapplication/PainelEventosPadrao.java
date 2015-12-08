@@ -238,6 +238,16 @@ public class PainelEventosPadrao extends AppCompatActivity {
                 }
 
             }catch (Exception ex){
+                btNovo.setVisibility(View.VISIBLE);
+                tvMensagem.setVisibility(View.VISIBLE);
+                btNovo.setText(R.string.string_tentar);
+                tvMensagem.setText(R.string.erro_padrao);
+                btNovo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new carregar().execute();
+                    }
+                });
                 Log.e(TAG,ex.getMessage());
             }
         }

@@ -19,6 +19,8 @@
             app:expandedTitleMarginEnd="30dp"
             app:expandedTitleMarginStart="30dp"
             app:contentScrim="@color/Black"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -35,8 +37,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 android:minHeight="?attr/actionBarSize"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin"
-                app:theme="@style/TemaActionBar"
                 />
 
         </android.support.design.widget.CollapsingToolbarLayout>

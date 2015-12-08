@@ -143,6 +143,8 @@ public class CadEvento extends AppCompatActivity {
             tvData.setText(formatDate.format(objEvento.getDataEvento()));
             tvHora.setText(formatHour.format(objEvento.getDataEvento()));
             calendar.setTime(objEvento.getDataEvento());
+            nr_latitude = objEvento.getLatitude();
+            nr_longitude = objEvento.getLongitude();
         } else {
             Toast.makeText(CadEvento.this, "Falha ao carregar evento", Toast.LENGTH_SHORT).show();
             finish();
@@ -423,7 +425,7 @@ public class CadEvento extends AppCompatActivity {
             descarregarControles();
             String mMensagem = "";
             if (tipoOperacao == 2)
-                mMensagem = objUsuario.getNome() + " alterou o evento";
+                mMensagem = objUsuario.getNome() + " alterou o evento, você pode visualizar agora.";
                 //mMensagem = objEvento.verificarMudancaEvento(objEvento, objEventoBkp, objUsuario.getNome());
 
             if (!mMensagem.equals("") || tipoOperacao == 1) {
