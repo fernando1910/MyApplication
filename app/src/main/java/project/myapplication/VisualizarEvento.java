@@ -383,8 +383,10 @@ public class VisualizarEvento extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressDialog.dismiss();
-            if (fg_participa)
+            if (fg_participa) {
                 Toast.makeText(VisualizarEvento.this, "Confirmado", Toast.LENGTH_SHORT).show();
+                new carregarEventoOnline().execute();
+            }
             else
                 Toast.makeText(VisualizarEvento.this, "Falha ao confirmar sua presença", Toast.LENGTH_SHORT).show();
         }

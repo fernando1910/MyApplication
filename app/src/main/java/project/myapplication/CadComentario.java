@@ -131,9 +131,6 @@ public class CadComentario extends AppCompatActivity {
                 synchronized (this) {
                     String mResposta = objEvento.enviarComentario(codigoEvento, codigoUsuario, objComentario.getComentario(), getString(R.string.wsBlueDate));
                     objComentario.setCodigoComentario(Integer.parseInt(mResposta));
-                    mComentarios.add(objComentario);
-                    mAdapter.notifyDataSetChanged();
-                    Log.i(TAG,mResposta);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -146,6 +143,7 @@ public class CadComentario extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             mProgressDialog.dismiss();
+            new buscarComentarios().execute();
         }
     }
 
